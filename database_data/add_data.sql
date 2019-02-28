@@ -1,3 +1,5 @@
+USE learn_sys;
+
 # Data for Users: 3 admins, 3 professors, 6 students.
 
 INSERT INTO Users VALUES (0, "thomas_bui", "password", "admin", "12345678"), 
@@ -51,7 +53,7 @@ INSERT INTO blocks (courseid, time, day, room) VALUES
 	("ASB312", "1300-1450", "fri", "B212");
 	
 
-# Data for classes: 
+# Data for classes. Not all students are enrolled in a class for testing purpose 
 
 INSERT INTO classes (blockid, userid) VALUES
 	(1, 321434),
@@ -73,16 +75,62 @@ INSERT INTO classes (blockid, userid) VALUES
 	(12, 321434),
 	(12, 090832),
 	(12, 492381),
-	(12, 111791),
+	(12, 892379),
 	(12, 178820),
 	(15, 111791),
 	(15, 321434),
 	(15, 090832),
 	(15, 492381),
-	(15, 111791),
+	(15, 892379),
 	(15, 178820);
 	
+# Data for GradeItems. Based on students enrolled in a class:
+
+INSERT INTO GradeItems (userid, courseid, name, marks, weight) VALUES	
+	(111791, "ASB311", "Review Quiz", "6/10", 2),
+	(178820, "ASB311", "Review Quiz", "7/10", 2),
+	(321434, "ASB311", "Review Quiz", "6/10", 2),
+	(492381, "ASB311", "Review Quiz", "9/10", 2),
+	(892379, "ASB311", "Review Quiz", "10/10", 2),
+	(090832, "ASB311", "Review Quiz", "7/10", 2),
 	
+	(111791, "ASB312", "Lab 1", "6/10", 2),
+	(178820, "ASB312", "Lab 1", "7/10", 2),
+	(321434, "ASB312", "Lab 1", "5/10", 2),
+	(492381, "ASB312", "Lab 1", "8/10", 2),
+	(892379, "ASB312", "Lab 1", "9/10", 2),
+	(090832, "ASB312", "Lab 1", "7/10", 2),
+	
+	(111791, "ASB312", "Lab 2", "8/10", 2),
+	(178820, "ASB312", "Lab 2", "8/10", 2),
+	(321434, "ASB312", "Lab 2", "7/10", 2),
+	(492381, "ASB312", "Lab 2", "7/10", 2),
+	(892379, "ASB312", "Lab 2", "10/10", 2),
+	(090832, "ASB312", "Lab 2", "8/10", 2),
+	
+	(321434, "COA101", "Quiz 1", "10/15", 5),
+	(492381, "COA101", "Quiz 1", "11/15", 5),
+	(784547, "COA101", "Quiz 1", "13/15", 5),
+	(082398, "COA101", "Quiz 1", "14/15", 5),
+	(551146, "COA101", "Quiz 1", "14/15", 5),
+	(679123, "COA101", "Quiz 1", "13/15", 5),
+	
+	(111791, "MAT204", "Integral Quiz 1", "10/15", 5),
+	(457861, "MAT204", "Integral Quiz 1", "11/15", 5),
+	(492381, "MAT204", "Integral Quiz 1", "13/15", 5),
+	(090832, "MAT204", "Integral Quiz 1", "14/15", 5),
+	
+	(111791, "MAT204", "Integral Quiz 2", "12/15", 5),
+	(457861, "MAT204", "Integral Quiz 2", "13/15", 5),
+	(492381, "MAT204", "Integral Quiz 2", "13/15", 5),
+	(090832, "MAT204", "Integral Quiz 2", "12/15", 5),
+	
+	(111791, "MAT204", "Integral Test", "15/20", 10),
+	(457861, "MAT204", "Integral Test", "16/20", 10),
+	(492381, "MAT204", "Integral Test", "17/20", 10),
+	(090832, "MAT204", "Integral Test", "18/20", 10);
+	
+# note: there is no data for AllGrades. 
 	
 	
 
