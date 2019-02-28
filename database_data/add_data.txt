@@ -18,7 +18,21 @@ INSERT INTO Courses VALUES ("COA101", "Intro to Computer Architecture", "A begin
 	("ASB311", "Advanced Assembly (LEC)", "For people interested in mastering assembly languages. This is the lecture version.", 12),
 	("ASB312", "Advanced Assembly (LAB)", "For people interested in mastering assembly languages. This is the lab version.", 12);
 	
-// Code below can't be used at the current stage. Will fix soon
-INSERT INTO blocks VALUES (1, "COA101", "1200-1350", "mon", "A102", 892379),
-	(2, "COA101", "1200-1350", "mon", "A102", 321434),
-	(3, "COA101", "1200-1350", "mon", "A102", 082398);
+INSERT INTO blocks (courseid, time, day, room) VALUES 
+	("COA101", "1200-1350", "mon", "A102"),
+	("COA101", "0800-0950", "wed", "A102"),
+	("COA101", "1300-1450", "wed", "A102"),
+	("COA101", "0800-0950", "fri", "A102"),
+	("MAT203", "0800-0950", "mon", "B202"),
+	("MAT203", "0800-0950", "tue", "B202"),
+	("MAT203", "0800-0950", "wed", "B202"),
+	("MAT204", "1300-1450", "mon", "B205"),
+	("MAT204", "1300-1450", "tue", "B205"),
+	("MAT204", "1300-1450", "wed", "B205"),
+	("ASB311", "1300-1450", "tue", "C111"),
+	("ASB311", "1000-1150", "thu", "C111"),
+	("ASB311", "1000-1150", "fri", "C111"),
+	("ASB312", "1500-1650", "tue", "C212"),
+	("ASB312", "1300-1450", "thu", "B212"),
+	("ASB312", "1300-1450", "fri", "B212");
+	

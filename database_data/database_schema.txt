@@ -22,16 +22,11 @@ CREATE TABLE Courses (
 );
 	
 CREATE TABLE Blocks (
-	blockid VARCHAR(2),
+	blockid INT(4) AUTO_INCREMENT,
 	courseid VARCHAR(6),
 	time VARCHAR(9),
-	day ENUM ('mon', 'tue', 'wed', 'thu', 'fri', 'sat'),
+	day ENUM ('mon', 'tue', 'wed', 'thu', 'fri'),
 	room VARCHAR(4) NOT NULL,
-	userid VARCHAR(6),
-	FOREIGN KEY fk_student_block(userid)
-	REFERENCES Users(userid)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE,
 	FOREIGN KEY fk_courses_block(courseid)
 	REFERENCES Courses(courseid)
 	ON UPDATE CASCADE
@@ -53,6 +48,20 @@ CREATE TABLE AllGrades (
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
 	PRIMARY KEY (userid, courseid)
+);
+
+CREATE TABLE Classes (
+	blockid INT(4),
+	userid VARCHAR(6),
+	FOREIGN KEY fk_student_classes(userid)
+	REFERENCES Users(userid)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	FOREIGN KEY fk_blockid_classes(blockid)
+	REFERENCES Blocks(blockid)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	PRIMARY KEY (blockid, userid)
 );
 
 CREATE TABLE GradeItems (
