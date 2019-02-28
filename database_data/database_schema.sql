@@ -35,6 +35,20 @@ CREATE TABLE Blocks (
 	
 );
 
+CREATE TABLE Classes (
+	blockid INT(4),
+	userid VARCHAR(6),
+	FOREIGN KEY fk_student_classes(userid)
+	REFERENCES Users(userid)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	FOREIGN KEY fk_blockid_classes(blockid)
+	REFERENCES Blocks(blockid)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	PRIMARY KEY (blockid, userid)
+);
+
 CREATE TABLE AllGrades (
 	userid VARCHAR(6),
 	courseid VARCHAR(6),
@@ -50,27 +64,12 @@ CREATE TABLE AllGrades (
 	PRIMARY KEY (userid, courseid)
 );
 
-CREATE TABLE Classes (
-	blockid INT(4),
-	userid VARCHAR(6),
-	FOREIGN KEY fk_student_classes(userid)
-	REFERENCES Users(userid)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE,
-	FOREIGN KEY fk_blockid_classes(blockid)
-	REFERENCES Blocks(blockid)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE,
-	PRIMARY KEY (blockid, userid)
-);
-
 CREATE TABLE GradeItems (
 	userid VARCHAR(6),
 	courseid VARCHAR(6),
 	name VARCHAR(40) NOT NULL,
-	type ENUM('quiz', 'test', 'project', 'midterm', 'finals'),
-	marks VARCHAR(10) CHECK (marks LIKE '%/%'),
-	weight VARCHAR(5) CHECK (weight LIKE '%\%'),
+	marks VARCHAR(8),
+	weight VARCHAR(5),
 	FOREIGN KEY fk_student_gritem(userid)
 	REFERENCES Users(userid)
 	ON UPDATE CASCADE
