@@ -1,3 +1,12 @@
+# command syntax to run this mysql file:
+#
+# PRECONDITION: must log in to mysql and has CREATE privilege
+#
+# CMD:
+# mysql> source file/path/to/add_data.sql;
+# DO NOT USE \ aka backward slash. It does not work for mysql.
+# Use forward slash aka /
+
 USE learn_sys;
 
 # Data for Users: 3 admins, 3 professors, 6 students.
@@ -32,9 +41,9 @@ INSERT INTO Courses VALUES ("COA101", "Intro to Computer Architecture", "A begin
 	("ASB312", "Advanced Assembly (LAB)", "For people interested in mastering assembly languages. This is the lab version.", 12);
 	
 	
-# Data for blocks: 16 blocks from the 3 courses.
+# Data for Blocks: 16 blocks from the 3 courses.
 
-INSERT INTO blocks (courseid, time, day, room) VALUES 
+INSERT INTO Blocks (courseid, time, day, room) VALUES 
 	("COA101", "1200-1350", "mon", "A102"),
 	("COA101", "0800-0950", "wed", "A102"),
 	("COA101", "1300-1450", "wed", "A102"),
@@ -55,7 +64,7 @@ INSERT INTO blocks (courseid, time, day, room) VALUES
 
 # Data for classes. Not all students are enrolled in a class for testing purpose 
 
-INSERT INTO classes (blockid, userid) VALUES
+INSERT INTO Classes (blockid, userid) VALUES
 	(1, 321434),
 	(1, 082398),
 	(1, 784547),

@@ -1,3 +1,11 @@
+# command syntax to run this mysql file:
+#
+# PRECONDITION: must log in to mysql and has CREATE privilege
+#
+# CMD:
+# mysql> source file/path/to/database_schema.sql;
+# DO NOT USE \ aka backward slash. It does not work for mysql.
+# Use forward slash aka /
 CREATE DATABASE learn_sys;
 
 USE learn_sys;
