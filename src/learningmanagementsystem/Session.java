@@ -17,7 +17,7 @@ public class Session {
     private Connection myConnection;
     private Commands commandList;
 
-    private enum Tables {
+    private enum TableNames {
         Courses, GradeItems
     }
 
@@ -60,13 +60,13 @@ public class Session {
     private void accessTable(String choice) {
 
         try {
-            Tables tableName = Tables.valueOf(choice);
-            switch (tableName) {
+            TableNames name = TableNames.valueOf(choice);
+            switch (name) {
                 case Courses:
-                    promptUserAction(tableName);
+                    promptUserAction(name);
                     break;
                 case GradeItems:
-                    promptUserAction(tableName);
+                    promptUserAction(name);
                     break;
             }
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class Session {
 
     }
 
-    private void promptUserAction(Tables tableName) {
+    private void promptUserAction(TableNames tableName) {
 
     }
 

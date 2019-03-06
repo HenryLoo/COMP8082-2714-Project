@@ -1,6 +1,6 @@
 package learningmanagementsystem;
 
-public class Course implements Tables{
+public class Course implements Tables {
 
     @Override
     public void select() {

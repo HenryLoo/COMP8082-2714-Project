@@ -5,5 +5,4 @@ public interface Tables {
     void update();
     void delete();
     void select(); // might change to display
-
 }
