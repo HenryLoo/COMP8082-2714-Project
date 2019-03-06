@@ -1,6 +1,6 @@
 package learningmanagementsystem;
 
-public class Course implements Tables {
+public class Courses implements Tables {
 
     @Override
     public void select() {
@@ -8,7 +8,8 @@ public class Course implements Tables {
     }
 
     @Override
-    public void add() {
+    public void add(String ){
+
 
     }
 
