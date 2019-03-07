@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Session {
     private MyDBConnection mdbc;
     private boolean inSession;
-    private Connection myConnection;
+    protected Connection myConnection;
     private Commands commandList;
 
     private enum TableNames {
