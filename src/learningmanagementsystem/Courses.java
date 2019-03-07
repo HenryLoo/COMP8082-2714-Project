@@ -44,7 +44,8 @@ public class Courses extends Command implements Tables {
     @Override
     public void add(String name, String id, String description, int profID){
         if(checkCourseName(name) && checkID(id) && checkDescription(description) && checkProfID(profID)){
-            String command = "INSERT INTO courses VALUES "
+            String command = "INSERT INTO courses VALUES ('" + name + "', '" + id + "' , '"
+                    + description + "', " + profID + ");";
         }
 
     }
