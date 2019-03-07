@@ -1,6 +1,40 @@
 package learningmanagementsystem;
 
-public class Courses implements Tables {
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class Courses extends Command implements Tables {
+
+    /**
+     * Create a Courses instance and run the dashboard.
+     */
+    public Courses() throws ExitProgramException{
+        try {
+            runDashboard();
+        } catch (ExitProgramException exit) {
+            throw exit;
+        }
+    }
+
+    @Override
+    public void runDashboard() throws ExitProgramException {
+        while (true) {
+            System.out.println("You are now in the Courses Dashboard. \n"
+                    + "Depends on your privilege, you can add, update, or delete data. \n"
+                    + "Press 'menu' to return to main menu, 'exit' to quit the program.");
+
+            try {
+                String input = scanner.next();
+                accessCMDList(input);
+
+            } catch (ExitProgramException exit) {
+                throw exit;
+            }
+        }
+
+    }
 
     @Override
     public void select() {
@@ -18,6 +52,27 @@ public class Courses implements Tables {
 
     @Override
     public void delete() {
+
+        try {
+
+            //remind user to enter the user id they want to delete
+            System.out.print("Please enter the id of user to delete:");
+            int userid = scanner.nextInt();
+
+            //define the Sql statement
+            // String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
+
+            //acquire the statement object
+
+//            stt = conn.createStatement();
+//
+//            //execute the Sql statement
+//            stt.executeUpdate(deleteSql);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+        }
 
     }
 
@@ -48,9 +103,10 @@ public class Courses implements Tables {
     }
 
     private boolean checkCourseName(String name) {
-        if(name != null){
+        if (name != null){
             return true;
         }
+
         return false;
     }
 
@@ -58,6 +114,7 @@ public class Courses implements Tables {
         if(description != null && description.length() > 150){
             return false;
         }
+
         return true;
     }
 
@@ -68,4 +125,5 @@ public class Courses implements Tables {
         }
         return true;
     }
+
 }
