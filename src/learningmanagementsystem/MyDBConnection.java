@@ -22,18 +22,19 @@ public class MyDBConnection {
     }
 
     public void init(){
-       try{
+       try {
         
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        myConnection=DriverManager.getConnection(
-                "jdbc:mysql://51.38.19.86:3306/munimoe_LMS","munimoe_admin", "a9D4^x1Uy8AV"
-                );
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            myConnection=DriverManager.getConnection(
+                    "jdbc:mysql://51.38.19.86:3306/munimoe_LMS","munimoe_admin", "a9D4^x1Uy8AV"
+                    );
+
+           System.out.println("Database connection success!");
         }
-        catch(Exception e){
+        catch (Exception e){
             System.out.println("Failed to connect to database.");
             e.printStackTrace();
         }
-       System.out.println("Database connection success!");
     }
     
     
