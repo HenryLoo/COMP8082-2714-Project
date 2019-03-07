@@ -43,22 +43,9 @@ public class Courses extends Command implements Tables {
 
     @Override
     public void add(String name, String id, String description, int profID){
-        try {
-            checkCourseName(name);
-        } catch(IllegalArgumentException e){
-            System.out.println("Please re enter");
+        if(checkCourseName(name) && checkID(id) && checkDescription(description) && checkProfID(profID)){
+            String command = "INSERT INTO courses VALUES "
         }
-        try {
-            checkDescription(description);
-        } catch (IllegalArgumentException e){
-            System.out.println("Please re enter");
-        }
-        try {
-            checkProfID(profID);
-        } catch (IllegalArgumentException e){
-            System.out.println("Please re enter");
-        }
-        
 
     }
 
