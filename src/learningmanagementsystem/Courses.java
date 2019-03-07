@@ -43,12 +43,11 @@ public class Courses extends Command implements Tables {
 
     @Override
     public void add(String name, String id, String description, int profID){
-        Statement smt = null;
         if(checkCourseName(name) && checkID(id) && checkDescription(description) && checkProfID(profID)){
-            String command = "INSERT INTO courses VALUES ('" + name + "', '" + id + "' , '"
+            String sql = "INSERT INTO courses VALUES ('" + name + "', '" + id + "' , '"
                     + description + "', " + profID + ");";
         }
-        smt.executeUpdate();
+
 
     }
 
