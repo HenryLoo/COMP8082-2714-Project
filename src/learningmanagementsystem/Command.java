@@ -1,6 +1,13 @@
 package learningmanagementsystem;
+import java.util.Scanner;
 
 public class Command {
+
+    /**
+     * Line size for user input (testing purpose).
+     */
+    public static int LINESIZE = 5;
+
     /*
         Declare all the commands available in the program.
      */
@@ -8,8 +15,17 @@ public class Command {
         add, update, delete, exit, menu, access
     }
 
+    /*
+        Declare all the tables available in the database.
+     */
     private enum TableNames {
         Courses, GradeItems
+    }
+
+    Scanner scanner;
+
+    public Command() {
+        scanner = new Scanner(System.in);
     }
 
     /**
@@ -19,9 +35,8 @@ public class Command {
      * @param input a String.
      */
     public void accessCMDList(String input) throws ExitProgramException {
-        String[] arguments = splitInput(input);
         try {
-            CommandsChoices cmd = CommandsChoices.valueOf(arguments[0]);
+            CommandsChoices cmd = CommandsChoices.valueOf(input);
             switch (cmd) {
                 case add:
                     runCommand(cmd);
@@ -36,7 +51,8 @@ public class Command {
                     exitProgram();
                     break;
                 case access:
-                    accessTable(arguments[1]);
+                    String tableName = scanner.next();
+                    accessTable(tableName);
             }
         } catch (ExitProgramException exit) {
             throw exit;
@@ -45,14 +61,10 @@ public class Command {
         }
     }
 
-    private String[] splitInput(String input) {
-        return input.split(" ");
-    }
-
     /*
         Choose which table dashboard to initialize for the user.
      */
-    private void accessTable(String choice) {
+    private void accessTable(String choice) throws ExitProgramException {
         try {
             TableNames name = TableNames.valueOf(choice);
             switch (name) {
@@ -63,6 +75,8 @@ public class Command {
 
         } catch (NullPointerException | IllegalArgumentException e) {
             System.out.println("This table does not exist. Try again");
+        } catch (ExitProgramException exit) {
+            throw exit;
         }
 
     }

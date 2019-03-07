@@ -25,8 +25,8 @@ public class Courses extends Command implements Tables {
                     + "Press 'menu' to return to main menu, 'exit' to quit the program.");
 
             try {
-                String choice = scanner.next();
-                accessCMDList(choice);
+                String input = scanner.next();
+                accessCMDList(input);
 
             } catch (ExitProgramException exit) {
                 throw exit;

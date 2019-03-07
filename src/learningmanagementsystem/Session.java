@@ -17,6 +17,7 @@ public class Session extends Command{
     private Connection myConnection;
 
     public Session() {
+        super();
         // Create connection and initialize it
         mdbc = new MyDBConnection();
         mdbc.init();
@@ -28,7 +29,6 @@ public class Session extends Command{
     }
 
     public void runMenu() {
-        Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Learning System Management. \n");
 
         while (inSession) {
@@ -37,8 +37,9 @@ public class Session extends Command{
                         + "You can choose from the following tables: Courses or GradeItems. \n"
                         + "Type 'exit' to exit");
 
-                String choice = scan.next();
-                accessCMDList(choice);
+                String input = scanner.next();
+
+                accessCMDList(input);
 
             } catch (ExitProgramException exit) {
                 endSession();
@@ -55,6 +56,7 @@ public class Session extends Command{
             inSession = false;
             System.out.println("Ending Connection...");
             myConnection.close();
+            scanner.close();
             System.out.println("Goodbye.");
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
