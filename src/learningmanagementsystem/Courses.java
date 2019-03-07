@@ -4,16 +4,23 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class Courses implements Tables {
+public class Courses extends Command implements Tables {
+
+    public Courses() {
+        super();
+    }
 
     @Override
     public void runDashboard() {
         while (true) {
             System.out.println("You are now in the Courses Dashboard. \n"
                     + "Depends on your privilege, you can add, update, or delete data. \n"
-                    + "Press 'return' to return to main menu, 'exit' to quit the program.");
+                    + "Press 'menu' to return to main menu, 'exit' to quit the program.");
 
             String choice = scanner.next();
+            if (accessCMDList(choice)) {
+                accessTable(choice);
+            }
         }
 
     }

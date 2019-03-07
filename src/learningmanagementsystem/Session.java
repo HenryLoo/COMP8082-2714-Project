@@ -15,13 +15,10 @@ public class Session {
     private MyDBConnection mdbc;
     private boolean inSession;
     private Connection myConnection;
+    private Command commandList;
 
     private enum TableNames {
         Courses, GradeItems
-    }
-
-    private enum CommandsChoices {
-        add, update, delete, exit
     }
 
     public Session() {
@@ -32,6 +29,8 @@ public class Session {
         // Get database connection
         myConnection = mdbc.getMyConnection();
         inSession = true;
+
+        commandList = new Command();
     }
 
     public void runMenu() {
@@ -45,9 +44,7 @@ public class Session {
 
             String choice = scan.next();
 
-            if (choice.equals("exit")) {
-                accessCMDList(choice);
-            } else {
+            if (!commandList.accessCMDList(choice)) {
                 accessTable(choice);
             }
         }
@@ -73,45 +70,18 @@ public class Session {
 
     }
 
-    private void endSession() {
+    /**
+     * Exit the program by ending the session.
+     */
+    protected void exitProgram() {
         try {
+            inSession = false;
+            System.out.println("Program shutting down. Goodbye.");
             myConnection.close();
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
 
-    public void accessCMDList(String choice) {
-        try {
-            CommandsChoices cmd = CommandsChoices.valueOf(choice);
-            switch (cmd) {
-                case add:
-                    runCommand(cmd);
-                    break;
-                case update:
-                    runCommand(cmd);
-                    break;
-                case delete:
-                    runCommand(cmd);
-                    break;
-                case exit:
-                    exitProgram();
-                    break;
-            }
-        } catch (Exception e) {
-            System.out.println("This command doesn't exist. Please retry");
-        }
-    }
-
-    // Holder for now
-    public void runCommand(CommandsChoices cmd) {
-        System.out.println("Please come back later");
-    }
-
-    private void exitProgram() {
-        inSession = false;
-        System.out.println("Program shutting down. Goodbye.");
-        endSession();
     }
 
 }
