@@ -42,6 +42,7 @@ public class Courses extends Command implements Tables {
     }
 
     @Override
+<<<<<<< HEAD
     public void add(String name, String id, String description, int profID) {
         Statement smt = ;
 
@@ -49,6 +50,12 @@ public class Courses extends Command implements Tables {
             String command = "INSERT INTO courses VALUES ( '" + name + "', '" + id
                     + "' , '" + description + "'," + profID + ");";
 
+=======
+    public void add(String name, String id, String description, int profID){
+        if(checkCourseName(name) && checkProfID(profID) && checkDescription(description) && checkProfID(profID)){
+            String command = "INSERT INTO courses VALUES ( " + "'" + name +"' " + ", " + "'" + id + "' "
+                    + ", '" + description + "' ," + profID + ");";
+>>>>>>> master
         }
     }
 
