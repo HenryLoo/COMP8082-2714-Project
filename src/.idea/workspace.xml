@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="6c9910e0-1d89-467e-b61f-8a2f7b3fb3a8" name="Default Changelist" comment="" />
+=======
+    <list default="true" id="6c9910e0-1d89-467e-b61f-8a2f7b3fb3a8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/learningmanagementsystem/Courses.java" beforeDir="false" afterPath="$PROJECT_DIR$/learningmanagementsystem/Courses.java" afterDir="false" />
+    </list>
+>>>>>>> master
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,15 +25,27 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="false">
+=======
+      <file pinned="false" current-in-tab="true">
+>>>>>>> master
         <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Session.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="210">
               <caret line="17" selection-start-line="17" selection-end-line="17" />
+<<<<<<< HEAD
+=======
+              <folding>
+                <element signature="e#701#702#0" expanded="true" />
+                <element signature="e#736#737#0" expanded="true" />
+              </folding>
+>>>>>>> master
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Courses.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -35,6 +53,17 @@
               <caret line="43" column="2" selection-start-line="43" selection-start-column="2" selection-end-line="52" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
+=======
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Courses.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="660">
+              <caret line="44" column="76" selection-start-line="44" selection-start-column="76" selection-end-line="44" selection-end-column="76" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2202#2203#0" expanded="true" />
+                <element signature="e#2229#2230#0" expanded="true" />
+>>>>>>> master
               </folding>
             </state>
           </provider>
@@ -82,10 +111,17 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/learningmanagementsystem/Tester.java" />
         <option value="$PROJECT_DIR$/learningmanagementsystem/Course.java" />
         <option value="$PROJECT_DIR$/learningmanagementsystem/Tables.java" />
         <option value="$PROJECT_DIR$/learningmanagementsystem/Session.java" />
+=======
+        <option value="$PROJECT_DIR$/learningmanagementsystem/Session.java" />
+        <option value="$PROJECT_DIR$/learningmanagementsystem/Tester.java" />
+        <option value="$PROJECT_DIR$/learningmanagementsystem/Course.java" />
+        <option value="$PROJECT_DIR$/learningmanagementsystem/Tables.java" />
+>>>>>>> master
         <option value="$PROJECT_DIR$/learningmanagementsystem/Courses.java" />
       </list>
     </option>
@@ -103,6 +139,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+<<<<<<< HEAD
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -119,13 +156,20 @@
           <select />
         </subPane>
       </pane>
+=======
+      <pane id="ProjectPane" />
+>>>>>>> master
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+<<<<<<< HEAD
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551991629160" />
+=======
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551991730459" />
+>>>>>>> master
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -155,7 +199,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551909449166</updated>
+<<<<<<< HEAD
       <workItem from="1551909454167" duration="10055000" />
+=======
+      <workItem from="1551909454167" duration="10434000" />
+>>>>>>> master
     </task>
     <task id="LOCAL-00001" summary="fixed package errors">
       <created>1551909928115</created>
@@ -182,7 +230,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="11012000" />
+=======
+    <option name="totallyTimeSpent" value="10570000" />
+>>>>>>> master
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1280" height="731" extended-state="6" />
@@ -230,6 +282,16 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Tester.java" />
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/learningmanagementsystem/MyDBConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="40" column="37" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> master
     <entry file="file://$PROJECT_DIR$/learningmanagementsystem/LearningManagementSystem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -251,6 +313,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Session.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -271,6 +334,27 @@
           <caret line="43" column="2" selection-start-line="43" selection-start-column="2" selection-end-line="52" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Courses.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="76" selection-start-line="44" selection-start-column="76" selection-end-line="44" selection-end-column="76" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2202#2203#0" expanded="true" />
+            <element signature="e#2229#2230#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/learningmanagementsystem/Session.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#701#702#0" expanded="true" />
+            <element signature="e#736#737#0" expanded="true" />
+>>>>>>> master
           </folding>
         </state>
       </provider>
