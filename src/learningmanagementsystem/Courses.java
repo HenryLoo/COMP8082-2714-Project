@@ -47,7 +47,9 @@ public class Courses implements Tables {
             try{
                 conn.close();
             } catch (Exception e2){
-        }}
+                // TODO: handle exception
+            }
+        }
 
     }
 
