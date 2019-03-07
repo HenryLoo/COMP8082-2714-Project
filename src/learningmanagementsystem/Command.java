@@ -81,6 +81,9 @@ public abstract class Command {
         System.out.println("Please come back later");
     }
 
+    /**
+     * Add data to tables.
+     */
     abstract public void add();
     /**
      * Tell session that we want to exit the program.
