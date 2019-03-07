@@ -11,17 +11,13 @@ import java.util.logging.Logger;
  * @version 4_mar_19
  */
 
-public class Session {
+public class Session extends Command{
     private MyDBConnection mdbc;
     private boolean inSession;
-    private Connection myConnection;
-    private Command commandList;
-
-    private enum TableNames {
-        Courses, GradeItems
-    }
+    protected Connection myConnection;
 
     public Session() {
+        super();
         // Create connection and initialize it
         mdbc = new MyDBConnection();
         mdbc.init();
@@ -30,54 +26,38 @@ public class Session {
         myConnection = mdbc.getMyConnection();
         inSession = true;
 
-        commandList = new Command();
     }
 
     public void runMenu() {
-        Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Learning System Management. \n");
 
         while (inSession) {
-            System.out.println("Enter the name of the table would you like to use. \n"
-                    + "You can choose from the following tables: Courses or GradeItems. \n"
-                    + "Type 'exit' to exit");
+            try {
+                System.out.println("Enter the name of the table would you like to use. \n"
+                        + "You can choose from the following tables: Courses or GradeItems. \n"
+                        + "Type 'exit' to exit");
 
-            String choice = scan.next();
+                String input = scanner.next();
 
-            if (!commandList.accessCMDList(choice)) {
-                accessTable(choice);
+                accessCMDList(input);
+
+            } catch (ExitProgramException exit) {
+                endSession();
             }
         }
-    }
-    /*
-        Choose which scenario the computer initialize for the user.
-     */
-    private void accessTable(String choice) {
-        TableNames name = TableNames.valueOf(choice);
-        switch (name) {
-            case Courses:
-                promptUserAction(name);
-                break;
-            case GradeItems:
-                promptUserAction(name);
-                break;
-            default:
-                System.out.println("The table name is incorrect. Try again.");
-        }
-    }
-
-    private void promptUserAction(TableNames tableName) {
-
     }
 
     /**
      * Exit the program by ending the session.
+     * @return true if program exit successfully, else false.
      */
-    protected void exitProgram() {
+    protected void endSession() {
         try {
             inSession = false;
-            System.out.println("Program shutting down. Goodbye.");
+            System.out.println("Ending Connection...");
             myConnection.close();
+            scanner.close();
+            System.out.println("Goodbye.");
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }

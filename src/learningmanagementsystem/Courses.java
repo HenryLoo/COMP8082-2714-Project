@@ -7,20 +7,30 @@ import java.util.Scanner;
 
 public class Courses extends Command implements Tables {
 
-    public Courses() {
-        super();
+    /**
+     * Create a Courses instance and run the dashboard.
+     */
+    public Courses() throws ExitProgramException{
+        try {
+            runDashboard();
+        } catch (ExitProgramException exit) {
+            throw exit;
+        }
     }
 
     @Override
-    public void runDashboard() {
+    public void runDashboard() throws ExitProgramException {
         while (true) {
             System.out.println("You are now in the Courses Dashboard. \n"
                     + "Depends on your privilege, you can add, update, or delete data. \n"
                     + "Press 'menu' to return to main menu, 'exit' to quit the program.");
 
-            String choice = scanner.next();
-            if (accessCMDList(choice)) {
-                accessTable(choice);
+            try {
+                String input = scanner.next();
+                accessCMDList(input);
+
+            } catch (ExitProgramException exit) {
+                throw exit;
             }
         }
 
@@ -62,7 +72,7 @@ public class Courses extends Command implements Tables {
             int userid = scanner.nextInt();
 
             //define the Sql statement
-            String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
+            // String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
 
             //acquire the statement object
 
@@ -84,7 +94,7 @@ public class Courses extends Command implements Tables {
     }
 
     private boolean checkID(String id){
-
+        return true;
     }
 
     private boolean checkCourseName(String name) {
@@ -110,4 +120,5 @@ public class Courses extends Command implements Tables {
         }
         return true;
     }
+
 }
