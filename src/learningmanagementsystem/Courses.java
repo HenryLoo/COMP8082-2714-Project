@@ -47,8 +47,6 @@ public class Courses extends Command implements Tables {
             String sql = "INSERT INTO courses VALUES ('" + name + "', '" + id + "' , '"
                     + description + "', " + profID + ");";
         }
-
-
     }
 
     @Override
