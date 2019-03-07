@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d14a5b00-3b11-4932-95f0-6b35fed03016" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command$CommandsChoices.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command$CommandsChoices.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command$TableNames.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command$TableNames.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Courses.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Courses.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Session.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Session.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Tables.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Tables.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Courses.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Courses.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Tables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Tables.java" afterDir="false" />
-    </list>
+    <list default="true" id="d14a5b00-3b11-4932-95f0-6b35fed03016" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +13,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
+            <state relative-caret-position="499">
               <caret line="48" column="36" lean-forward="true" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -140,7 +127,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551998374509" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552000478510" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -205,13 +192,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4301000" />
+    <option name="totallyTimeSpent" value="6083000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="730" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -221,7 +208,7 @@
       <window_info anchor="bottom" id="Messages" weight="0.3291536" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3291536" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3291536" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -288,7 +275,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
+        <state relative-caret-position="499">
           <caret line="48" column="36" lean-forward="true" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
