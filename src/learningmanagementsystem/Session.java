@@ -38,9 +38,7 @@ public class Session extends Command{
                         + "Type 'exit' to exit");
 
                 String choice = scan.next();
-
-                if (!accessCMDList(choice)) {
-                }
+                accessCMDList(choice);
 
             } catch (ExitProgramException exit) {
                 endSession();

@@ -16,11 +16,12 @@ public class Command {
      * Test whether the parameter is a command.
      * If it is, run appropriate action.
      *
-     * @param choice a String.
+     * @param input a String.
      */
-    public void accessCMDList(String choice) throws ExitProgramException {
+    public void accessCMDList(String input) throws ExitProgramException {
+        String[] arguments = splitInput(input);
         try {
-            CommandsChoices cmd = CommandsChoices.valueOf(choice);
+            CommandsChoices cmd = CommandsChoices.valueOf(arguments[0]);
             switch (cmd) {
                 case add:
                     runCommand(cmd);
@@ -35,27 +36,35 @@ public class Command {
                     exitProgram();
                     break;
                 case access:
-                    accessTable(choice);
+                    accessTable(arguments[1]);
             }
         } catch (ExitProgramException exit) {
             throw exit;
         } catch (NullPointerException | IllegalArgumentException e) {
-            System.out.println("This command doesn't exist. Please try again.");
+            System.out.println("The command syntax is incorrect. Please try again.");
         }
+    }
+
+    private String[] splitInput(String input) {
+        return input.split(" ");
     }
 
     /*
         Choose which table dashboard to initialize for the user.
      */
     private void accessTable(String choice) {
-        TableNames name = TableNames.valueOf(choice);
-        switch (name) {
-            case Courses:
-                new Courses();
-                break;
-            default:
-                System.out.println("The table name is incorrect. Try again.");
+        try {
+            TableNames name = TableNames.valueOf(choice);
+            switch (name) {
+                case Courses:
+                    new Courses();
+                    break;
+            }
+
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.out.println("This table does not exist. Try again");
         }
+
     }
 
     // Holder for now

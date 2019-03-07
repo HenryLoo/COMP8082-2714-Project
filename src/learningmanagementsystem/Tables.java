@@ -8,7 +8,7 @@ import java.util.Scanner;
  */
 public interface Tables {
     Scanner scanner = new Scanner(System.in);
-    void runDashboard();
+    void runDashboard() throws ExitProgramException;
     void add(String name, String id, String description, int profID);
     void update();
     void delete();
