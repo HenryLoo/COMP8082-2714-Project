@@ -43,7 +43,7 @@ public class Session extends Command{
 
                 String input = scanner.next();
 
-                accessCMDList(input);
+                accessCMDList(input, myConnection);
 
             } catch (ExitProgramException exit) {
                 endSession();
@@ -65,6 +65,10 @@ public class Session extends Command{
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    public void add(){
 
     }
 
