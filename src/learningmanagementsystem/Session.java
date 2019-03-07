@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Session extends Command{
     private MyDBConnection mdbc;
     private boolean inSession;
-    protected Connection myConnection;
+    private Connection myConnection;
 
     public Session() {
         super();
@@ -26,6 +26,10 @@ public class Session extends Command{
         myConnection = mdbc.getMyConnection();
         inSession = true;
 
+    }
+
+    public Connection getMyConnection() {
+        return myConnection;
     }
 
     public void runMenu() {
