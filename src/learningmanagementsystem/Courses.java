@@ -45,10 +45,27 @@ public class Courses extends Command implements Tables {
     }
 
     @Override
-    public void add(){
+    public void getAddData(){
+        System.out.println("Please enter a course id");
+        String courseID = scanner.next();
+        System.out.println("Please enter the course name");
+        String name = scanner.next();
+        System.out.println("Please enter the profID");
+        int profID = scanner.nextInt();
+        System.out.println("Please enter a description");
+        String description = scanner.next();
+
+
+        if(checkID(courseID) && checkCourseName(name) && checkDescription(description) && checkProfID(profID)) {
+            add(courseID,name,description,profID);
+        }
+    }
+
+    @Override
+    public void add(String courseID, String name, String description, int profID){
         Statement newCommand = null;
-//        if(checkCourseName(name) && checkID(id) && checkDescription(description) && checkProfID(profID)){
-            String sql = "INSERT INTO Courses VALUES('abc123', 'hello', 'this is a test', 11);";
+            String sql = "INSERT INTO Courses VALUES('" + courseID + "', '"+ name + "', '"
+                    + description + "', " + profID + ");";
             try {
                 newCommand = myConn.createStatement();
                 newCommand.executeUpdate(sql);
@@ -90,7 +107,24 @@ public class Courses extends Command implements Tables {
     }
 
     private boolean checkID(String id){
-        return true;
+        boolean digitTest  = false;
+        boolean alphaTest = false;
+        for(int i = 0; i < 3; i++){
+            if(id!= null && Character.isAlphabetic(id.charAt(i))){
+                digitTest = true;
+            }
+        }
+        for(int i = 3; i < 6; i++){
+            if(id!= null && Character.isDigit(id.charAt(i))){
+                alphaTest = true;
+            }
+        }
+        if (digitTest && alphaTest && id.length() == 6 ){
+            return true;
+        }else {
+            return false;
+
+        }
     }
 
     private boolean checkCourseName(String name) {
@@ -103,7 +137,7 @@ public class Courses extends Command implements Tables {
 
     private boolean checkDescription(String description) {
         if(description != null && description.length() > 150){
-            throw new IllegalArgumentException("Sorry the description is too long!");
+            return false;
         }
 
         return true;
@@ -112,7 +146,7 @@ public class Courses extends Command implements Tables {
     private boolean checkProfID(int profID){
         int length = Integer.toString(profID).length();
         if(length != 2){
-            throw new IllegalArgumentException("Your professor id is invalid");
+            return false;
         }
         return true;
     }
