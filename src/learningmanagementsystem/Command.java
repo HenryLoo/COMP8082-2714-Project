@@ -82,6 +82,7 @@ public abstract class Command {
     }
 
     abstract public void getAddData();
+
     /**
      * Tell session that we want to exit the program.
      */
