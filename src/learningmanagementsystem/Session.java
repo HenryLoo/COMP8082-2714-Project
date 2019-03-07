@@ -68,7 +68,7 @@ public class Session extends Command{
 
     }
 
-    public void add(){
+    public void getAddData(){
 
     }
 

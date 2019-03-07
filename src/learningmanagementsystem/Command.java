@@ -34,7 +34,7 @@ public abstract class Command {
             CommandsChoices cmd = CommandsChoices.valueOf(input);
             switch (cmd) {
                 case add:
-                    add();
+                    getAddData();
                     break;
                 case update:
                     runCommand(cmd);
@@ -81,10 +81,8 @@ public abstract class Command {
         System.out.println("Please come back later");
     }
 
-    /**
-     * Add data to tables.
-     */
-    abstract public void add();
+    abstract public void getAddData();
+
     /**
      * Tell session that we want to exit the program.
      */
