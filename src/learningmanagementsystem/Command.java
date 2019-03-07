@@ -2,12 +2,6 @@ package learningmanagementsystem;
 import java.util.Scanner;
 
 public class Command {
-
-    /**
-     * Line size for user input (testing purpose).
-     */
-    public static int LINESIZE = 5;
-
     /*
         Declare all the commands available in the program.
      */

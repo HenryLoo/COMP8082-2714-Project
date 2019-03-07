@@ -72,7 +72,7 @@ public class Courses extends Command implements Tables {
             int userid = scanner.nextInt();
 
             //define the Sql statement
-            String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
+            // String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
 
             //acquire the statement object
 

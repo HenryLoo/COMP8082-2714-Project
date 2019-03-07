@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Session extends Command{
     private MyDBConnection mdbc;
     private boolean inSession;
-    private Connection myConnection;
+    protected Connection myConnection;
 
     public Session() {
         super();
