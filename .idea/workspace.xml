@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d14a5b00-3b11-4932-95f0-6b35fed03016" name="Default Changelist" comment="" />
+    <list default="true" id="d14a5b00-3b11-4932-95f0-6b35fed03016" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Command.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Courses.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Courses.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Session.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Session.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Tables.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/production/COMP8082-2714-Project/learningmanagementsystem/Tables.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Courses.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Courses.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Tables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Tables.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,12 +23,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="48" column="36" lean-forward="true" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
+            <state relative-caret-position="170">
+              <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2386#2387#0" expanded="true" />
-                <element signature="e#2413#2414#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -28,7 +36,7 @@
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Tables.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+              <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
             </state>
           </provider>
         </entry>
@@ -45,8 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Session.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="71" selection-start-line="71" selection-end-line="71" />
+            <state relative-caret-position="914">
+              <caret line="70" column="26" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -54,8 +62,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Command.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
+            <state relative-caret-position="756">
+              <caret line="83" column="36" selection-start-line="83" selection-start-column="36" selection-end-line="83" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -66,13 +74,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="75">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>add</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -81,8 +94,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/Tables.java" />
-        <option value="$PROJECT_DIR$/src/learningmanagementsystem/Command.java" />
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/Session.java" />
+        <option value="$PROJECT_DIR$/src/learningmanagementsystem/Command.java" />
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/Courses.java" />
       </list>
     </option>
@@ -127,7 +140,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552000478510" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552002930315" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -192,7 +205,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6083000" />
+    <option name="totallyTimeSpent" value="8172000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="730" extended-state="6" />
@@ -235,6 +248,23 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="83" column="36" selection-start-line="83" selection-start-column="36" selection-end-line="83" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/LearningManagementSystem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -242,45 +272,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Tables.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Command.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Session.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="71" selection-start-line="71" selection-end-line="71" />
+        <state relative-caret-position="914">
+          <caret line="70" column="26" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="48" column="36" lean-forward="true" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
+        <state relative-caret-position="170">
+          <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2386#2387#0" expanded="true" />
-            <element signature="e#2413#2414#0" expanded="true" />
           </folding>
         </state>
       </provider>
