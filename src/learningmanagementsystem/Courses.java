@@ -2,16 +2,19 @@ package learningmanagementsystem;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
 public class Courses extends Command implements Tables {
 
+    private Connection myConn;
     /**
      * Create a Courses instance and run the dashboard.
      */
-    public Courses() throws ExitProgramException{
+    public Courses(Connection newMyConn) throws ExitProgramException{
         try {
+            myConn = newMyConn;
             runDashboard();
         } catch (ExitProgramException exit) {
             throw exit;
@@ -27,7 +30,7 @@ public class Courses extends Command implements Tables {
 
             try {
                 String input = scanner.next();
-                accessCMDList(input);
+                accessCMDList(input, myConn);
 
             } catch (ExitProgramException exit) {
                 throw exit;
@@ -42,11 +45,17 @@ public class Courses extends Command implements Tables {
     }
 
     @Override
-    public void add(String name, String id, String description, int profID){
-        if(checkCourseName(name) && checkID(id) && checkDescription(description) && checkProfID(profID)){
-            String sql = "INSERT INTO courses VALUES ('" + name + "', '" + id + "' , '"
-                    + description + "', " + profID + ");";
-        }
+    public void add(){
+        Statement newCommand = null;
+//        if(checkCourseName(name) && checkID(id) && checkDescription(description) && checkProfID(profID)){
+            String sql = "INSERT INTO Courses VALUES('abc123', 'hello', 'this is a test', 11);";
+            try {
+                newCommand = myConn.createStatement();
+                newCommand.executeUpdate(sql);
+                newCommand.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
