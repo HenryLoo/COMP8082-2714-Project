@@ -11,11 +11,10 @@ import java.util.logging.Logger;
  * @version 4_mar_19
  */
 
-public class Session {
+public class Session extends Command{
     private MyDBConnection mdbc;
     private boolean inSession;
     private Connection myConnection;
-    private Command commandList;
 
     private enum TableNames {
         Courses, GradeItems
@@ -30,7 +29,6 @@ public class Session {
         myConnection = mdbc.getMyConnection();
         inSession = true;
 
-        commandList = new Command();
     }
 
     public void runMenu() {
@@ -44,7 +42,7 @@ public class Session {
 
             String choice = scan.next();
 
-            if (!commandList.accessCMDList(choice)) {
+            if (!accessCMDList(choice)) {
                 accessTable(choice);
             }
         }
@@ -72,14 +70,17 @@ public class Session {
 
     /**
      * Exit the program by ending the session.
+     * @return true if program exit successfully, else false.
      */
-    protected void exitProgram() {
+    protected boolean exitProgram() {
         try {
             inSession = false;
             System.out.println("Program shutting down. Goodbye.");
             myConnection.close();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
 
     }

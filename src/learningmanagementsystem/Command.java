@@ -1,6 +1,6 @@
 package learningmanagementsystem;
 
-public class Command {
+abstract public class Command {
     /*
         Declare all the commands available in the program.
      */
@@ -44,5 +44,8 @@ public class Command {
         System.out.println("Please come back later");
     }
 
-
+    /*
+    A code to exit the program in Session.
+     */
+    abstract protected void exitProgram();
 }

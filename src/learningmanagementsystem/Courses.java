@@ -6,10 +6,6 @@ import java.sql.Statement;
 
 public class Courses extends Command implements Tables {
 
-    public Courses() {
-        super();
-    }
-
     @Override
     public void runDashboard() {
         while (true) {
@@ -18,9 +14,7 @@ public class Courses extends Command implements Tables {
                     + "Press 'menu' to return to main menu, 'exit' to quit the program.");
 
             String choice = scanner.next();
-            if (accessCMDList(choice)) {
-                accessTable(choice);
-            }
+            accessCMDList(choice);
         }
 
     }
@@ -105,5 +99,12 @@ public class Courses extends Command implements Tables {
             throw new IllegalArgumentException("Your professor id is invalid");
         }
         return true;
+    }
+
+    /**
+     * Tell session that we want to exit the program.
+     */
+    protected void exitProgram() {
+        throw new
     }
 }
