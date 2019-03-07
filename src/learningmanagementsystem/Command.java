@@ -1,7 +1,8 @@
 package learningmanagementsystem;
 import java.util.Scanner;
+import java.sql.*;
 
-public class Command {
+public abstract class Command {
     /*
         Declare all the commands available in the program.
      */
@@ -28,12 +29,12 @@ public class Command {
      *
      * @param input a String.
      */
-    public void accessCMDList(String input) throws ExitProgramException {
+    public void accessCMDList(String input, Connection myConn) throws ExitProgramException {
         try {
             CommandsChoices cmd = CommandsChoices.valueOf(input);
             switch (cmd) {
                 case add:
-                    runCommand(cmd);
+                    add();
                     break;
                 case update:
                     runCommand(cmd);
@@ -46,7 +47,7 @@ public class Command {
                     break;
                 case access:
                     String tableName = scanner.next();
-                    accessTable(tableName);
+                    accessTable(tableName, myConn);
             }
         } catch (ExitProgramException exit) {
             throw exit;
@@ -58,12 +59,12 @@ public class Command {
     /*
         Choose which table dashboard to initialize for the user.
      */
-    private void accessTable(String choice) throws ExitProgramException {
+    private void accessTable(String choice, Connection myConn) throws ExitProgramException {
         try {
             TableNames name = TableNames.valueOf(choice);
             switch (name) {
                 case Courses:
-                    new Courses();
+                    new Courses(myConn);
                     break;
             }
 
@@ -80,6 +81,7 @@ public class Command {
         System.out.println("Please come back later");
     }
 
+    abstract public void add();
     /**
      * Tell session that we want to exit the program.
      */

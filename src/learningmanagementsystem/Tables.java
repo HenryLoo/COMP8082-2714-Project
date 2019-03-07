@@ -8,7 +8,7 @@ package learningmanagementsystem;
  */
 public interface Tables {
     void runDashboard() throws ExitProgramException;
-    void add(String name, String id, String description, int profID);
+    void add();
     void update();
     void delete();
     void select(); // might change to display
