@@ -1,6 +1,6 @@
 package learningmanagementsystem;
 
-abstract public class Command {
+public class Command {
     /*
         Declare all the commands available in the program.
      */
@@ -15,7 +15,7 @@ abstract public class Command {
      * @param choice a String.
      * @retrun true if it's a command, else false.
      */
-    public boolean accessCMDList(String choice) {
+    public boolean accessCMDList(String choice) throws ExitProgramException {
         try {
             CommandsChoices cmd = CommandsChoices.valueOf(choice);
             switch (cmd) {
@@ -31,10 +31,13 @@ abstract public class Command {
                 case exit:
                     exitProgram();
                     break;
+                default:
+                    System.out.println("This command doesn't exist. Please try again.");
             }
-        } catch (Exception e) {
-            return false;
+        } catch (ExitProgramException exit) {
+            throw exit;
         }
+
 
         return true;
     }
@@ -44,8 +47,10 @@ abstract public class Command {
         System.out.println("Please come back later");
     }
 
-    /*
-    A code to exit the program in Session.
+    /**
+     * Tell session that we want to exit the program.
      */
-    abstract protected void exitProgram();
+    protected void exitProgram() throws ExitProgramException {
+        throw new ExitProgramException("Exiting Program...");
+    }
 }

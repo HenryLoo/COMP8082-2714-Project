@@ -74,7 +74,7 @@ public class Courses extends Command implements Tables {
     }
 
     private boolean checkID(String id){
-
+        return true;
     }
 
     private boolean checkCourseName(String name) {
@@ -101,10 +101,4 @@ public class Courses extends Command implements Tables {
         return true;
     }
 
-    /**
-     * Tell session that we want to exit the program.
-     */
-    protected void exitProgram() {
-        throw new
-    }
 }

@@ -36,19 +36,25 @@ public class Session extends Command{
         System.out.println("Welcome to the Learning System Management. \n");
 
         while (inSession) {
-            System.out.println("Enter the name of the table would you like to use. \n"
-                    + "You can choose from the following tables: Courses or GradeItems. \n"
-                    + "Type 'exit' to exit");
+            try {
+                System.out.println("Enter the name of the table would you like to use. \n"
+                        + "You can choose from the following tables: Courses or GradeItems. \n"
+                        + "Type 'exit' to exit");
 
-            String choice = scan.next();
+                String choice = scan.next();
 
-            if (!accessCMDList(choice)) {
-                accessTable(choice);
+                if (!accessCMDList(choice)) {
+                    accessTable(choice);
+                }
+
+            } catch (ExitProgramException exit) {
+                endSession();
             }
         }
     }
+
     /*
-        Choose which scenario the computer initialize for the user.
+        Choose which table dashboard to initialize for the user.
      */
     private void accessTable(String choice) {
         TableNames name = TableNames.valueOf(choice);
@@ -72,15 +78,14 @@ public class Session extends Command{
      * Exit the program by ending the session.
      * @return true if program exit successfully, else false.
      */
-    protected boolean exitProgram() {
+    protected void endSession() {
         try {
             inSession = false;
-            System.out.println("Program shutting down. Goodbye.");
+            System.out.println("Ending Connection...");
             myConnection.close();
-            return true;
+            System.out.println("Goodbye.");
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
 
     }
