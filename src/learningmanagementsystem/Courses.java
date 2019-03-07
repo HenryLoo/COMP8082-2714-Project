@@ -5,7 +5,26 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
 
-public class Courses implements Tables {
+public class Courses extends Command implements Tables {
+
+    public Courses() {
+        super();
+    }
+
+    @Override
+    public void runDashboard() {
+        while (true) {
+            System.out.println("You are now in the Courses Dashboard. \n"
+                    + "Depends on your privilege, you can add, update, or delete data. \n"
+                    + "Press 'menu' to return to main menu, 'exit' to quit the program.");
+
+            String choice = scanner.next();
+            if (accessCMDList(choice)) {
+                accessTable(choice);
+            }
+        }
+
+    }
 
     @Override
     public void select() {
@@ -37,37 +56,24 @@ public class Courses implements Tables {
     public void delete() {
 
         try {
-            //getting connection
-
-
-            if (myConnection = null)
-                return;
 
             //remind user to enter the user id they want to delete
-            System.out.print("Please enter the name of course to delete:");
-            Scanner input;
-            input = new Scanner(System.in);
-
-            try {
-                checkCourseName(input);
-            } catch(IllegalArgumentException e){
-                System.out.println("That course name is invalid, please re-enter:");
-            }
-
-
-            int CourseName = input.nextInt();
+            System.out.print("Please enter the id of user to delete:");
+            int userid = scanner.nextInt();
 
             //define the Sql statement
             String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
 
             //acquire the statement object
-            stt = myConnection.createStatement();
 
-            //execute the Sql statement
-            stt.executeUpdate(deleteSql);
+//            stt = conn.createStatement();
+//
+//            //execute the Sql statement
+//            stt.executeUpdate(deleteSql);
 
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
         }
 
     }
@@ -82,9 +88,10 @@ public class Courses implements Tables {
     }
 
     private boolean checkCourseName(String name) {
-        if(name != null){
+        if (name != null){
             return true;
         }
+
         return false;
     }
 
@@ -92,6 +99,7 @@ public class Courses implements Tables {
         if(description != null && description.length() > 150){
             throw new IllegalArgumentException("Sorry the description is too long!");
         }
+
         return true;
     }
 
