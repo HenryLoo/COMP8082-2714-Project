@@ -9,22 +9,9 @@ public class Courses implements Tables {
 
     @Override
     public void add(String name, String id, String description, int profID){
-        try {
-            checkCourseName(name);
-        } catch(IllegalArgumentException e){
-            System.out.println("Please re enter");
-        }
-        try {
-            checkDescription(description);
-        } catch (IllegalArgumentException e){
-            System.out.println("Please re enter");
-        }
-        try {
-            checkProfID(profID);
-        } catch (IllegalArgumentException e){
-            System.out.println("Please re enter");
-        }
-        
+        if(checkCourseName(name) && checkProfID(profID) && )
+        String command = "INSERT INTO courses VALUES (" + name + ", " + id
+                + ", " + description + " ," + profID + ";";
 
     }
 
@@ -39,7 +26,24 @@ public class Courses implements Tables {
     }
 
     private boolean checkID(String id){
+        boolean digitTest  = false;
+        boolean alphaTest = false;
+        for(int i = 0; i < 3; i++){
+            if(id!= null && Character.isDigit(id.charAt(i))){
+                digitTest = true;
+            }
+        }
+        for(int i = 3; i < 6; i++){
+            if(id!= null && Character.isAlphabetic(i)){
+                alphaTest = true;
+            }
+        }
+        if (digitTest && alphaTest && id.length() == 6 ){
+            return true;
+        }else {
+            return false;
 
+        }
     }
 
     private boolean checkCourseName(String name) {
@@ -51,15 +55,15 @@ public class Courses implements Tables {
 
     private boolean checkDescription(String description) {
         if(description != null && description.length() > 150){
-            throw new IllegalArgumentException("Sorry the description is too long!");
+            return false;
         }
         return true;
     }
 
     private boolean checkProfID(int profID){
         int length = Integer.toString(profID).length();
-        if(length != 2){
-            throw new IllegalArgumentException("Your professor id is invalid");
+        if(length != 6){
+            return false;
         }
         return true;
     }
