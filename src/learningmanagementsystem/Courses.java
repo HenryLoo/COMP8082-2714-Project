@@ -24,10 +24,7 @@ public class Courses implements Tables {
         } catch (IllegalArgumentException e){
             System.out.println("Please re enter");
         }
-
-
-
-
+        
 
     }
 
