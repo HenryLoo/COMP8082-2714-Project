@@ -5,7 +5,11 @@ public class Command {
         Declare all the commands available in the program.
      */
     private enum CommandsChoices {
-        add, update, delete, exit, menu
+        add, update, delete, exit, menu, access
+    }
+
+    private enum TableNames {
+        Courses, GradeItems
     }
 
     /**
@@ -13,9 +17,8 @@ public class Command {
      * If it is, run appropriate action.
      *
      * @param choice a String.
-     * @retrun true if it's a command, else false.
      */
-    public boolean accessCMDList(String choice) throws ExitProgramException {
+    public void accessCMDList(String choice) throws ExitProgramException {
         try {
             CommandsChoices cmd = CommandsChoices.valueOf(choice);
             switch (cmd) {
@@ -31,15 +34,28 @@ public class Command {
                 case exit:
                     exitProgram();
                     break;
-                default:
-                    System.out.println("This command doesn't exist. Please try again.");
+                case access:
+                    accessTable(choice);
             }
         } catch (ExitProgramException exit) {
             throw exit;
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.out.println("This command doesn't exist. Please try again.");
         }
+    }
 
-
-        return true;
+    /*
+        Choose which table dashboard to initialize for the user.
+     */
+    private void accessTable(String choice) {
+        TableNames name = TableNames.valueOf(choice);
+        switch (name) {
+            case Courses:
+                new Courses();
+                break;
+            default:
+                System.out.println("The table name is incorrect. Try again.");
+        }
     }
 
     // Holder for now

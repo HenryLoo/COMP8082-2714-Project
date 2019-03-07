@@ -6,6 +6,13 @@ import java.sql.Statement;
 
 public class Courses extends Command implements Tables {
 
+    /**
+     * Create a Courses instance and run the dashboard.
+     */
+    public Courses() {
+        runDashboard();
+    }
+
     @Override
     public void runDashboard() {
         while (true) {

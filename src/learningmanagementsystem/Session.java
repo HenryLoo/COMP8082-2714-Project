@@ -16,10 +16,6 @@ public class Session extends Command{
     private boolean inSession;
     private Connection myConnection;
 
-    private enum TableNames {
-        Courses, GradeItems
-    }
-
     public Session() {
         // Create connection and initialize it
         mdbc = new MyDBConnection();
@@ -44,34 +40,12 @@ public class Session extends Command{
                 String choice = scan.next();
 
                 if (!accessCMDList(choice)) {
-                    accessTable(choice);
                 }
 
             } catch (ExitProgramException exit) {
                 endSession();
             }
         }
-    }
-
-    /*
-        Choose which table dashboard to initialize for the user.
-     */
-    private void accessTable(String choice) {
-        TableNames name = TableNames.valueOf(choice);
-        switch (name) {
-            case Courses:
-                promptUserAction(name);
-                break;
-            case GradeItems:
-                promptUserAction(name);
-                break;
-            default:
-                System.out.println("The table name is incorrect. Try again.");
-        }
-    }
-
-    private void promptUserAction(TableNames tableName) {
-
     }
 
     /**
