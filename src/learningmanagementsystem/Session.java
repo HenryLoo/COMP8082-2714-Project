@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
- * Code of updating course using CLI
+ * Represent an user session
  * @author Thomas
  * @author Ricky (based on template)
  * @version 4_mar_19
@@ -15,7 +15,6 @@ public class Session {
     private MyDBConnection mdbc;
     private boolean inSession;
     private Connection myConnection;
-    private Commands commandList;
 
     private enum TableNames {
         Courses, GradeItems
@@ -33,7 +32,6 @@ public class Session {
         // Get database connection
         myConnection = mdbc.getMyConnection();
         inSession = true;
-        commandList = new Commands();
     }
 
     public void runMenu() {
@@ -48,7 +46,7 @@ public class Session {
             String choice = scan.next();
 
             if (choice.equals("exit")) {
-                commandList.accessCMDList(choice);
+                accessCMDList(choice);
             } else {
                 accessTable(choice);
             }
@@ -58,42 +56,21 @@ public class Session {
         Choose which scenario the computer initialize for the user.
      */
     private void accessTable(String choice) {
-
-        try {
-            TableNames name = TableNames.valueOf(choice);
-            switch (name) {
-                case Courses:
-                    promptUserAction(name);
-                    break;
-                case GradeItems:
-                    promptUserAction(name);
-                    break;
-            }
-        } catch (Exception e) {
-            System.out.println("This table doesn't exist. Please retry");
+        TableNames name = TableNames.valueOf(choice);
+        switch (name) {
+            case Courses:
+                promptUserAction(name);
+                break;
+            case GradeItems:
+                promptUserAction(name);
+                break;
+            default:
+                System.out.println("The table name is incorrect. Try again.");
         }
-
     }
 
     private void promptUserAction(TableNames tableName) {
 
-    }
-
-    public ResultSet executeQuery(Connection db, String query) {
-
-        ResultSet rs=null;
-
-        try{
-            // Create statement
-            Statement stmt = db.createStatement();
-
-            // Execute query on DB
-            rs=stmt.executeQuery(query);
-
-        }
-        catch(SQLException e){}
-
-        return rs;
     }
 
     private void endSession() {
@@ -103,38 +80,38 @@ public class Session {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private class Commands {
-        public void accessCMDList(String choice) {
-            try {
-                CommandsChoices cmd = CommandsChoices.valueOf(choice);
-                switch (cmd) {
-                    case add:
-                        runCommand(cmd);
-                        break;
-                    case update:
-                        runCommand(cmd);
-                        break;
-                    case delete:
-                        runCommand(cmd);
-                        break;
-                    case exit:
-                        exitProgram();
-                        break;
-                }
-            } catch (Exception e) {
-                System.out.println("This command doesn't exist. Please retry");
+
+    public void accessCMDList(String choice) {
+        try {
+            CommandsChoices cmd = CommandsChoices.valueOf(choice);
+            switch (cmd) {
+                case add:
+                    runCommand(cmd);
+                    break;
+                case update:
+                    runCommand(cmd);
+                    break;
+                case delete:
+                    runCommand(cmd);
+                    break;
+                case exit:
+                    exitProgram();
+                    break;
             }
-        }
-
-        // Holder for now
-        public void runCommand(CommandsChoices cmd) {
-            System.out.println("Please come back later");
-        }
-
-        private void exitProgram() {
-            inSession = false;
-            System.out.println("Program shutting down. Goodbye.");
-            endSession();
+        } catch (Exception e) {
+            System.out.println("This command doesn't exist. Please retry");
         }
     }
+
+    // Holder for now
+    public void runCommand(CommandsChoices cmd) {
+        System.out.println("Please come back later");
+    }
+
+    private void exitProgram() {
+        inSession = false;
+        System.out.println("Program shutting down. Goodbye.");
+        endSession();
+    }
+
 }

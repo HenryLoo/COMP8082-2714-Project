@@ -7,6 +7,18 @@ import java.sql.Statement;
 public class Courses implements Tables {
 
     @Override
+    public void runDashboard() {
+        while (true) {
+            System.out.println("You are now in the Courses Dashboard. \n"
+                    + "Depends on your privilege, you can add, update, or delete data. \n"
+                    + "Press 'return' to return to main menu, 'exit' to quit the program.");
+
+            String choice = scanner.next();
+        }
+
+    }
+
+    @Override
     public void select() {
 
     }
@@ -35,35 +47,22 @@ public class Courses implements Tables {
     @Override
     public void delete() {
         try {
-            //getting connection
-
-            conn = MyDBConnection.getConnection();
-            if (conn = null)
-                return;
-
             //remind user to enter the user id they want to delete
             System.out.print("Please enter the id of user to delete:");
-            Scanner input;
-            input = new Scanner(System.in);
-            int userid = input.nextInt();
+            int userid = scanner.nextInt();
 
             //define the Sql statement
             String deleteSql = "DELETE FROM login WHERE userid ="+userid+";";
 
             //acquire the statement object
-            stt = conn.createStatement();
-
-            //execute the Sql statement
-            stt.executeUpdate(deleteSql);
+//            stt = conn.createStatement();
+//
+//            //execute the Sql statement
+//            stt.executeUpdate(deleteSql);
 
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
-            try{
-                conn.close();
-            } catch (Exception e2){
-                // TODO: handle exception
-            }
         }
 
     }
@@ -78,9 +77,10 @@ public class Courses implements Tables {
     }
 
     private boolean checkCourseName(String name) {
-        if(name != null){
+        if (name != null){
             return true;
         }
+
         return false;
     }
 
@@ -88,6 +88,7 @@ public class Courses implements Tables {
         if(description != null && description.length() > 150){
             throw new IllegalArgumentException("Sorry the description is too long!");
         }
+
         return true;
     }
 
