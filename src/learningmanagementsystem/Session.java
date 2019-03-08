@@ -28,10 +28,9 @@ public class Session extends Command{
 
     }
 
-    public Connection getMyConnection() {
-        return myConnection;
-    }
-
+    /**
+     * Run the menu for the user.
+     */
     public void runMenu() {
         System.out.println("Welcome to the Learning System Management. \n");
 
@@ -42,7 +41,6 @@ public class Session extends Command{
                         + "Type 'exit' to exit");
 
                 String input = scanner.next();
-
                 accessCMDList(input, myConnection);
 
             } catch (ExitProgramException exit) {

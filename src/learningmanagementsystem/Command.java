@@ -81,7 +81,13 @@ public abstract class Command {
         System.out.println("Please come back later");
     }
 
-    abstract public void getAddData();
+    /**
+     * Get add data from user.
+     * This is different for each user.
+     */
+    public void getAddData() {
+        System.out.println("Please enter data to add to the table.");
+    };
 
     /**
      * Tell session that we want to exit the program.
