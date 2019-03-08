@@ -123,48 +123,40 @@ public class Courses extends Command implements Tables {
     }
 
     private boolean checkID(String id){
-        boolean digitTest  = false;
-        boolean alphaTest = false;
+        if (id == null || id.strip().equals("")) {
+            return false;
+        }
+
+        if (id.length() > 6) {
+            return false;
+        }
+
         for(int i = 0; i < 3; i++){
-            if(id!= null && Character.isAlphabetic(id.charAt(i))){
-                digitTest = true;
+            if(!(Character.isAlphabetic(id.charAt(i)))){
+                return false;
             }
         }
+
         for(int i = 3; i < 6; i++){
-            if(id!= null && Character.isDigit(id.charAt(i))){
-                alphaTest = true;
+            if(!(Character.isDigit(id.charAt(i)))){
+                return false;
             }
-        }
-        if (digitTest && alphaTest && id.length() == 6 ){
-            return true;
-        }else {
-            return false;
-
-        }
-    }
-
-    private boolean checkCourseName(String name) {
-        if (name != null){
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean checkDescription(String description) {
-        if(description != null && description.length() > 150){
-            return false;
         }
 
         return true;
+    }
+
+    private boolean checkCourseName(String name) {
+        return name != null && !(name.strip().equals(""));
+    }
+
+    private boolean checkDescription(String description) {
+        return description != null && !(description.strip().equals("")) && description.length() <= 150;
     }
 
     private boolean checkProfID(int profID){
         int length = Integer.toString(profID).length();
-        if(length != 2){
-            return false;
-        }
-        return true;
+        return length == 2;
     }
 
 }
