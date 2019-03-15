@@ -58,7 +58,7 @@ CREATE TABLE Classes (
 );
 
 CREATE TABLE GradeItems (
-	itemid INT(8),
+	itemid INT(6),
 	courseid VARCHAR(6),
 	name VARCHAR(40) NOT NULL,
 	total INT(3),
@@ -72,7 +72,7 @@ CREATE TABLE GradeItems (
 
 CREATE TABLE StuGrades (
 	stuid INT(6),
-	itemid INT(8),
+	itemid INT(6),
 	grade DECIMAL(4, 2),
 	FOREIGN KEY fk_studid(stuid)
 	REFERENCES Users(userid)
