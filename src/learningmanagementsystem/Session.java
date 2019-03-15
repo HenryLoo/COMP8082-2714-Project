@@ -12,14 +12,13 @@ import java.util.logging.Logger;
  */
 
 public class Session extends Command{
-    private MyDBConnection mdbc;
     private boolean inSession;
     private Connection myConnection;
 
     public Session() {
         super();
         // Create connection and initialize it
-        mdbc = new MyDBConnection();
+        MyDBConnection mdbc = new MyDBConnection();
         mdbc.init();
 
         // Get database connection

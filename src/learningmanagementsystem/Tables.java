@@ -11,5 +11,5 @@ public interface Tables {
     void add(String courseID, String name, String description, int profID);
     void update();
     void delete();
-    void select(); // might change to display
+    void select(String colName, String value); // might change to display
 }

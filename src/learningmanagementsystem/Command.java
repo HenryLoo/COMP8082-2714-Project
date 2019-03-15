@@ -2,7 +2,7 @@ package learningmanagementsystem;
 import java.util.Scanner;
 import java.sql.*;
 
-public abstract class Command {
+public class Command {
     /*
         Declare all the commands available in the program.
      */
@@ -37,7 +37,7 @@ public abstract class Command {
                     getAddData();
                     break;
                 case update:
-                    runCommand(cmd);
+                    getUpdateData();
                     break;
                 case delete:
                     runCommand(cmd);
@@ -87,7 +87,11 @@ public abstract class Command {
      */
     public void getAddData() {
         System.out.println("Please enter data to add to the table.");
-    };
+    }
+
+    public void getUpdateData() {
+        System.out.println("Please enter data so we can update the course table.");
+    }
 
     /**
      * Tell session that we want to exit the program.

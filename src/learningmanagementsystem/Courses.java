@@ -38,8 +38,24 @@ public class Courses extends Command implements Tables {
 
     }
 
+    /**
+     * Display data in a table with the specified location.
+     * @param colName the column name as a String
+     * @parem value the value as a String
+     */
     @Override
-    public void select() {
+    public void select(String colName, String value) {
+        String sql = "SELECT * FROM Courses WHERE " + colName + " = " + value;
+        try {
+            Statement newCommand = myConn.createStatement();
+            newCommand.executeUpdate(sql);
+            newCommand.close();
+            System.out.println("Your data has been successfully added to Courses. \n"
+                    + "Returning to Courses Dashboard...");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -58,7 +74,7 @@ public class Courses extends Command implements Tables {
         String description = scanner.next();
 
 
-        if (checkID(courseID)
+        if (checkCourseID(courseID)
                 && checkCourseName(name)
                 && checkDescription(description)
                 && checkProfID(profID)) {
@@ -118,11 +134,24 @@ public class Courses extends Command implements Tables {
     }
 
     @Override
+    public void getUpdateData() {
+        System.out.println("Please enter the course id: ");
+        String courseid = scanner.next();
+
+        if (!checkCourseID(courseid)) {
+            System.out.println("Your course id format is invalid, please try again.");
+            return;
+        }
+
+
+    }
+
+    @Override
     public void update() {
 
     }
 
-    private boolean checkID(String id){
+    private boolean checkCourseID(String id){
         if (id == null || id.strip().equals("")) {
             return false;
         }
