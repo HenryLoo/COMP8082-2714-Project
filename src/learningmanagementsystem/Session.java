@@ -12,14 +12,13 @@ import java.util.logging.Logger;
  */
 
 public class Session extends Command{
-    private MyDBConnection mdbc;
     private boolean inSession;
     private Connection myConnection;
 
     public Session() {
         super();
         // Create connection and initialize it
-        mdbc = new MyDBConnection();
+        MyDBConnection mdbc = new MyDBConnection();
         mdbc.init();
 
         // Get database connection
@@ -28,10 +27,9 @@ public class Session extends Command{
 
     }
 
-    public Connection getMyConnection() {
-        return myConnection;
-    }
-
+    /**
+     * Run the menu for the user.
+     */
     public void runMenu() {
         System.out.println("Welcome to the Learning System Management. \n");
 
@@ -42,7 +40,6 @@ public class Session extends Command{
                         + "Type 'exit' to exit");
 
                 String input = scanner.next();
-
                 accessCMDList(input, myConnection);
 
             } catch (ExitProgramException exit) {
