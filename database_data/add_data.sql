@@ -7,7 +7,7 @@
 # DO NOT USE \ aka backward slash. It does not work for mysql.
 # Use forward slash aka /
 
-USE learn_sys;
+USE munimoe_LMS;
 
 # Data for Users: 3 admins, 3 professors, 6 students.
 
@@ -147,8 +147,6 @@ INSERT INTO StuGrades (stuid, itemid, grade) VALUES
 	(457861, 542375, 15),
 	(492381, 542375, 17),
 	(090832, 542375,18);
-	
-# note: there is no data for AllGrades. 
 	
 	
 
