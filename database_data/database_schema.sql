@@ -6,9 +6,8 @@
 # mysql> source file/path/to/database_schema.sql;
 # DO NOT USE \ aka backward slash. It does not work for mysql.
 # Use forward slash aka /
-CREATE DATABASE learn_sys;
 
-USE learn_sys;
+USE munimoe_LMS;
 
 CREATE TABLE Users (
 	userid INT(6) PRIMARY KEY NOT NULL,
@@ -45,8 +44,8 @@ CREATE TABLE Blocks (
 
 CREATE TABLE Classes (
 	blockid INT(4),
-	userid INT(6),
-	FOREIGN KEY fk_student_classes(userid)
+	stuid INT(6),
+	FOREIGN KEY fk_student_classes(stuid)
 	REFERENCES Users(userid)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
@@ -54,7 +53,7 @@ CREATE TABLE Classes (
 	REFERENCES Blocks(blockid)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
-	PRIMARY KEY (blockid, userid)
+	PRIMARY KEY (blockid, stuid)
 );
 
 CREATE TABLE GradeItems (
