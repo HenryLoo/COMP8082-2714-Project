@@ -95,45 +95,60 @@ INSERT INTO Classes (blockid, userid) VALUES
 	
 # Data for GradeItems. Based on students enrolled in a class:
 
-INSERT INTO GradeItems (userid, courseid, name, marks, weight) VALUES	
+INSERT INTO GradeItems (itemid, courseid, name, total, weight) VALUES
+	(111791, "ASB311", "Review Quiz", "6/10", 2),
+	
+	(111791, "ASB312", "Lab 1", "6/10", 2),
+	
+	(111791, "ASB312", "Lab 2", "8/10", 2),
+	
+	(321434, "COA101", "Quiz 1", "10/15", 5),
+	
+	(111791, "MAT204", "Integral Quiz 1", "10/15", 5),
+	
+	(111791, "MAT204", "Integral Quiz 2", "12/15", 5),
+	
+	(111791, "MAT204", "Integral Test", "15/20", 10),
+
+INSERT INTO GradeItems (itemid, courseid, name, total, earned, weight) VALUES
 	(111791, "ASB311", "Review Quiz", "6/10", 2),
 	(178820, "ASB311", "Review Quiz", "7/10", 2),
 	(321434, "ASB311", "Review Quiz", "6/10", 2),
 	(492381, "ASB311", "Review Quiz", "9/10", 2),
 	(892379, "ASB311", "Review Quiz", "10/10", 2),
 	(090832, "ASB311", "Review Quiz", "7/10", 2),
-	
+
 	(111791, "ASB312", "Lab 1", "6/10", 2),
 	(178820, "ASB312", "Lab 1", "7/10", 2),
 	(321434, "ASB312", "Lab 1", "5/10", 2),
 	(492381, "ASB312", "Lab 1", "8/10", 2),
 	(892379, "ASB312", "Lab 1", "9/10", 2),
 	(090832, "ASB312", "Lab 1", "7/10", 2),
-	
+
 	(111791, "ASB312", "Lab 2", "8/10", 2),
 	(178820, "ASB312", "Lab 2", "8/10", 2),
 	(321434, "ASB312", "Lab 2", "7/10", 2),
 	(492381, "ASB312", "Lab 2", "7/10", 2),
 	(892379, "ASB312", "Lab 2", "10/10", 2),
 	(090832, "ASB312", "Lab 2", "8/10", 2),
-	
+
 	(321434, "COA101", "Quiz 1", "10/15", 5),
 	(492381, "COA101", "Quiz 1", "11/15", 5),
 	(784547, "COA101", "Quiz 1", "13/15", 5),
 	(082398, "COA101", "Quiz 1", "14/15", 5),
 	(551146, "COA101", "Quiz 1", "14/15", 5),
 	(679123, "COA101", "Quiz 1", "13/15", 5),
-	
+
 	(111791, "MAT204", "Integral Quiz 1", "10/15", 5),
 	(457861, "MAT204", "Integral Quiz 1", "11/15", 5),
 	(492381, "MAT204", "Integral Quiz 1", "13/15", 5),
 	(090832, "MAT204", "Integral Quiz 1", "14/15", 5),
-	
+
 	(111791, "MAT204", "Integral Quiz 2", "12/15", 5),
 	(457861, "MAT204", "Integral Quiz 2", "13/15", 5),
 	(492381, "MAT204", "Integral Quiz 2", "13/15", 5),
 	(090832, "MAT204", "Integral Quiz 2", "12/15", 5),
-	
+
 	(111791, "MAT204", "Integral Test", "15/20", 10),
 	(457861, "MAT204", "Integral Test", "16/20", 10),
 	(492381, "MAT204", "Integral Test", "17/20", 10),
