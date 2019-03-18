@@ -1,5 +1,6 @@
 package learningmanagementsystem;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Courses extends Command implements Tables {
+public class Courses implements Tables {
 
     // the connection to the database
     private Connection myConn;
@@ -24,6 +25,9 @@ public class Courses extends Command implements Tables {
     private TextField courseNameTxtFld;
     private TextField courseProfTxtFld;
     private TextField courseDescriptionTxtFld;
+
+    // tell us that there's an error in user inputs.
+    private boolean inputErrorIndicator;
 
     /**
      * Create a Courses instance and run the dashboard.
@@ -41,7 +45,7 @@ public class Courses extends Command implements Tables {
      */
     public GridPane createAddDashBoard() {
 
-        Label functionTitle = new Label("Please enter the new course's data below:");
+        Label functionTitle = new Label("Please enter the new course's data:");
         Label courseIdLbl = new Label("CourseID: ");
         Label courseNameLbl = new Label("Course Name: ");
         Label courseProfLbl = new Label("Course Professor: ");
@@ -83,6 +87,57 @@ public class Courses extends Command implements Tables {
         return gp;
     }
 
+    // try to add data
+    // if there are errors, let users know
+    private void checkInputForAddingData(ActionEvent event) {
+        // turn off the error indicator
+        inputErrorIndicator = false;
+
+        // create an error message for user
+        String message = "";
+        int courseProfId = 0;
+
+        String courseId = courseIdTxtFld.getText().trim();
+        if (!checkCourseID(courseId)) {
+            message += "Your course id must be six characters long. \n"
+                    + "It must start with three letters and end with three digits. \n";
+            inputErrorIndicator = true;
+            courseIdTxtFld.setStyle("-fx-border-color: red");
+        }
+
+        String courseName = courseNameTxtFld.getText().trim();
+        if (!checkCourseName(courseName)) {
+            message += "Your course name must be less than 40 characters. \n";
+            inputErrorIndicator = true;
+            courseIdTxtFld.setStyle("-fx-border-color: red");
+        }
+
+        try {
+            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+            if (!checkProfID(courseProfId)) {
+                message += "The professor ID doesn't exist. \n";
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            inputErrorIndicator = true;
+            courseProfTxtFld.setStyle("-fx-border-color: red");
+        }
+
+        String courseDescription = courseDescriptionTxtFld.getText().trim();
+        if (!checkDescription(courseDescription)) {
+            message += "Your course description must be less than 150 characters. \n";
+            inputErrorIndicator = true;
+            courseIdTxtFld.setStyle("-fx-border-color: red");
+        }
+
+        if (inputErrorIndicator) {
+            errorMessage.setText(message);
+        } else {
+            add(courseId, courseName, courseDescription, courseProfId);
+        }
+
+    }
+
     /**
      * Display data in a table with the specified location.
      * @param colName the column name as a String
@@ -102,29 +157,6 @@ public class Courses extends Command implements Tables {
             e.printStackTrace();
         }
 
-    }
-
-    /**
-     * Get data from user so we can add it to Courses.
-     */
-    @Override
-    public void getAddData(){
-        System.out.println("Please enter a course id: ");
-        String courseID = scanner.next();
-        System.out.println("Please enter the course name: ");
-        String name = scanner.next();
-        System.out.println("Please enter the profID: ");
-        int profID = scanner.nextInt();
-        System.out.println("Please enter a description: ");
-        String description = scanner.next();
-
-
-        if (checkCourseID(courseID)
-                && checkCourseName(name)
-                && checkDescription(description)
-                && checkProfID(profID)) {
-            add (courseID,name,description,profID);
-        }
     }
 
     /**
@@ -159,7 +191,6 @@ public class Courses extends Command implements Tables {
 
             //remind user to enter the user id they want to delete
             System.out.print("Please enter the id of user to delete:");
-            int userid = scanner.nextInt();
 
             //define the Sql statement
             // String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
@@ -178,15 +209,9 @@ public class Courses extends Command implements Tables {
 
     }
 
-    @Override
     public void getUpdateData() {
         System.out.println("Please enter the course id: ");
-        String courseid = scanner.next();
 
-        if (!checkCourseID(courseid)) {
-            System.out.println("Your course id format is invalid, please try again.");
-            return;
-        }
 
 
 
@@ -197,23 +222,32 @@ public class Courses extends Command implements Tables {
 
     }
 
-    private boolean checkCourseID(String id){
+    /**
+     * Check if course id is valid.
+     * @param id a String
+     * @return true if valid, else false.
+     */
+    public boolean checkCourseID(String id){
+        // check for empty String
         if (id == null || id.strip().equals("")) {
             return false;
         }
 
+        // check for length
         if (id.length() > 6) {
             return false;
         }
 
+        // check that it starts with three letters
         for(int i = 0; i < 3; i++){
-            if(!(Character.isAlphabetic(id.charAt(i)))){
+            if(!Character.isAlphabetic(id.charAt(i))){
                 return false;
             }
         }
 
+        // check that it ends with three letters.
         for(int i = 3; i < 6; i++){
-            if(!(Character.isDigit(id.charAt(i)))){
+            if(!Character.isDigit(id.charAt(i))){
                 return false;
             }
         }
@@ -221,17 +255,32 @@ public class Courses extends Command implements Tables {
         return true;
     }
 
-    private boolean checkCourseName(String name) {
+    /**
+     * Check if course name is valid.
+     * @param name a String
+     * @return true if name is valid, else false.
+     */
+    public boolean checkCourseName(String name) {
         final int maxLength = 40;
         return name != null && !(name.strip().equals("")) && name.length() <= maxLength;
     }
 
-    private boolean checkDescription(String description) {
+    /**
+     * Check if course description is valid.
+     * @param description a String
+     * @return true if description is valid, else false.
+     */
+    public boolean checkDescription(String description) {
         final int maxLength = 150;
         return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
     }
 
-    private boolean checkProfID(int profID){
+    /**
+     * Check if prof id is valid.
+     * @param profID a String
+     * @return true if valid, else false.
+     */
+    public boolean checkProfID(int profID){
         int length = Integer.toString(profID).length();
         return length == 2;
     }
