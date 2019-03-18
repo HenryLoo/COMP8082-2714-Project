@@ -1,5 +1,12 @@
 package learningmanagementsystem;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,35 +14,73 @@ import java.sql.Statement;
 
 public class Courses extends Command implements Tables {
 
+    // the connection to the database
     private Connection myConn;
+
+    private Label errorMessage;
+
+    // the text fields for each data column in the table.
+    private TextField courseIdTxtFld;
+    private TextField courseNameTxtFld;
+    private TextField courseProfTxtFld;
+    private TextField courseDescriptionTxtFld;
+
     /**
      * Create a Courses instance and run the dashboard.
      */
-    public Courses(Connection newMyConn) throws ExitProgramException{
-        try {
-            myConn = newMyConn;
-            runDashboard();
-        } catch (ExitProgramException exit) {
-            throw exit;
-        }
+    public Courses(Connection newMyConn) {
+        myConn = newMyConn;
+        errorMessage = new Label("");
+        errorMessage.setFont(Font.font(13));
+        errorMessage.setTextFill(Color.RED);
     }
 
-    @Override
-    public void runDashboard() throws ExitProgramException {
-        while (true) {
-            System.out.println("You are now in the Courses Dashboard. \n"
-                    + "Depends on your privilege, you can add, update, or delete data. \n"
-                    + "Press 'menu' to return to main menu, 'exit' to quit the program.");
+    /**
+     * Create a grid pane containing elements needed to add courses.
+     * @return a GridPane with all the text fields.
+     */
+    public GridPane createAddDashBoard() {
 
-            try {
-                String input = scanner.next();
-                accessCMDList(input, myConn);
+        Label functionTitle = new Label("Please enter the new course's data below:");
+        Label courseIdLbl = new Label("CourseID: ");
+        Label courseNameLbl = new Label("Course Name: ");
+        Label courseProfLbl = new Label("Course Professor: ");
+        Label courseDescriptionLbl = new Label("Course Description: ");
 
-            } catch (ExitProgramException exit) {
-                throw exit;
-            }
-        }
+        functionTitle.setFont(Font.font(22));
+        courseIdLbl.setFont(Font.font(18));
+        courseNameLbl.setFont(Font.font(18));
+        courseProfLbl.setFont(Font.font(18));
+        courseDescriptionLbl.setFont(Font.font(18));
 
+        courseIdTxtFld = new TextField();
+        courseNameTxtFld = new TextField();
+        courseProfTxtFld = new TextField();
+        courseDescriptionTxtFld = new TextField();
+
+        GridPane gp = new GridPane();
+
+        gp.add(functionTitle, 0, 0, 2, 1);
+        gp.add(courseIdLbl, 0, 1);
+        gp.add(courseNameLbl, 0, 2);
+        gp.add(courseProfLbl, 0, 3);
+        gp.add(courseDescriptionLbl, 0, 4);
+        gp.add(errorMessage, 0, 5, 2, 1);
+
+        gp.add(courseIdTxtFld, 1, 1);
+        gp.add(courseNameTxtFld, 1, 2);
+        gp.add(courseProfTxtFld, 1, 3);
+        gp.add(courseDescriptionTxtFld, 1, 4);
+
+        Button saveBtn = new Button("Add Course");
+        gp.add(saveBtn, 0, 6);
+
+        final int hGap = 5;
+        final int vGap = 10;
+        gp.setHgap(hGap);
+        gp.setVgap(vGap);
+
+        return gp;
     }
 
     /**
@@ -177,11 +222,13 @@ public class Courses extends Command implements Tables {
     }
 
     private boolean checkCourseName(String name) {
-        return name != null && !(name.strip().equals(""));
+        final int maxLength = 40;
+        return name != null && !(name.strip().equals("")) && name.length() <= maxLength;
     }
 
     private boolean checkDescription(String description) {
-        return description != null && !(description.strip().equals("")) && description.length() <= 150;
+        final int maxLength = 150;
+        return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
     }
 
     private boolean checkProfID(int profID){

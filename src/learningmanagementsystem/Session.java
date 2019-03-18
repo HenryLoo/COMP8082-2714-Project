@@ -28,6 +28,10 @@ public class Session extends Command{
         // We are now connected to the database.
     }
 
+    public Connection getMyConnection() {
+        return myConnection;
+    }
+
     /**
      * Run the menu for the user.
      */
@@ -35,17 +39,13 @@ public class Session extends Command{
         System.out.println("Welcome to the Learning System Management. \n");
 
         while (inSession) {
-            try {
-                System.out.println("Enter the name of the table would you like to use. \n"
-                        + "You can choose from the following tables: Courses or GradeItems. \n"
-                        + "Type 'exit' to exit");
+            System.out.println("Enter the name of the table would you like to use. \n"
+                    + "You can choose from the following tables: Courses or GradeItems. \n"
+                    + "Type 'exit' to exit");
 
-                String input = scanner.next();
-                accessCMDList(input, myConnection);
+            String input = scanner.next();
+            accessCMDList(input, myConnection);
 
-            } catch (ExitProgramException exit) {
-                endSession();
-            }
         }
     }
 

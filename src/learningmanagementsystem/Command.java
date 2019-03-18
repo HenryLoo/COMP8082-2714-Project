@@ -29,7 +29,7 @@ public class Command {
      *
      * @param input a String.
      */
-    public void accessCMDList(String input, Connection myConn) throws ExitProgramException {
+    public void accessCMDList(String input, Connection myConn) {
         try {
             CommandsChoices cmd = CommandsChoices.valueOf(input);
             switch (cmd) {
@@ -42,15 +42,10 @@ public class Command {
                 case delete:
                     runCommand(cmd);
                     break;
-                case exit:
-                    exitProgram();
-                    break;
                 case access:
                     String tableName = scanner.next();
                     accessTable(tableName, myConn);
             }
-        } catch (ExitProgramException exit) {
-            throw exit;
         } catch (NullPointerException | IllegalArgumentException e) {
             System.out.println("The command syntax is incorrect. Please try again.");
         }
@@ -59,7 +54,7 @@ public class Command {
     /*
         Choose which table dashboard to initialize for the user.
      */
-    private void accessTable(String choice, Connection myConn) throws ExitProgramException {
+    private void accessTable(String choice, Connection myConn) {
         try {
             TableNames name = TableNames.valueOf(choice);
             switch (name) {
@@ -70,8 +65,6 @@ public class Command {
 
         } catch (NullPointerException | IllegalArgumentException e) {
             System.out.println("This table does not exist. Try again");
-        } catch (ExitProgramException exit) {
-            throw exit;
         }
 
     }
@@ -93,10 +86,4 @@ public class Command {
         System.out.println("Please enter data so we can update the course table.");
     }
 
-    /**
-     * Tell session that we want to exit the program.
-     */
-    protected void exitProgram() throws ExitProgramException {
-        throw new ExitProgramException("Exiting Program...");
-    }
 }

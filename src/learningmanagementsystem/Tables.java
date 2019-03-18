@@ -1,5 +1,7 @@
 package learningmanagementsystem;
 
+import javafx.scene.layout.GridPane;
+
 /**
  * An interfaces for all tables in the database
  *
@@ -7,7 +9,7 @@ package learningmanagementsystem;
  * @version 06_mar_2019
  */
 public interface Tables {
-    void runDashboard() throws ExitProgramException;
+    GridPane createAddDashBoard();
     void add(String courseID, String name, String description, int profID);
     void update();
     void delete();
