@@ -25,6 +25,7 @@ public class Session extends Command{
         myConnection = mdbc.getMyConnection();
         inSession = true;
 
+        // We are now connected to the database.
     }
 
     /**
@@ -52,7 +53,7 @@ public class Session extends Command{
      * Exit the program by ending the session.
      * @return true if program exit successfully, else false.
      */
-    protected void endSession() {
+    public void endSession() {
         try {
             inSession = false;
             System.out.println("Ending Connection...");
