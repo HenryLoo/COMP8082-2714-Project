@@ -110,7 +110,6 @@ public class LearningSysGUI extends GridPane {
             final int gap = 5;
             HBox hbox = new HBox(viewButton, addButton, updateButton, deleteButton);
             hbox.setSpacing(gap);
-            hbox.setStyle("-fx-background-color: gray");
 
             // get the functionOptions that's currently empty and set it to hbox.
             functionOptions.getChildren().setAll(hbox);

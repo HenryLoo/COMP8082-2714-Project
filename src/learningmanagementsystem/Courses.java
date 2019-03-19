@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -18,7 +17,7 @@ public class Courses implements Tables {
     // the connection to the database
     private Connection myConn;
 
-    private Label errorMessage;
+    private Label userMessage;
 
     // the text fields for each data column in the table.
     private TextField courseIdTxtFld;
@@ -34,9 +33,9 @@ public class Courses implements Tables {
      */
     public Courses(Connection newMyConn) {
         myConn = newMyConn;
-        errorMessage = new Label("");
-        errorMessage.setFont(Font.font(13));
-        errorMessage.setTextFill(Color.RED);
+        userMessage = new Label("");
+        userMessage.setFont(Font.font(13));
+        userMessage.setTextFill(Color.RED);
     }
 
     /**
@@ -48,7 +47,7 @@ public class Courses implements Tables {
         Label functionTitle = new Label("Please enter the new course's data:");
         Label courseIdLbl = new Label("CourseID: ");
         Label courseNameLbl = new Label("Course Name: ");
-        Label courseProfLbl = new Label("Course Professor: ");
+        Label courseProfLbl = new Label("Course Professor ID: ");
         Label courseDescriptionLbl = new Label("Course Description: ");
 
         functionTitle.setFont(Font.font(22));
@@ -69,15 +68,16 @@ public class Courses implements Tables {
         gp.add(courseNameLbl, 0, 2);
         gp.add(courseProfLbl, 0, 3);
         gp.add(courseDescriptionLbl, 0, 4);
-        gp.add(errorMessage, 0, 5, 2, 1);
+        gp.add(userMessage, 0, 5, 2, 1);
 
         gp.add(courseIdTxtFld, 1, 1);
         gp.add(courseNameTxtFld, 1, 2);
         gp.add(courseProfTxtFld, 1, 3);
         gp.add(courseDescriptionTxtFld, 1, 4);
 
-        Button saveBtn = new Button("Add Course");
-        gp.add(saveBtn, 0, 6);
+        Button addBtn = new Button("Add Course");
+        addBtn.setOnAction(this::checkInputForAddingData);
+        gp.add(addBtn, 0, 6);
 
         final int hGap = 5;
         final int vGap = 10;
@@ -131,7 +131,8 @@ public class Courses implements Tables {
         }
 
         if (inputErrorIndicator) {
-            errorMessage.setText(message);
+            userMessage.setTextFill(Color.RED);
+            userMessage.setText(message);
         } else {
             add(courseId, courseName, courseDescription, courseProfId);
         }
@@ -176,8 +177,12 @@ public class Courses implements Tables {
             Statement newCommand = myConn.createStatement();
             newCommand.executeUpdate(sql);
             newCommand.close();
-            System.out.println("Your data has been successfully added to Courses. \n"
-                            + "Returning to Courses Dashboard...");
+
+            // let user know course is added
+            userMessage.setTextFill(Color.GREEN);
+            userMessage.setText("Course Added.");
+
+            //
 
         } catch (SQLException e) {
             e.printStackTrace();
