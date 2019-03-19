@@ -11,8 +11,7 @@ import java.util.logging.Logger;
  * @version 4_mar_19
  */
 
-public class Session extends Command{
-    private boolean inSession;
+public class Session {
     private Connection myConnection;
 
     public Session() {
@@ -23,7 +22,6 @@ public class Session extends Command{
 
         // Get database connection
         myConnection = mdbc.getMyConnection();
-        inSession = true;
 
         // We are now connected to the database.
     }
@@ -33,40 +31,17 @@ public class Session extends Command{
     }
 
     /**
-     * Run the menu for the user.
-     */
-    public void runMenu() {
-        System.out.println("Welcome to the Learning System Management. \n");
-
-        while (inSession) {
-            System.out.println("Enter the name of the table would you like to use. \n"
-                    + "You can choose from the following tables: Courses or GradeItems. \n"
-                    + "Type 'exit' to exit");
-
-            String input = scanner.next();
-            accessCMDList(input, myConnection);
-
-        }
-    }
-
-    /**
      * Exit the program by ending the session.
      * @return true if program exit successfully, else false.
      */
     public void endSession() {
         try {
-            inSession = false;
             System.out.println("Ending Connection...");
             myConnection.close();
-            scanner.close();
             System.out.println("Goodbye.");
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
-
-    public void getAddData(){
 
     }
 
