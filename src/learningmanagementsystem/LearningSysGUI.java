@@ -25,7 +25,7 @@ public class LearningSysGUI extends GridPane {
     // The current table that user is looking at.
     private Tables currentTable;
 
-    // The ecosystem.
+    // The session that's connected to the GUI.
     private Session mySession;
 
 
@@ -69,6 +69,7 @@ public class LearningSysGUI extends GridPane {
          * Create the buttons at the top of the program
           */
         public HBox createTableNameBar() {
+            // create each button individually
             Button courseTable = createCoursesButton();
 
             final int gap = 10;
@@ -84,6 +85,7 @@ public class LearningSysGUI extends GridPane {
             Tooltip tip = new Tooltip("View and edit the courses");
             myButton.setTooltip(tip);
 
+            // all table name buttons will have the same onAction.
             myButton.setOnAction(this::createFunctionOptions);
             return myButton;
         }
@@ -95,33 +97,59 @@ public class LearningSysGUI extends GridPane {
             // equal to select command in sql
             Button viewButton = new Button("View Table");
 
-            // equal to add command in sql
-            Button addButton = new Button("Add" + buttonName);
+            // equal to insert into command in sql
+            Button addButton = new Button("Add " + buttonName);
+            addButton.setOnAction(this::openAddDashBoard);
 
             // equal to update command in sql
-            Button updateButton = new Button("Update" + buttonName);
+            Button updateButton = new Button("Update " + buttonName);
 
             // equal to delete command in sql
-            Button deleteButton = new Button("Delete" + buttonName);
+            Button deleteButton = new Button("Delete " + buttonName);
 
             final int gap = 5;
             HBox hbox = new HBox(viewButton, addButton, updateButton, deleteButton);
             hbox.setSpacing(gap);
-            hbox.setStyle("-fx-background-color: gray");
 
             // get the functionOptions that's currently empty and set it to hbox.
             functionOptions.getChildren().setAll(hbox);
         }
 
+        /**
+         * Find the button name based on the event created by clicking on that button.
+         * @param event an ActionEvent.
+         * @return the name of the button as a String.
+         */
         public String findButtonName(ActionEvent event) {
             // split the object text into two parts by separating using the quote symbol.
             // to check why this work, you can use System.out.println(event.getSource()).
             String[] buttonObj = event.getSource().toString().split("'");
 
             final int indexContainingTheName = 1;
-            return buttonObj[indexContainingTheName];
+            String name = buttonObj[indexContainingTheName];
+
+            // set the currentTable instance variable to the correct table.
+            setCurrentTable(name);
+            return name;
         }
 
+        /**
+         * Set the current table to a new instance of that table class.
+         * @param tableName a String
+         */
+        public void setCurrentTable(String tableName) {
+            switch (tableName) {
+                case "Courses":
+                    currentTable = new Courses(mySession.getMyConnection());
+                    break;
+                default:
+                    System.out.println("There's no table with that name");
+            }
+        }
+
+        public void openAddDashBoard(ActionEvent event) {
+            currentPane.getChildren().setAll(currentTable.createAddDashBoard());
+        }
     }
 
 
