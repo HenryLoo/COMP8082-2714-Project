@@ -92,10 +92,12 @@ public class LearningSysGUI extends GridPane {
 
         // when a table is chosen, displays the functions
         private void createFunctionOptions(ActionEvent event) {
+            // find which button was clicked
             String buttonName = findButtonName(event);
 
             // equal to select command in sql
             Button viewButton = new Button("View Table");
+            viewButton.setOnAction(this::openSearchDashBoard);
 
             // equal to insert into command in sql
             Button addButton = new Button("Add " + buttonName);
@@ -147,9 +149,23 @@ public class LearningSysGUI extends GridPane {
             }
         }
 
+        /**
+         * Open the add dashboard.
+         * @param event an Action event.
+         */
         public void openAddDashBoard(ActionEvent event) {
             currentPane.getChildren().setAll(currentTable.createAddDashBoard());
         }
+
+        /**
+         * Open the search dashboard.
+         * @param event an Action Event.
+         */
+        public void openSearchDashBoard(ActionEvent event) {
+            currentPane.getChildren().setAll(currentTable.createSearchDashBoard());
+        }
+
+
     }
 
 
