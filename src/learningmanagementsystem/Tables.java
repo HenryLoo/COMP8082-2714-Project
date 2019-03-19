@@ -13,5 +13,6 @@ public interface Tables {
     void add(String courseID, String name, String description, int profID);
     void update();
     void delete();
-    void select(String colName, String value); // might change to display
+    GridPane createSearchDashBoard();
+    void search(String colName, String value); // might change to display
 }

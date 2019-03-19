@@ -25,6 +25,9 @@ public class Courses implements Tables {
     private TextField courseProfTxtFld;
     private TextField courseDescriptionTxtFld;
 
+    // display the result
+    private GridPane resultPane;
+
     // tell us that there's an error in user inputs.
     private boolean inputErrorIndicator;
 
@@ -36,6 +39,13 @@ public class Courses implements Tables {
         userMessage = new Label("");
         userMessage.setFont(Font.font(13));
         userMessage.setTextFill(Color.RED);
+
+        courseIdTxtFld = new TextField();
+        courseNameTxtFld = new TextField();
+        courseProfTxtFld = new TextField();
+        courseDescriptionTxtFld = new TextField();
+
+        resultPane = new GridPane();
     }
 
     /**
@@ -55,11 +65,6 @@ public class Courses implements Tables {
         courseNameLbl.setFont(Font.font(18));
         courseProfLbl.setFont(Font.font(18));
         courseDescriptionLbl.setFont(Font.font(18));
-
-        courseIdTxtFld = new TextField();
-        courseNameTxtFld = new TextField();
-        courseProfTxtFld = new TextField();
-        courseDescriptionTxtFld = new TextField();
 
         GridPane gp = new GridPane();
 
@@ -140,27 +145,6 @@ public class Courses implements Tables {
     }
 
     /**
-     * Display data in a table with the specified location.
-     * @param colName the column name as a String
-     * @parem value the value as a String
-     */
-    @Override
-    public void select(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = " + value;
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-            System.out.println("Your data has been successfully added to Courses. \n"
-                    + "Returning to Courses Dashboard...");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * Add data to the Courses table.
      * @param courseID
      * @param name
@@ -187,6 +171,113 @@ public class Courses implements Tables {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /******************************************************/
+
+    /**
+     * Create a grid pane containing elements needed to search courses.
+     * @return a GridPane with all the textfields.
+     */
+    public GridPane createSearchDashBoard() {
+
+        Label functionTitle = new Label("Search for Courses By CourseId:");
+
+        functionTitle.setFont(Font.font(22));
+
+        GridPane gp = new GridPane();
+
+        gp.add(functionTitle, 0, 0);
+        gp.add(courseIdTxtFld, 1, 0);
+
+        Button searchBtn = new Button("Search Courses");
+        searchBtn.setOnAction(this::checkInputForSearchData);
+        gp.add(searchBtn, 2, 0);
+
+        gp.add(userMessage, 0, 2, 2, 1);
+        gp.add(resultPane, 0, 3, 3, 1);
+
+        final int hGap = 5;
+        final int vGap = 10;
+        gp.setHgap(hGap);
+        gp.setVgap(vGap);
+
+        return gp;
+    }
+
+    // try to add data
+    // if there are errors, let users know
+    private void checkInputForSearchData(ActionEvent event) {
+        // turn off the error indicator
+        inputErrorIndicator = false;
+
+        // create an error message for user
+        String message = "";
+
+        // consider refactoring
+        String courseId = courseIdTxtFld.getText().trim();
+        if (!checkCourseID(courseId)) {
+            message += "Your course id must be six characters long. \n"
+                    + "It must start with three letters and end with three digits. \n";
+            inputErrorIndicator = true;
+            courseIdTxtFld.setStyle("-fx-border-color: red");
+        }
+
+        if (inputErrorIndicator) {
+            userMessage.setTextFill(Color.RED);
+            userMessage.setText(message);
+        } else {
+            resultPane.getChildren().setAll(createSearchResultArea());
+        }
+
+    }
+
+    // create the search result area
+    private GridPane createSearchResultArea() {
+        Label courseIdLbl = new Label("CourseID");
+        Label courseNameLbl = new Label("Course Name: ");
+        Label courseDescriptionLbl = new Label("Description: ");
+        Label courseProfLbl = new Label("Professor ID: ");
+
+        courseIdLbl.setFont(Font.font(18));
+        courseNameLbl.setFont(Font.font(18));
+        courseProfLbl.setFont(Font.font(18));
+        courseDescriptionLbl.setFont(Font.font(18));
+
+        GridPane gp = new GridPane();
+
+        gp.add(courseIdLbl, 0, 0);
+        gp.add(courseNameLbl, 1, 0);
+        gp.add(courseDescriptionLbl, 2, 0);
+        gp.add(courseProfLbl, 3, 0);
+
+        final int hGap = 5;
+        final int vGap = 10;
+        gp.setHgap(hGap);
+        gp.setVgap(vGap);
+
+        return gp;
+    }
+
+    /**
+     * Display data in a table with the specified location.
+     * @param colName the column name as a String
+     * @parem value the value as a String
+     */
+    @Override
+    public void search(String colName, String value) {
+        String sql = "SELECT * FROM Courses WHERE " + colName + " = " + value;
+        try {
+            Statement newCommand = myConn.createStatement();
+            newCommand.executeUpdate(sql);
+            newCommand.close();
+            System.out.println("Your data has been successfully added to Courses. \n"
+                    + "Returning to Courses Dashboard...");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
