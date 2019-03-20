@@ -1,6 +1,7 @@
 package learningmanagementsystem;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -9,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,16 +38,22 @@ public class Courses implements Tables {
      */
     public Courses(Connection newMyConn) {
         myConn = newMyConn;
-        userMessage = new Label("");
+        initTextfieldsAndUserMessage();
         userMessage.setFont(Font.font(13));
         userMessage.setTextFill(Color.RED);
+        resultPane = new GridPane();
+    }
 
+    /**
+     * Initiate the textfields and userMessage to new ones.
+     */
+    public void initTextfieldsAndUserMessage() {
         courseIdTxtFld = new TextField();
         courseNameTxtFld = new TextField();
         courseProfTxtFld = new TextField();
         courseDescriptionTxtFld = new TextField();
 
-        resultPane = new GridPane();
+        userMessage = new Label("");
     }
 
     /**
@@ -66,6 +74,9 @@ public class Courses implements Tables {
         courseProfLbl.setFont(Font.font(18));
         courseDescriptionLbl.setFont(Font.font(18));
 
+        // since the text fields are shared, we have to cleared them first
+        initTextfieldsAndUserMessage();
+
         GridPane gp = new GridPane();
 
         gp.add(functionTitle, 0, 0, 2, 1);
@@ -84,10 +95,8 @@ public class Courses implements Tables {
         addBtn.setOnAction(this::checkInputForAddingData);
         gp.add(addBtn, 0, 6);
 
-        final int hGap = 5;
-        final int vGap = 10;
-        gp.setHgap(hGap);
-        gp.setVgap(vGap);
+        gp.setHgap(HGAP);
+        gp.setVgap(VGAP);
 
         return gp;
     }
@@ -99,12 +108,12 @@ public class Courses implements Tables {
         inputErrorIndicator = false;
 
         // create an error message for user
-        String message = "";
+        String errorMessage = "";
         int courseProfId = 0;
 
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
-            message += "Your course id must be six characters long. \n"
+            errorMessage += "Your course id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
             courseIdTxtFld.setStyle("-fx-border-color: red");
@@ -112,7 +121,7 @@ public class Courses implements Tables {
 
         String courseName = courseNameTxtFld.getText().trim();
         if (!checkCourseName(courseName)) {
-            message += "Your course name must be less than 40 characters. \n";
+            errorMessage += "Your course name must be less than 40 characters. \n";
             inputErrorIndicator = true;
             courseIdTxtFld.setStyle("-fx-border-color: red");
         }
@@ -120,7 +129,7 @@ public class Courses implements Tables {
         try {
             courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
             if (!checkProfID(courseProfId)) {
-                message += "The professor ID doesn't exist. \n";
+                errorMessage += "The professor ID doesn't exist. \n";
                 throw new Exception();
             }
         } catch (Exception e) {
@@ -130,18 +139,45 @@ public class Courses implements Tables {
 
         String courseDescription = courseDescriptionTxtFld.getText().trim();
         if (!checkDescription(courseDescription)) {
-            message += "Your course description must be less than 150 characters. \n";
+            errorMessage += "Your course description must be less than 150 characters. \n";
             inputErrorIndicator = true;
             courseIdTxtFld.setStyle("-fx-border-color: red");
         }
 
         if (inputErrorIndicator) {
-            userMessage.setTextFill(Color.RED);
-            userMessage.setText(message);
+            displayErrorMessage(errorMessage);
         } else {
             add(courseId, courseName, courseDescription, courseProfId);
+            displaySuccessMessage("Course Added!");
         }
 
+    }
+
+    /**
+     * Display an error message to user.
+     * @param errorMessage a String.
+     */
+    public void displayErrorMessage(String errorMessage) {
+        userMessage.setTextFill(Color.RED);
+        userMessage.setText(errorMessage);
+    }
+
+    /**
+     * Display an successful operation message to user.
+     * @param successMessage a String.
+     */
+    public void displaySuccessMessage(String successMessage) {
+        userMessage.setTextFill(Color.GREEN);
+        userMessage.setText(successMessage);
+    }
+
+    /**
+     * Display a notification message to user.
+     * @param notificationMessage a String.
+     */
+    public void displayNotificationMessage(String notificationMessage) {
+        userMessage.setTextFill(Color.BLACK);
+        userMessage.setText(notificationMessage);
     }
 
     /**
@@ -173,8 +209,6 @@ public class Courses implements Tables {
         }
     }
 
-    /******************************************************/
-
     /**
      * Create a grid pane containing elements needed to search courses.
      * @return a GridPane with all the textfields.
@@ -182,11 +216,12 @@ public class Courses implements Tables {
     public GridPane createSearchDashBoard() {
 
         Label functionTitle = new Label("Search for Courses By CourseId:");
-
         functionTitle.setFont(Font.font(22));
 
-        GridPane gp = new GridPane();
+        // reset the textfields and userMessage since it's shared resources.
+        initTextfieldsAndUserMessage();
 
+        GridPane gp = new GridPane();
         gp.add(functionTitle, 0, 0);
         gp.add(courseIdTxtFld, 1, 0);
 
@@ -197,10 +232,8 @@ public class Courses implements Tables {
         gp.add(userMessage, 0, 2, 2, 1);
         gp.add(resultPane, 0, 3, 3, 1);
 
-        final int hGap = 5;
-        final int vGap = 10;
-        gp.setHgap(hGap);
-        gp.setVgap(vGap);
+        gp.setHgap(HGAP);
+        gp.setVgap(VGAP);
 
         return gp;
     }
@@ -212,51 +245,22 @@ public class Courses implements Tables {
         inputErrorIndicator = false;
 
         // create an error message for user
-        String message = "";
+        String errorMessage = "";
 
         // consider refactoring
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
-            message += "Your course id must be six characters long. \n"
+            errorMessage += "Your course id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
             courseIdTxtFld.setStyle("-fx-border-color: red");
         }
 
         if (inputErrorIndicator) {
-            userMessage.setTextFill(Color.RED);
-            userMessage.setText(message);
+            displayErrorMessage(errorMessage);
         } else {
-            resultPane.getChildren().setAll(createSearchResultArea());
+            search("courseid", courseId);
         }
-
-    }
-
-    // create the search result area
-    private GridPane createSearchResultArea() {
-        Label courseIdLbl = new Label("CourseID");
-        Label courseNameLbl = new Label("Course Name: ");
-        Label courseDescriptionLbl = new Label("Description: ");
-        Label courseProfLbl = new Label("Professor ID: ");
-
-        courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
-
-        GridPane gp = new GridPane();
-
-        gp.add(courseIdLbl, 0, 0);
-        gp.add(courseNameLbl, 1, 0);
-        gp.add(courseDescriptionLbl, 2, 0);
-        gp.add(courseProfLbl, 3, 0);
-
-        final int hGap = 5;
-        final int vGap = 10;
-        gp.setHgap(hGap);
-        gp.setVgap(vGap);
-
-        return gp;
     }
 
     /**
@@ -266,18 +270,101 @@ public class Courses implements Tables {
      */
     @Override
     public void search(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = " + value;
+        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value +"';";
+
         try {
             Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
+            ResultSet result = newCommand.executeQuery(sql);
+            displaySearchQueryResult(result);
             newCommand.close();
-            System.out.println("Your data has been successfully added to Courses. \n"
-                    + "Returning to Courses Dashboard...");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Display the search query result.
+     * @param result a ResultSet.
+     */
+    public void displaySearchQueryResult(ResultSet result) {
+        try {
+
+            if (!result.isBeforeFirst()) {
+                displayNotificationMessage("No Result Found.");
+                return;
+            }
+
+            resultPane.getChildren().setAll(createSearchResultArea(result));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Create the search result area
+     */
+    public GridPane createSearchResultArea(ResultSet searchResult) {
+        GridPane gp = new GridPane();
+
+        Label courseIdLbl = new Label("CourseID");
+        Label courseNameLbl = new Label("Course Name");
+        Label courseDescriptionLbl = new Label("Description");
+        Label courseProfLbl = new Label("Professor ID");
+
+        courseIdLbl.setFont(Font.font(18));
+        courseNameLbl.setFont(Font.font(18));
+        courseProfLbl.setFont(Font.font(18));
+        courseDescriptionLbl.setFont(Font.font(18));
+
+        gp.add(courseIdLbl, 0, 0);
+        gp.add(courseNameLbl, 1, 0);
+        gp.add(courseDescriptionLbl, 2, 0);
+        gp.add(courseProfLbl, 3, 0);
+
+        appendResultToSearchResultArea(gp, searchResult);
+
+        gp.setHgap(HGAP);
+        gp.setVgap(VGAP);
+
+        return gp;
+    }
+
+    // append the search result to the result area.
+    private void appendResultToSearchResultArea(GridPane gp, ResultSet searchResult) {
+        try {
+            // i start at 1 because it represent the row index after
+            // the column name.
+            for (int i = 1; searchResult.next(); i++) {
+                Label courseIdLbl = new Label(searchResult.getString("courseid"));
+                Label courseNameLbl = new Label(searchResult.getString("course_name"));
+                Label courseDescriptionLbl = new Label(searchResult.getString("description"));
+                Label courseProfLbl = new Label(String.valueOf(searchResult.getInt("profid")));
+
+                courseIdLbl.setFont(Font.font(18));
+                courseNameLbl.setFont(Font.font(18));
+                courseProfLbl.setFont(Font.font(18));
+                courseDescriptionLbl.setFont(Font.font(18));
+
+                gp.add(courseIdLbl, 0, i);
+                gp.add(courseNameLbl, 1, i);
+                gp.add(courseDescriptionLbl, 2, i);
+                gp.add(courseProfLbl, 3, i);
+
+                // equal to update command in sql
+                Button updateButton = new Button("Update");
+
+                // equal to delete command in sql
+                Button deleteButton = new Button("Delete");
+
+                gp.add(updateButton, 4, i);
+                gp.add(deleteButton, 5, i);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -305,14 +392,6 @@ public class Courses implements Tables {
 
     }
 
-    public void getUpdateData() {
-        System.out.println("Please enter the course id: ");
-
-
-
-
-    }
-
     @Override
     public void update() {
 
@@ -330,19 +409,19 @@ public class Courses implements Tables {
         }
 
         // check for length
-        if (id.length() > 6) {
+        if (id.length() != 6) {
             return false;
         }
 
         // check that it starts with three letters
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++){
             if(!Character.isAlphabetic(id.charAt(i))){
                 return false;
             }
         }
 
         // check that it ends with three letters.
-        for(int i = 3; i < 6; i++){
+        for (int i = 3; i < 6; i++){
             if(!Character.isDigit(id.charAt(i))){
                 return false;
             }
