@@ -8,13 +8,15 @@ import javafx.scene.layout.GridPane;
  * @author Bosco
  * @version 06_mar_2019
  */
-public interface Tables {
+public abstract class Tables {
     int HGAP = 5;
     int VGAP = 10;
-    GridPane createAddDashBoard();
-    void add(String courseID, String name, String description, int profID);
-    void edit();
-    void delete(String courseID);
-    GridPane createSearchDashBoard();
-    void search(String colName, String value); // might change to display
+
+    abstract GridPane createAddDashBoard();
+    abstract void add(String courseID, String name, String description, int profID);
+    abstract void edit();
+    abstract void delete(String courseID);
+    abstract GridPane createSearchDashBoard();
+    abstract void search(String colName, String value); // might change to display
+
 }
