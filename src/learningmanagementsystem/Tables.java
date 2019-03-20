@@ -16,7 +16,7 @@ public interface Tables {
     GridPane createAddDashBoard();
     void add(String courseID, String name, String description, int profID);
     void update();
-    void delete();
+    void delete(String courseID);
     GridPane createSearchDashBoard();
     void search(String colName, String value); // might change to display
 }

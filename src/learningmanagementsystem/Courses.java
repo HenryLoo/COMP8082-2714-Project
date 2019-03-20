@@ -367,30 +367,26 @@ public class Courses implements Tables {
         }
     }
 
-    @Override
-    public void delete() {
+
+    public void delete(String courseID) {
+
+
+        String sql = "DELETE FROM Courses WHERE courseid = " + courseID + ";";
+
+
 
         try {
+            Statement newCommand = myConn.createStatement();
+            newCommand.executeUpdate(sql);
+            newCommand.close();
+            System.out.println("Your data has been successfully deleted to Courses. \n"
+                    + "Returning to Courses Dashboard...");
 
-            //remind user to enter the user id they want to delete
-            System.out.print("Please enter the id of user to delete:");
-
-            //define the Sql statement
-            // String deleteSql = "DELETE FROM login WHERE CourseName ="+CourseName+";";
-
-            //acquire the statement object
-
-//            stt = conn.createStatement();
-//
-//            //execute the Sql statement
-//            stt.executeUpdate(deleteSql);
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
         }
-
     }
+
 
     @Override
     public void update() {
