@@ -43,12 +43,6 @@ public class LearningSysGUI extends GridPane {
         final int Vgap = 20;
         setHgap(Hgap);
         setVgap(Vgap);
-
-        // working on layout of the page
-
-        // need to set up a myPool page
-        // then the starting var editor
-        // then the run simulation page
     }
 
     private VBox greetingPane() {
@@ -103,14 +97,8 @@ public class LearningSysGUI extends GridPane {
             Button addButton = new Button("Add " + buttonName);
             addButton.setOnAction(this::openAddDashBoard);
 
-            // equal to update command in sql
-            Button updateButton = new Button("Update " + buttonName);
-
-            // equal to delete command in sql
-            Button deleteButton = new Button("Delete " + buttonName);
-
             final int gap = 5;
-            HBox hbox = new HBox(viewButton, addButton, updateButton, deleteButton);
+            HBox hbox = new HBox(viewButton, addButton);
             hbox.setSpacing(gap);
 
             // get the functionOptions that's currently empty and set it to hbox.

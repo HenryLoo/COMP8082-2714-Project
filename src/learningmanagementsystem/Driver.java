@@ -23,7 +23,7 @@ public class Driver extends Application {
         // in git but for JavaFX
 
         final int appHeight = 600;
-        final int appWidth = 900;
+        final int appWidth = 1200;
         Scene scene = new Scene(gui, appWidth, appHeight);
 
         // Stage the scene aka show it to user.

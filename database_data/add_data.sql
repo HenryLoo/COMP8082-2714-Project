@@ -34,7 +34,8 @@ INSERT INTO Users VALUES (0, "thomas_bui", "password", "admin", "12345678"),
 	
 # Data for Courses: 3 courses, 2 of them has lecture and lab versions.
 
-INSERT INTO Courses VALUES ("COA101", "Intro to Computer Architecture", "A beginners' class on how computers work.", 11),
+INSERT INTO Courses VALUES 
+	("COA101", "Intro to Computer Architecture", "A beginners' class on how computers work.", 11),
 	("MAT203", "Intermediate Calculus (LEC)", "A deeper look at Calculus and its application to real-life problems. This is the lecture version.", 10),
 	("MAT204", "Intermediate Calculus (LAB)", "A deeper look at Calculus and its application to real-life problems. This is the lab version.", 11),
 	("ASB311", "Advanced Assembly (LEC)", "For people interested in mastering assembly languages. This is the lecture version.", 12),
