@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="JavaFX">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.base" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.controls" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.fxml" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.graphics" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.media" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.swing" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX/src/javafx.web" />
+      <root url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../../openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/JavaFX" recursive="false" type="SOURCES" />
+  </library>
+</component>

@@ -367,12 +367,11 @@ public class Courses implements Tables {
         }
     }
 
-    @Override
-    public void delete(String courseID, String name, String description, int profID) {
+
+    public void delete(String courseID) {
 
 
-        String sql = "DELETE FROM Courses WHERE('" + courseID + "', '" + name + "', '"
-                + description + "', " + profID + ");
+        String sql = "DELETE FROM Courses WHERE courseid = " + courseID + ";";
 
 
 
