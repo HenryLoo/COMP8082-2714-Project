@@ -363,7 +363,6 @@ public class Courses implements Tables {
                 Button deleteButton = new Button("Delete");
                 deleteButton.setTooltip(new Tooltip("Delete"));
 
-
                 gp.add(updateButton, 4, i);
                 gp.add(deleteButton, 5, i);
             }
@@ -371,11 +370,6 @@ public class Courses implements Tables {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void openUpdateDashBoard(ActionEvent event) {
-        Button triggeredButton = (Button) event.getSource();
-        System.out.println((triggeredButton.getId()));
     }
 
     /**
@@ -389,8 +383,6 @@ public class Courses implements Tables {
     }
 
     @Override
-    public void delete() {
-
     public void delete(String courseID) {
 
 

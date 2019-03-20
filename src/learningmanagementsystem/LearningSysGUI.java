@@ -107,12 +107,11 @@ public class LearningSysGUI extends GridPane {
         }
 
         /**
-         * Find the button name based on the event created by clicking on that button.
+         * Find the button text based on the event created by clicking on that button.
          * @param event an ActionEvent.
          * @return the name of the button as a String.
          */
         public String findButtonText(ActionEvent event) {
-            // split the object text into two parts by separating using the quote symbol.
             // to check why this work, you can use System.out.println(event.getSource()).
             Button buttonObj = (Button) event.getSource();
             String name = buttonObj.getText();
