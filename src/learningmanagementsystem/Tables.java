@@ -15,7 +15,7 @@ public interface Tables {
     int VGAP = 10;
     GridPane createAddDashBoard();
     void add(String courseID, String name, String description, int profID);
-    void update();
+    void edit();
     void delete();
     GridPane createSearchDashBoard();
     void search(String colName, String value); // might change to display

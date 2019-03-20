@@ -87,7 +87,7 @@ public class LearningSysGUI extends GridPane {
         // when a table is chosen, displays the functions
         private void createFunctionOptions(ActionEvent event) {
             // find which button was clicked
-            String buttonName = findButtonName(event);
+            String buttonName = findButtonText(event);
 
             // equal to select command in sql
             Button viewButton = new Button("View Table");
@@ -110,13 +110,11 @@ public class LearningSysGUI extends GridPane {
          * @param event an ActionEvent.
          * @return the name of the button as a String.
          */
-        public String findButtonName(ActionEvent event) {
+        public String findButtonText(ActionEvent event) {
             // split the object text into two parts by separating using the quote symbol.
             // to check why this work, you can use System.out.println(event.getSource()).
-            String[] buttonObj = event.getSource().toString().split("'");
-
-            final int indexContainingTheName = 1;
-            String name = buttonObj[indexContainingTheName];
+            Button buttonObj = (Button) event.getSource();
+            String name = buttonObj.getText();
 
             // set the currentTable instance variable to the correct table.
             setCurrentTable(name);
