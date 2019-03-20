@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -353,10 +354,15 @@ public class Courses implements Tables {
                 gp.add(courseProfLbl, 3, i);
 
                 // equal to update command in sql
-                Button updateButton = new Button("Update");
+                Button updateButton = new Button("Edit");
+                updateButton.setId(searchResult.getString("courseid"));
+                updateButton.setOnAction(this::openUpdateDashBoard);
+                updateButton.setTooltip(new Tooltip("Edit"));
 
                 // equal to delete command in sql
                 Button deleteButton = new Button("Delete");
+                deleteButton.setTooltip(new Tooltip("Delete"));
+
 
                 gp.add(updateButton, 4, i);
                 gp.add(deleteButton, 5, i);
@@ -367,6 +373,23 @@ public class Courses implements Tables {
         }
     }
 
+    public void openUpdateDashBoard(ActionEvent event) {
+        Button triggeredButton = (Button) event.getSource();
+        System.out.println((triggeredButton.getId()));
+    }
+
+    /**
+     * Find the button id.
+     * @param event an ActionEvent.
+     * @return the button id as a String.
+     */
+    public String findButtonId(ActionEvent event) {
+        Button buttonObj = (Button) event.getSource();
+        return buttonObj.getId();
+    }
+
+    @Override
+    public void delete() {
 
     public void delete(String courseID) {
 
@@ -389,7 +412,7 @@ public class Courses implements Tables {
 
 
     @Override
-    public void update() {
+    public void edit() {
 
     }
 
