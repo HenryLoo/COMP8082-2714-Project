@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Courses implements Tables {
+public class Courses extends Tables {
 
     // the connection to the database
     private Connection myConn;
@@ -387,9 +387,6 @@ public class Courses implements Tables {
         Button buttonObj = (Button) event.getSource();
         return buttonObj.getId();
     }
-
-    @Override
-    public void delete() {
 
     public void delete(String courseID) {
 
