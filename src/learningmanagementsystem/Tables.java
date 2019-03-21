@@ -21,7 +21,8 @@ public abstract class Tables {
 
     abstract GridPane createAddDashBoard();
     abstract void add(String courseID, String name, String description, int profID);
-    abstract void edit();
+    abstract void edit(String currentCourseid, String newCourseid, String courseName,
+                       String courseDescription, int courseProfId);
     abstract void delete(String courseID);
     abstract GridPane createSearchDashBoard();
     abstract ResultSet search(String colName, String value); // might change to display

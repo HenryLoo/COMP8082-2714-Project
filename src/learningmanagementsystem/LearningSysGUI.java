@@ -94,6 +94,7 @@ public class LearningSysGUI extends GridPane {
             // equal to insert into command in sql
             Button addButton = new Button("Add " + buttonName);
             addButton.setOnAction(this::openAddDashBoard);
+            addButton.setTooltip(new Tooltip("Add New " + buttonName));
 
             final int gap = 5;
             HBox hbox = new HBox(viewButton, addButton);

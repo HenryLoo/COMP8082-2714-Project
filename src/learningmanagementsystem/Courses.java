@@ -19,7 +19,7 @@ public class Courses extends Tables {
 
     // the connection to the database
     private Connection myConn;
-    
+
     // the text fields for each data column in the table.
     private TextField courseIdTxtFld;
     private TextField courseNameTxtFld;
@@ -121,56 +121,73 @@ public class Courses extends Tables {
     // try to add data
     // if there are errors, let users know
     private void checkInputForAddingData(ActionEvent event) {
-        // turn off the error indicator
-        inputErrorIndicator = false;
-
         // create an error message for user
         String errorMessage = "";
         int courseProfId = 0;
 
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
-            errorMessage += "Your course id must be six characters long. \n"
-                    + "It must start with three letters and end with three digits. \n";
-            inputErrorIndicator = true;
-            courseIdTxtFld.setStyle("-fx-border-color: red");
+            errorMessage += markCourseIdTxtFldWrong();
         }
 
         String courseName = courseNameTxtFld.getText().trim();
         if (!checkCourseName(courseName)) {
-            errorMessage += "Your course name must be less than 40 characters. \n";
-            inputErrorIndicator = true;
-            courseIdTxtFld.setStyle("-fx-border-color: red");
+            errorMessage += markCourseNameTxtFldWrong();
         }
 
         try {
             courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
             if (!checkUserID(courseProfId)) {
-                errorMessage += "The professor ID doesn't exist. \n";
+                // do this so the catch block handles everything
                 throw new Exception();
             }
         } catch (Exception e) {
-            inputErrorIndicator = true;
-            courseProfTxtFld.setStyle("-fx-border-color: red");
+            errorMessage += markCourseProfIdTxtFldWrong();
         }
 
         String courseDescription = courseDescriptionTxtFld.getText().trim();
         if (!checkDescription(courseDescription)) {
-            errorMessage += "Your course description must be less than 150 characters. \n";
-            inputErrorIndicator = true;
-            courseIdTxtFld.setStyle("-fx-border-color: red");
+            errorMessage += markCourseDescriptionTxtFld();
         }
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+            // turn off the error indicator
+            inputErrorIndicator = false;
         } else {
             add(courseId, courseName, courseDescription, courseProfId);
-            displaySuccessMessage("Course Added!");
         }
 
     }
 
+    // mark that the courseIdTxtFld was wrong
+    private String markCourseIdTxtFldWrong() {
+        inputErrorIndicator = true;
+        courseIdTxtFld.setStyle("-fx-border-color: red");
+        return "Your course id must be six characters long. \n"
+                + "It must start with three letters and end with three digits. \n";
+    }
 
+    // mark the coursenameTxtFld was wrong
+    private String markCourseNameTxtFldWrong() {
+        inputErrorIndicator = true;
+        courseIdTxtFld.setStyle("-fx-border-color: red");
+        return "Your course name must be less than 40 characters. \n";
+    }
+
+    // mark the courseProfidTxtFld was wrong
+    private String markCourseProfIdTxtFldWrong() {
+        inputErrorIndicator = true;
+        courseProfTxtFld.setStyle("-fx-border-color: red");
+        return "The professor ID doesn't exist. \n";
+    }
+
+    // mark the courseDescriptionTxtFld was wrong
+    private String markCourseDescriptionTxtFld() {
+        inputErrorIndicator = true;
+        courseIdTxtFld.setStyle("-fx-border-color: red");
+        return "Your course description must be less than 150 characters. \n";
+    }
 
     /**
      * Add data to the Courses table.
@@ -191,9 +208,8 @@ public class Courses extends Tables {
             newCommand.executeUpdate(sql);
             newCommand.close();
 
-            // let user know course is added
-            userMessage.setTextFill(Color.GREEN);
-            userMessage.setText("Course Added.");
+            displaySuccessMessage("Course Added!");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -399,6 +415,9 @@ public class Courses extends Tables {
         setTextBoxToValueOfResultSet(courseid);
 
         Button editBtn = new Button("Edit Course");
+
+        // add the current courseid into the update button
+        editBtn.setId(courseid);
         editBtn.setOnAction(this::checkInputForEditingData);
         gp.add(editBtn, 0, 6);
 
@@ -408,6 +427,8 @@ public class Courses extends Tables {
         return gp;
     }
 
+    // set textbox to values of the 'select' statement based on
+    // the courseid
     private void setTextBoxToValueOfResultSet(String courseid) {
         try {
             // find the result associated with the courseid passed to this method.
@@ -417,9 +438,9 @@ public class Courses extends Tables {
 
             // set textboxes to current value of the specified course
             courseIdTxtFld.setText(result.getString("courseid"));
-            courseNameTxtFld.setText(result.getString("name"));
-            courseProfTxtFld.setText(result.getString("description"));
-            courseDescriptionTxtFld.setText(result.getString("profid"));
+            courseNameTxtFld.setText(result.getString("course_name"));
+            courseDescriptionTxtFld.setText(result.getString("description"));
+            courseProfTxtFld.setText(result.getString("profid"));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -428,7 +449,60 @@ public class Courses extends Tables {
     }
 
     private void checkInputForEditingData(ActionEvent event) {
+        String errorMessage = "";
+        int courseProfId = 0;
 
+        String newCourseId = courseIdTxtFld.getText().trim();
+        if (!checkCourseID(newCourseId)) {
+            errorMessage += markCourseIdTxtFldWrong();
+        }
+
+        String courseName = courseNameTxtFld.getText().trim();
+        if (!checkCourseName(courseName)) {
+            errorMessage += markCourseNameTxtFldWrong();
+        }
+
+        try {
+            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+            if (!checkUserID(courseProfId)) {
+                // do this so the catch block handles everything
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            errorMessage += markCourseProfIdTxtFldWrong();
+        }
+
+        String courseDescription = courseDescriptionTxtFld.getText().trim();
+        if (!checkDescription(courseDescription)) {
+            errorMessage += markCourseDescriptionTxtFld();
+        }
+
+        if (inputErrorIndicator) {
+            displayErrorMessage(errorMessage);
+            // turn off the error indicator
+            inputErrorIndicator = false;
+        } else {
+            String currentCourseId = findButtonId(event);
+            edit(currentCourseId, newCourseId, courseName, courseDescription, courseProfId);
+        }
+    }
+
+    @Override
+    public void edit(String currentCourseID, String newCourseID, String courseName, String courseDescription,
+                     int courseProfId) {
+        String sql = "UPDATE Courses SET courseid = '" + newCourseID + "', course_name = '"
+                + courseName + "', description = '" + courseDescription + "', profid = "
+                + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
+
+        try {
+            Statement newCommand = myConn.createStatement();
+            newCommand.executeUpdate(sql);
+            newCommand.close();
+            displaySuccessMessage("Course Updated!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void putForDelete(ActionEvent event){
@@ -438,10 +512,7 @@ public class Courses extends Tables {
     }
 
     public void delete(String courseID) {
-
-
         String sql = "DELETE FROM Courses WHERE courseid = '" + courseID + "';";
-        System.out.println("IN DELETE");
 
         try {
             Statement newCommand = myConn.createStatement();
@@ -451,12 +522,6 @@ public class Courses extends Tables {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    public void edit() {
-
     }
 
 
