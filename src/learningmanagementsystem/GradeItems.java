@@ -215,7 +215,7 @@ public class GradeItems extends Tables {
      */
     public GridPane createSearchDashBoard() {
 
-        Label functionTitle = new Label("Search for Courses By CourseId:");
+        Label functionTitle = new Label("Search for Gradeitem By GradeitemId:");
         functionTitle.setFont(Font.font(22));
 
         // reset the textfields and userMessage since it's shared resources.
@@ -225,7 +225,7 @@ public class GradeItems extends Tables {
         gp.add(functionTitle, 0, 0);
         gp.add(courseIdTxtFld, 1, 0);
 
-        Button searchBtn = new Button("Search Courses");
+        Button searchBtn = new Button("Search Gradeitems");
         searchBtn.setOnAction(this::checkInputForSearchData);
         gp.add(searchBtn, 2, 0);
 
@@ -248,18 +248,18 @@ public class GradeItems extends Tables {
         String errorMessage = "";
 
         // consider refactoring
-        String courseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
-            errorMessage += "Your course id must be six characters long. \n"
+        String GradeitemId = GradeitemIdTxtFld.getText().trim();
+        if (!checkGradeitemID(GradeitemId)) {
+            errorMessage += "Your Gradeitem id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
-            courseIdTxtFld.setStyle("-fx-border-color: red");
+            GradeitemIdTxtFld.setStyle("-fx-border-color: red");
         }
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
         } else {
-            ResultSet result = search("courseid", courseId);
+            ResultSet result = search("Gradeitemid", GradeitemId);
             displaySearchQueryResult(result);
         }
     }
@@ -272,7 +272,7 @@ public class GradeItems extends Tables {
      */
     @Override
     public ResultSet search(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
+        String sql = "SELECT * FROM Gradeitems WHERE " + colName + " = '" + value + "';";
 
         try {
             Statement newCommand = myConn.createStatement();
@@ -311,20 +311,20 @@ public class GradeItems extends Tables {
      */
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
-        Label courseIdLbl = new Label("CourseID");
-        Label courseNameLbl = new Label("Course Name");
-        Label courseDescriptionLbl = new Label("Description");
-        Label courseProfLbl = new Label("Professor ID");
+        Label GradeitemIdLbl = new Label("GradeitemID");
+        Label GradeitemNameLbl = new Label("Gradeitem Name");
+        Label GradeitemDescriptionLbl = new Label("Description");
+        Label GradeitemProfLbl = new Label("Professor ID");
 
         courseIdLbl.setFont(Font.font(18));
         courseNameLbl.setFont(Font.font(18));
         courseProfLbl.setFont(Font.font(18));
         courseDescriptionLbl.setFont(Font.font(18));
 
-        gp.add(courseIdLbl, 0, 0);
-        gp.add(courseNameLbl, 1, 0);
-        gp.add(courseDescriptionLbl, 2, 0);
-        gp.add(courseProfLbl, 3, 0);
+        gp.add(GradeitemIdLbl, 0, 0);
+        gp.add(GradeitemNameLbl, 1, 0);
+        gp.add(GradeitemDescriptionLbl, 2, 0);
+        gp.add(GradeitemProfLbl, 3, 0);
 
         appendResultToSearchResultArea(gp, searchResult);
 
@@ -340,33 +340,33 @@ public class GradeItems extends Tables {
             // i start at 1 because it represent the row index after
             // the column name.
             for (int i = 1; searchResult.next(); i++) {
-                Label courseIdLbl = new Label(searchResult.getString("courseid"));
-                Label courseNameLbl = new Label(searchResult.getString("course_name"));
-                Label courseDescriptionLbl = new Label(searchResult.getString("description"));
-                Label courseProfLbl = new Label(String.valueOf(searchResult.getInt("profid")));
+                Label GradeitemIdLbl = new Label(searchResult.getString("Gradeitemid"));
+                Label GradeitemNameLbl = new Label(searchResult.getString("Gradeitem_name"));
+                Label GradeitemDescriptionLbl = new Label(searchResult.getString("description"));
+                Label GradeitemProfLbl = new Label(String.valueOf(searchResult.getInt("profid")));
 
-                courseIdLbl.setFont(Font.font(18));
-                courseNameLbl.setFont(Font.font(18));
-                courseProfLbl.setFont(Font.font(18));
-                courseDescriptionLbl.setFont(Font.font(18));
+                GradeitemIdLbl.setFont(Font.font(18));
+                GradeitemNameLbl.setFont(Font.font(18));
+                GradeitemProfLbl.setFont(Font.font(18));
+                GradeitemDescriptionLbl.setFont(Font.font(18));
 
-                gp.add(courseIdLbl, 0, i);
-                gp.add(courseNameLbl, 1, i);
-                gp.add(courseDescriptionLbl, 2, i);
-                gp.add(courseProfLbl, 3, i);
+                gp.add(GradeitemIdLbl, 0, i);
+                gp.add(GradeitemNameLbl, 1, i);
+                gp.add(GradeitemDescriptionLbl, 2, i);
+                gp.add(GradeitemProfLbl, 3, i);
 
                 // create an edit button
                 ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
                 Button editButton = new Button();
                 editButton.setGraphic(editPencil);
-                editButton.setId(searchResult.getString("courseid"));
+                editButton.setId(searchResult.getString("Gradeitemid"));
                 editButton.setOnAction(this::openEditDashBoard);
                 editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
                 ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
                 Button deleteButton = new Button();
-                deleteButton.setId(searchResult.getString("courseid"));
+                deleteButton.setId(searchResult.getString("Gradeitemid"));
                 deleteButton.setTooltip(new Tooltip("Delete"));
                 deleteButton.setOnAction(this::putForDelete);
 
@@ -408,12 +408,12 @@ public class GradeItems extends Tables {
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        setTextBoxToValueOfResultSet(courseid);
+        setTextBoxToValueOfResultSet(Gradeitemid);
 
-        Button editBtn = new Button("Edit Course");
+        Button editBtn = new Button("Edit Gradeitem");
 
         // add the current courseid into the update button
-        editBtn.setId(courseid);
+        editBtn.setId(Gradeitemid);
         editBtn.setOnAction(this::checkInputForEditingData);
         gp.add(editBtn, 0, 6);
 
@@ -425,18 +425,18 @@ public class GradeItems extends Tables {
 
     // set textbox to values of the 'select' statement based on
     // the courseid
-    private void setTextBoxToValueOfResultSet(String courseid) {
+    private void setTextBoxToValueOfResultSet(String Gradeitemid) {
         try {
             // find the result associated with the courseid passed to this method.
             // courseid is guaranteed to work
-            ResultSet result = search("courseid", courseid);
+            ResultSet result = search("Gradeitemid", Gradeitemid);
             result.next();
 
             // set textboxes to current value of the specified course
-            courseIdTxtFld.setText(result.getString("courseid"));
-            courseNameTxtFld.setText(result.getString("course_name"));
-            courseDescriptionTxtFld.setText(result.getString("description"));
-            courseProfTxtFld.setText(result.getString("profid"));
+            GradeitemIdTxtFld.setText(result.getString("Gradeitemid"));
+            GradeitemNameTxtFld.setText(result.getString("Gradeitem_name"));
+            GradeitemDescriptionTxtFld.setText(result.getString("description"));
+            GradeitemProfTxtFld.setText(result.getString("profid"));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -510,8 +510,8 @@ public class GradeItems extends Tables {
         System.out.println(findButtonId(event));
     }
 
-    public void delete(String courseID) {
-        String sql = "DELETE FROM Courses WHERE courseid = '" + courseID + "';";
+    public void delete(String GradeitemID) {
+        String sql = "DELETE FROM Gradeitems WHERE Gradeitemid = '" + GradeitemID + "';";
 
         try {
             Statement newCommand = myConn.createStatement();
