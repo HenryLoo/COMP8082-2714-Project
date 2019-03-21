@@ -23,7 +23,6 @@ public class MyDBConnection {
 
     public void init(){
        try {
-        
             Class.forName("com.mysql.cj.jdbc.Driver");
             myConnection=DriverManager.getConnection(
                     "jdbc:mysql://51.38.19.86:3306/munimoe_LMS","munimoe_admin", "a9D4^x1Uy8AV");
@@ -40,29 +39,7 @@ public class MyDBConnection {
     public Connection getMyConnection(){
         return myConnection;
     }
-    
-    
-    public void close(ResultSet rs){
-        
-        if(rs !=null){
-            try{
-               rs.close();
-            }
-            catch(Exception e){}
-        
-        }
-    }
-    
-     public void close(java.sql.Statement stmt){
-        
-        if(stmt !=null){
-            try{
-               stmt.close();
-            }
-            catch(Exception e){}
-        
-        }
-    }
+
      
   public void destroy(){
   
@@ -70,6 +47,7 @@ public class MyDBConnection {
     
          try{
                myConnection.close();
+               System.out.println("Connection desctroyed");
             }
             catch(Exception e){}
         

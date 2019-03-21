@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Courses extends Tables {
+public class GradeItems extends Tables {
 
     // the connection to the database
     private Connection myConn;
@@ -28,19 +28,10 @@ public class Courses extends Tables {
     private TextField courseProfTxtFld;
     private TextField courseDescriptionTxtFld;
 
-    // display the result
-    private GridPane resultPane;
-
-    // tell us that there's an error in user inputs.
-    private boolean inputErrorIndicator;
-
-    // the current pane being displayed to user.
-    private Pane currentPane;
-
     /**
      * Create a Courses instance and run the dashboard.
      */
-    public Courses(Connection newMyConn, Pane newCurrentPane) {
+    public GradeItems(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
         userMessage.setFont(Font.font(13));
@@ -555,4 +546,5 @@ public class Courses extends Tables {
         return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
     }
 }
+
 
