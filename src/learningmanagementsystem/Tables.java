@@ -1,6 +1,8 @@
 package learningmanagementsystem;
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 import java.sql.ResultSet;
 
@@ -11,16 +13,49 @@ import java.sql.ResultSet;
  * @version 06_mar_2019
  */
 public abstract class Tables {
-    int HGAP = 5;
-    int VGAP = 10;
+    public static final int HGAP = 5;
+    public static final int VGAP = 10;
+
+    protected Label userMessage;
+
 
     abstract GridPane createAddDashBoard();
     abstract void add(String courseID, String name, String description, int profID);
-    abstract void edit();
+    abstract void edit(String currentCourseid, String newCourseid, String courseName,
+                       String courseDescription, int courseProfId);
     abstract void delete(String courseID);
     abstract GridPane createSearchDashBoard();
-    abstract void search(String colName, String value); // might change to display
+    abstract ResultSet search(String colName, String value); // might change to display
 
+    /**
+     * Display an error message to user.
+     *
+     * @param errorMessage a String.
+     */
+    public void displayErrorMessage(String errorMessage) {
+        userMessage.setTextFill(Color.RED);
+        userMessage.setText(errorMessage);
+    }
+
+    /**
+     * Display an successful operation message to user.
+     *
+     * @param successMessage a String.
+     */
+    public void displaySuccessMessage(String successMessage) {
+        userMessage.setTextFill(Color.GREEN);
+        userMessage.setText(successMessage);
+    }
+
+    /**
+     * Display a notification message to user.
+     *
+     * @param notificationMessage a String.
+     */
+    public void displayNotificationMessage(String notificationMessage) {
+        userMessage.setTextFill(Color.BLACK);
+        userMessage.setText(notificationMessage);
+    }
     /**
      * Check if prof id is valid.
      * @param profID a String
@@ -64,7 +99,6 @@ public abstract class Tables {
 
         return true;
     }
-
 }
 
 

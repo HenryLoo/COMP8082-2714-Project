@@ -14,9 +14,6 @@ import java.sql.*;
 
 public class LearningSysGUI extends GridPane {
 
-    // The option bar at the top of the screen.
-    private OptionBar topBar;
-
     // The bar that displays table functions.
     private HBox functionOptions;
 
@@ -32,7 +29,7 @@ public class LearningSysGUI extends GridPane {
 
     public LearningSysGUI(Session newSession) {
         mySession = newSession;
-        topBar = new OptionBar();
+        OptionBar topBar = new OptionBar();
         currentPane = greetingPane();
         functionOptions = new HBox();
 
@@ -97,6 +94,7 @@ public class LearningSysGUI extends GridPane {
             // equal to insert into command in sql
             Button addButton = new Button("Add " + buttonName);
             addButton.setOnAction(this::openAddDashBoard);
+            addButton.setTooltip(new Tooltip("Add New " + buttonName));
 
             final int gap = 5;
             HBox hbox = new HBox(viewButton, addButton);
@@ -107,12 +105,11 @@ public class LearningSysGUI extends GridPane {
         }
 
         /**
-         * Find the button name based on the event created by clicking on that button.
+         * Find the button text based on the event created by clicking on that button.
          * @param event an ActionEvent.
          * @return the name of the button as a String.
          */
         public String findButtonText(ActionEvent event) {
-            // split the object text into two parts by separating using the quote symbol.
             // to check why this work, you can use System.out.println(event.getSource()).
             Button buttonObj = (Button) event.getSource();
             String name = buttonObj.getText();
@@ -129,7 +126,7 @@ public class LearningSysGUI extends GridPane {
         public void setCurrentTable(String tableName) {
             switch (tableName) {
                 case "Courses":
-                    currentTable = new Courses(mySession.getMyConnection());
+                    currentTable = new Courses(mySession.getMyConnection(), currentPane);
                     break;
                 default:
                     System.out.println("There's no table with that name");
