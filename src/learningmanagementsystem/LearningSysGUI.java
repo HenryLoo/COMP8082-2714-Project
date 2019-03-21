@@ -14,9 +14,6 @@ import java.sql.*;
 
 public class LearningSysGUI extends GridPane {
 
-    // The option bar at the top of the screen.
-    private OptionBar topBar;
-
     // The bar that displays table functions.
     private HBox functionOptions;
 
@@ -32,7 +29,7 @@ public class LearningSysGUI extends GridPane {
 
     public LearningSysGUI(Session newSession) {
         mySession = newSession;
-        topBar = new OptionBar();
+        OptionBar topBar = new OptionBar();
         currentPane = greetingPane();
         functionOptions = new HBox();
 
@@ -128,7 +125,7 @@ public class LearningSysGUI extends GridPane {
         public void setCurrentTable(String tableName) {
             switch (tableName) {
                 case "Courses":
-                    currentTable = new Courses(mySession.getMyConnection());
+                    currentTable = new Courses(mySession.getMyConnection(), currentPane);
                     break;
                 default:
                     System.out.println("There's no table with that name");

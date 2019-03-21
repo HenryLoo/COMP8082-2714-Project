@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -34,15 +35,22 @@ public class Courses extends Tables {
     // tell us that there's an error in user inputs.
     private boolean inputErrorIndicator;
 
+    // the current pane being displayed to user.
+    private Pane currentPane;
+
+    // hold a result set after the set is closed.
+    private ResultSet resultHolder;
+
     /**
      * Create a Courses instance and run the dashboard.
      */
-    public Courses(Connection newMyConn) {
+    public Courses(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
         userMessage.setFont(Font.font(13));
         userMessage.setTextFill(Color.RED);
         resultPane = new GridPane();
+        currentPane = newCurrentPane;
     }
 
     /**
@@ -62,35 +70,13 @@ public class Courses extends Tables {
      * @return a GridPane with all the text fields.
      */
     public GridPane createAddDashBoard() {
+        // get the generic look of a course info dashboard
+        GridPane gp = createSingleCourseInfoDashBoard();
 
+        // create things unique to the add dashboard.
         Label functionTitle = new Label("Please enter the new course's data:");
-        Label courseIdLbl = new Label("CourseID: ");
-        Label courseNameLbl = new Label("Course Name: ");
-        Label courseProfLbl = new Label("Course Professor ID: ");
-        Label courseDescriptionLbl = new Label("Course Description: ");
-
         functionTitle.setFont(Font.font(22));
-        courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
-
-        // since the text fields are shared, we have to cleared them first
-        initTextfieldsAndUserMessage();
-
-        GridPane gp = new GridPane();
-
         gp.add(functionTitle, 0, 0, 2, 1);
-        gp.add(courseIdLbl, 0, 1);
-        gp.add(courseNameLbl, 0, 2);
-        gp.add(courseProfLbl, 0, 3);
-        gp.add(courseDescriptionLbl, 0, 4);
-        gp.add(userMessage, 0, 5, 2, 1);
-
-        gp.add(courseIdTxtFld, 1, 1);
-        gp.add(courseNameTxtFld, 1, 2);
-        gp.add(courseProfTxtFld, 1, 3);
-        gp.add(courseDescriptionTxtFld, 1, 4);
 
         Button addBtn = new Button("Add Course");
         addBtn.setOnAction(this::checkInputForAddingData);
@@ -100,6 +86,41 @@ public class Courses extends Tables {
         gp.setVgap(VGAP);
 
         return gp;
+    }
+
+    /**
+     * Create a single course info dashboard generic for add and update dashboard.
+     * @return a grid pane containing all the needed elements.
+     */
+    public GridPane createSingleCourseInfoDashBoard() {
+        GridPane gp = new GridPane();
+
+        Label courseIdLbl = new Label("CourseID: ");
+        Label courseNameLbl = new Label("Course Name: ");
+        Label courseProfLbl = new Label("Course Professor ID: ");
+        Label courseDescriptionLbl = new Label("Course Description: ");
+
+        courseIdLbl.setFont(Font.font(18));
+        courseNameLbl.setFont(Font.font(18));
+        courseProfLbl.setFont(Font.font(18));
+        courseDescriptionLbl.setFont(Font.font(18));
+
+        gp.add(courseIdLbl, 0, 1);
+        gp.add(courseNameLbl, 0, 2);
+        gp.add(courseProfLbl, 0, 3);
+        gp.add(courseDescriptionLbl, 0, 4);
+
+        // since the text fields are shared, we have to cleared them first
+        initTextfieldsAndUserMessage();
+
+        gp.add(courseIdTxtFld, 1, 1);
+        gp.add(courseNameTxtFld, 1, 2);
+        gp.add(courseProfTxtFld, 1, 3);
+        gp.add(courseDescriptionTxtFld, 1, 4);
+        gp.add(userMessage, 0, 5, 2, 1);
+
+        return gp;
+
     }
 
     // try to add data
@@ -230,8 +251,8 @@ public class Courses extends Tables {
         searchBtn.setOnAction(this::checkInputForSearchData);
         gp.add(searchBtn, 2, 0);
 
-        gp.add(userMessage, 0, 2, 2, 1);
-        gp.add(resultPane, 0, 3, 3, 1);
+        gp.add(userMessage, 0, 1, 2, 1);
+        gp.add(resultPane, 0, 2, 3, 1);
 
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
@@ -276,6 +297,7 @@ public class Courses extends Tables {
         try {
             Statement newCommand = myConn.createStatement();
             ResultSet result = newCommand.executeQuery(sql);
+            resultHolder = result;
             displaySearchQueryResult(result);
             newCommand.close();
 
@@ -371,6 +393,13 @@ public class Courses extends Tables {
             e.printStackTrace();
         }
     }
+    /**
+     * Open the update dashboard.
+     * @param event an ActionEvent.
+     */
+    public void openUpdateDashBoard(ActionEvent event) {
+        currentPane.getChildren().setAll(createUpdateDashBoard(findButtonId(event)));
+    }
 
     /**
      * Find the button id.
@@ -380,6 +409,36 @@ public class Courses extends Tables {
     public String findButtonId(ActionEvent event) {
         Button buttonObj = (Button) event.getSource();
         return buttonObj.getId();
+    }
+
+    public GridPane createUpdateDashBoard(String courseid) {
+        GridPane gp = createSingleCourseInfoDashBoard();
+
+        // create things unique to the add dashboard.
+        Label functionTitle = new Label("You can change any of the current data below:");
+        functionTitle.setFont(Font.font(22));
+        gp.add(functionTitle, 0, 0, 2, 1);
+
+        Button addBtn = new Button("Update Course");
+        addBtn.setOnAction(this::checkInputForEditingData);
+        gp.add(addBtn, 0, 6);
+
+        // set textbox value to current course value
+//        courseIdTxtFld.setText();
+//        courseNameTxtFld;
+//        courseProfTxtFld;
+//        courseDescriptionTxtFld;
+
+        gp.setHgap(HGAP);
+        gp.setVgap(VGAP);
+
+        return gp;
+    }
+
+    // try to edit data
+    // tell user if can't
+    private void checkInputForEditingData(ActionEvent event) {
+        System.out.println(resultHolder);
     }
 
     public void delete(String courseID) {
