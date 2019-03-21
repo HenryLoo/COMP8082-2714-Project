@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -362,14 +364,17 @@ public class Courses extends Tables {
                 gp.add(courseDescriptionLbl, 2, i);
                 gp.add(courseProfLbl, 3, i);
 
-                // equal to update command in sql
-                Button updateButton = new Button("Edit");
+                // create an edit button
+                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
+                Button updateButton = new Button();
+                updateButton.setGraphic(editPencil);
                 updateButton.setId(searchResult.getString("courseid"));
                 updateButton.setOnAction(this::openEditDashBoard);
                 updateButton.setTooltip(new Tooltip("Edit"));
 
-                // equal to delete command in sql
-                Button deleteButton = new Button("Delete");
+                // create a delete button
+                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
+                Button deleteButton = new Button();
                 deleteButton.setId(searchResult.getString("courseid"));
                 deleteButton.setTooltip(new Tooltip("Delete"));
                 deleteButton.setOnAction(this::putForDelete);
