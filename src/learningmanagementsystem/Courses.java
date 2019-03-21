@@ -59,6 +59,7 @@ public class Courses extends Tables {
 
     /**
      * Create a grid pane containing elements needed to add courses.
+     *
      * @return a GridPane with all the text fields.
      */
     public GridPane createAddDashBoard() {
@@ -129,7 +130,7 @@ public class Courses extends Tables {
 
         try {
             courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkProfID(courseProfId)) {
+            if (!checkUserID(courseProfId)) {
                 errorMessage += "The professor ID doesn't exist. \n";
                 throw new Exception();
             }
@@ -156,6 +157,7 @@ public class Courses extends Tables {
 
     /**
      * Display an error message to user.
+     *
      * @param errorMessage a String.
      */
     public void displayErrorMessage(String errorMessage) {
@@ -165,6 +167,7 @@ public class Courses extends Tables {
 
     /**
      * Display an successful operation message to user.
+     *
      * @param successMessage a String.
      */
     public void displaySuccessMessage(String successMessage) {
@@ -174,6 +177,7 @@ public class Courses extends Tables {
 
     /**
      * Display a notification message to user.
+     *
      * @param notificationMessage a String.
      */
     public void displayNotificationMessage(String notificationMessage) {
@@ -183,15 +187,16 @@ public class Courses extends Tables {
 
     /**
      * Add data to the Courses table.
+     *
      * @param courseID
      * @param name
      * @param description
      * @param profID
      */
     @Override
-    public void add(String courseID, String name, String description, int profID){
+    public void add(String courseID, String name, String description, int profID) {
 
-        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '"+ name + "', '"
+        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
                 + description + "', " + profID + ");";
 
         try {
@@ -212,6 +217,7 @@ public class Courses extends Tables {
 
     /**
      * Create a grid pane containing elements needed to search courses.
+     *
      * @return a GridPane with all the textfields.
      */
     public GridPane createSearchDashBoard() {
@@ -266,12 +272,13 @@ public class Courses extends Tables {
 
     /**
      * Display data in a table with the specified location.
+     *
      * @param colName the column name as a String
      * @parem value the value as a String
      */
     @Override
     public void search(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value +"';";
+        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
 
         try {
             Statement newCommand = myConn.createStatement();
@@ -286,6 +293,7 @@ public class Courses extends Tables {
 
     /**
      * Display the search query result.
+     *
      * @param result a ResultSet.
      */
     public void displaySearchQueryResult(ResultSet result) {
@@ -380,6 +388,7 @@ public class Courses extends Tables {
 
     /**
      * Find the button id.
+     *
      * @param event an ActionEvent.
      * @return the button id as a String.
      */
@@ -392,7 +401,6 @@ public class Courses extends Tables {
 
 
         String sql = "DELETE FROM Courses WHERE courseid = " + courseID + ";";
-
 
 
         try {
@@ -413,41 +421,10 @@ public class Courses extends Tables {
 
     }
 
-    /**
-     * Check if course id is valid.
-     * @param id a String
-     * @return true if valid, else false.
-     */
-    public boolean checkCourseID(String id){
-        // check for empty String
-        if (id == null || id.strip().equals("")) {
-            return false;
-        }
-
-        // check for length
-        if (id.length() != 6) {
-            return false;
-        }
-
-        // check that it starts with three letters
-        for (int i = 0; i < 3; i++){
-            if(!Character.isAlphabetic(id.charAt(i))){
-                return false;
-            }
-        }
-
-        // check that it ends with three letters.
-        for (int i = 3; i < 6; i++){
-            if(!Character.isDigit(id.charAt(i))){
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     /**
      * Check if course name is valid.
+     *
      * @param name a String
      * @return true if name is valid, else false.
      */
@@ -458,6 +435,7 @@ public class Courses extends Tables {
 
     /**
      * Check if course description is valid.
+     *
      * @param description a String
      * @return true if description is valid, else false.
      */
@@ -465,15 +443,5 @@ public class Courses extends Tables {
         final int maxLength = 150;
         return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
     }
-
-    /**
-     * Check if prof id is valid.
-     * @param profID a String
-     * @return true if valid, else false.
-     */
-    public boolean checkProfID(int profID){
-        int length = Integer.toString(profID).length();
-        return length == 2;
-    }
-
 }
+

@@ -21,5 +21,50 @@ public abstract class Tables {
     abstract GridPane createSearchDashBoard();
     abstract void search(String colName, String value); // might change to display
 
+    /**
+     * Check if prof id is valid.
+     * @param profID a String
+     * @return true if valid, else false.
+     */
+    public boolean checkUserID(int profID){
+        int length = Integer.toString(profID).length();
+        return length == 2;
+    }
+
+    /**
+     * Check if course id is valid.
+     *
+     * @param id a String
+     * @return true if valid, else false.
+     */
+    public boolean checkCourseID(String id) {
+        // check for empty String
+        if (id == null || id.strip().equals("")) {
+            return false;
+        }
+
+        // check for length
+        if (id.length() != 6) {
+            return false;
+        }
+
+        // check that it starts with three letters
+        for (int i = 0; i < 3; i++) {
+            if (!Character.isAlphabetic(id.charAt(i))) {
+                return false;
+            }
+        }
+
+        // check that it ends with three letters.
+        for (int i = 3; i < 6; i++) {
+            if (!Character.isDigit(id.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }
+
+
