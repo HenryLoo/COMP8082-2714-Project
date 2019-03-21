@@ -369,8 +369,9 @@ public class Courses extends Tables {
 
                 // equal to delete command in sql
                 Button deleteButton = new Button("Delete");
+                deleteButton.setId(searchResult.getString("courseid"));
                 deleteButton.setTooltip(new Tooltip("Delete"));
-
+                deleteButton.setOnAction(this::putForDelete);
 
                 gp.add(updateButton, 4, i);
                 gp.add(deleteButton, 5, i);
@@ -397,18 +398,21 @@ public class Courses extends Tables {
         return buttonObj.getId();
     }
 
+    public void putForDelete(ActionEvent event){
+        delete(findButtonId(event));
+        displaySuccessMessage("You successfully deleted the course!");
+        System.out.println(findButtonId(event));
+    }
     public void delete(String courseID) {
 
 
-        String sql = "DELETE FROM Courses WHERE courseid = " + courseID + ";";
-
+        String sql = "DELETE FROM Courses WHERE courseid = '" + courseID + "';";
+        System.out.println("IN DELETE");
 
         try {
             Statement newCommand = myConn.createStatement();
             newCommand.executeUpdate(sql);
             newCommand.close();
-            System.out.println("Your data has been successfully deleted to Courses. \n"
-                    + "Returning to Courses Dashboard...");
 
         } catch (SQLException e) {
             e.printStackTrace();
