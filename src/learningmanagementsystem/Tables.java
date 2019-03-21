@@ -37,11 +37,16 @@ public abstract class Tables {
 
 
     abstract GridPane createAddDashBoard();
+
     abstract void add(String courseID, String name, String description, int profID);
+
     abstract void edit(String currentCourseid, String newCourseid, String courseName,
                        String courseDescription, int courseProfId);
+
     abstract void delete(String courseID);
+
     abstract GridPane createSearchDashBoard();
+
     abstract ResultSet search(String colName, String value); // might change to display
 
     /**
@@ -56,7 +61,6 @@ public abstract class Tables {
 
     /**
      * Confirmation message to user.
-     *
      */
     public boolean confirmationMessage() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -92,14 +96,14 @@ public abstract class Tables {
         userMessage.setTextFill(Color.BLACK);
         userMessage.setText(notificationMessage);
     }
-
-
+  
     /**
      * Check if prof id is valid.
+     *
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkUserID(int profID){
+    public boolean checkUserID(int profID) {
         int length = Integer.toString(profID).length();
         return length == 2;
     }
@@ -137,6 +141,60 @@ public abstract class Tables {
 
         return true;
     }
+
+
+    /**
+     * Checks if grade weight is valid.
+     *
+     * @param weight an int
+     * @return true if valid, false if else
+     */
+    public boolean gradeCheckWeight(int weight) {
+        if (weight > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if total mark is valid.
+     * @param totalMark an int
+     * @return true if valid, false if else
+     */
+    public boolean gradesCheckTotalMark(int totalMark) {
+        if (totalMark > 100 || totalMark < 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if item id is valid.
+     * @param itemID an int
+     * @return true if valid, false if else
+     */
+    public boolean gradesCheckItemID(int itemID) {
+        int lengthID = String.valueOf(itemID).length();
+        if (lengthID > 6) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if item name is valid.
+     * @param itemName a String
+     * @return true if valid, false if else
+     */
+    public boolean gradesCheckItemName(String itemName){
+        int length = String.valueOf(itemName).length();
+        if(length > 40) {
+            return false;
+        }
+        return true;
+    }
+
+
 }
 
 
