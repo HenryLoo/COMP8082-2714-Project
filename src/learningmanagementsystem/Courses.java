@@ -124,8 +124,26 @@ public class Courses extends Tables {
     // if there are errors, let users know
     private void checkInputForAddingData(ActionEvent event) {
         // create an error message for user
+        String errorMessage = testAllTextFld();
+
+        if (inputErrorIndicator) {
+            displayErrorMessage(errorMessage);
+            // turn off the error indicator
+            inputErrorIndicator = false;
+        } else {
+            String courseId = courseIdTxtFld.getText().trim();
+            String courseName = courseNameTxtFld.getText().trim();
+            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+            String courseDescription = courseDescriptionTxtFld.getText().trim();
+
+            add(courseId, courseName, courseDescription, courseProfId);
+        }
+
+    }
+
+    // test all the textfields and return the error message
+    private String testAllTextFld() {
         String errorMessage = "";
-        int courseProfId = 0;
 
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
@@ -138,7 +156,7 @@ public class Courses extends Tables {
         }
 
         try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
             if (!checkUserID(courseProfId)) {
                 // do this so the catch block handles everything
                 throw new Exception();
@@ -152,14 +170,7 @@ public class Courses extends Tables {
             errorMessage += markCourseDescriptionTxtFld();
         }
 
-        if (inputErrorIndicator) {
-            displayErrorMessage(errorMessage);
-            // turn off the error indicator
-            inputErrorIndicator = false;
-        } else {
-            add(courseId, courseName, courseDescription, courseProfId);
-        }
-
+        return errorMessage;
     }
 
     // mark that the courseIdTxtFld was wrong
@@ -267,7 +278,13 @@ public class Courses extends Tables {
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+
+            // turn off error indicator
+            inputErrorIndicator = false;
         } else {
+            // clear the result pane
+            resultPane = new GridPane();
+            
             ResultSet result = search("courseid", courseId);
             displaySearchQueryResult(result);
         }
@@ -449,40 +466,21 @@ public class Courses extends Tables {
     }
 
     private void checkInputForEditingData(ActionEvent event) {
-        String errorMessage = "";
-        int courseProfId = 0;
-
-        String newCourseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(newCourseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
+        String errorMessage = testAllTextFld();
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
+            // get the current course set in the button id of the source
             String currentCourseId = findButtonId(event);
+
+            String newCourseId = courseIdTxtFld.getText().trim();
+            String courseName = courseNameTxtFld.getText().trim();
+            String courseDescription = courseDescriptionTxtFld.getText().trim();
+            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+
             edit(currentCourseId, newCourseId, courseName, courseDescription, courseProfId);
         }
     }
@@ -511,7 +509,6 @@ public class Courses extends Tables {
     public void putForDelete(ActionEvent event){
         delete(findButtonId(event));
         displaySuccessMessage("You successfully deleted the course!");
-        System.out.println(findButtonId(event));
     }
 
     public void delete(String courseID) {

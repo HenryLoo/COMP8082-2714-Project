@@ -121,73 +121,12 @@ public class GradeItems extends Tables {
         // create an error message for user
         String errorMessage = "";
 
-        String itemId = itemIdTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
-
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
             // turn off the error indicator
             inputErrorIndicator = false;
-        } else {
-            add(courseId, courseName, courseDescription, courseProfId);
         }
 
-    }
-
-    // mark that the courseIdTxtFld was wrong
-    private String markCourseIdTxtFldWrong() {
-        inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course id must be six characters long. \n"
-                + "It must start with three letters and end with three digits. \n";
-    }
-
-    // mark the coursenameTxtFld was wrong
-    private String markCourseNameTxtFldWrong() {
-        inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course name must be less than 40 characters. \n";
-    }
-
-    // mark the courseProfidTxtFld was wrong
-    private String markCourseProfIdTxtFldWrong() {
-        inputErrorIndicator = true;
-        courseProfTxtFld.setStyle("-fx-border-color: red");
-        return "The professor ID doesn't exist. \n";
-    }
-
-    // mark the courseDescriptionTxtFld was wrong
-    private String markCourseDescriptionTxtFld() {
-        inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course description must be less than 150 characters. \n";
     }
 
     /**
