@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
 
 import java.sql.ResultSet;
 
@@ -49,6 +52,25 @@ public abstract class Tables {
     public void displayErrorMessage(String errorMessage) {
         userMessage.setTextFill(Color.RED);
         userMessage.setText(errorMessage);
+    }
+
+    /**
+     * Confirmation message to user.
+     *
+     */
+    public boolean confirmationMessage() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Box");
+        alert.setHeaderText("Are you sure you want to delete?");
+        alert.setResizable(false);
+        Optional<ButtonType> result = alert.showAndWait();
+        ButtonType button = result.orElse(ButtonType.CANCEL);
+
+        if (button == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
