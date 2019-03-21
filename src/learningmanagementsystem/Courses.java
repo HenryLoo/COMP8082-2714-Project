@@ -365,18 +365,15 @@ public class Courses extends Tables {
                 gp.add(courseProfLbl, 3, i);
 
                 // create an edit button
-                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button editButton = new Button();
-                editButton.setGraphic(editPencil);
+//                ImageView editPencil = new ImageView(new Image("../../img/Pencil-icon.png"));
+                Button editButton = new Button("Edit");
                 editButton.setId(searchResult.getString("courseid"));
                 editButton.setOnAction(this::openEditDashBoard);
-                editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
-                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
-                Button deleteButton = new Button();
+//                ImageView deleteSign = new ImageView(new Image("../../img/delete-1-icon.png"));
+                Button deleteButton = new Button("Delete");
                 deleteButton.setId(searchResult.getString("courseid"));
-                deleteButton.setTooltip(new Tooltip("Delete"));
                 deleteButton.setOnAction(this::putForDelete);
 
                 gp.add(editButton, 4, i);
@@ -514,9 +511,11 @@ public class Courses extends Tables {
     }
 
     public void putForDelete(ActionEvent event){
-        delete(findButtonId(event));
-        displaySuccessMessage("You successfully deleted the course!");
-        System.out.println(findButtonId(event));
+        if (confirmationMessage()) {
+            delete(findButtonId(event));
+            displaySuccessMessage("You successfully deleted the course!");
+        }
+
     }
 
     public void delete(String courseID) {

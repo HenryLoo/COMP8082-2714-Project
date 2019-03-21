@@ -45,16 +45,6 @@ public abstract class Tables {
     abstract ResultSet search(String colName, String value); // might change to display
 
     /**
-     * Display an error message to user.
-     *
-     * @param errorMessage a String.
-     */
-    public void displayErrorMessage(String errorMessage) {
-        userMessage.setTextFill(Color.RED);
-        userMessage.setText(errorMessage);
-    }
-
-    /**
      * Confirmation message to user.
      *
      */
@@ -71,6 +61,16 @@ public abstract class Tables {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Display an error message to user.
+     *
+     * @param errorMessage a String.
+     */
+    public void displayErrorMessage(String errorMessage) {
+        userMessage.setTextFill(Color.RED);
+        userMessage.setText(errorMessage);
     }
 
     /**
