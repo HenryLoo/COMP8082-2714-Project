@@ -23,12 +23,12 @@ public class LearningSysGUI extends GridPane {
     // The current table that user is looking at.
     private Tables currentTable;
 
-    // The session that's connected to the GUI.
-    private Session mySession;
+    // The connection that connects the GUI to the database.
+    private Connection databaseConnection;
 
 
-    public LearningSysGUI(Session newSession) {
-        mySession = newSession;
+    public LearningSysGUI(Connection newDatabaseConnection) {
+        databaseConnection = newDatabaseConnection;
         OptionBar topBar = new OptionBar();
         currentPane = greetingPane();
         functionOptions = new HBox();
@@ -126,7 +126,7 @@ public class LearningSysGUI extends GridPane {
         public void setCurrentTable(String tableName) {
             switch (tableName) {
                 case "Courses":
-                    currentTable = new Courses(mySession.getMyConnection(), currentPane);
+                    currentTable = new Courses(databaseConnection, currentPane);
                     break;
                 default:
                     System.out.println("There's no table with that name");

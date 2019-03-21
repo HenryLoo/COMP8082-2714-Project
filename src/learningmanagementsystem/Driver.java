@@ -9,15 +9,11 @@ import javafx.stage.Stage;
  * Drive the functions
  */
 public class Driver extends Application {
-
-    // The session that'll run when we open the app.
-    private Session mySession;
-
+        private MyDBConnection connection;
     public void start(Stage primaryStage) {
-
-        // start a session
-        mySession = new Session();
-        GridPane gui = new LearningSysGUI(mySession);
+        connection = new MyDBConnection();
+        connection.init();
+        GridPane gui = new LearningSysGUI(connection.getMyConnection());
 
         // Set up the scene, which is like staging for a commit
         // in git but for JavaFX
@@ -33,11 +29,11 @@ public class Driver extends Application {
     }
 
     /**
-     * End the session when application closes.
+     * Destroy the connection when application closes.
      */
     @Override
     public void stop() {
-        mySession.endSession();
+        connection.destroy();
     }
 
     public static void main(String[] args) {
