@@ -218,7 +218,7 @@ public class Courses extends Tables {
     /**
      * Create a grid pane containing elements needed to search courses.
      *
-     * @return a GridPane with all the textfields.
+     * @return a GridPane with all the text fields.
      */
     public GridPane createSearchDashBoard() {
 
@@ -499,6 +499,9 @@ public class Courses extends Tables {
             newCommand.executeUpdate(sql);
             newCommand.close();
             displaySuccessMessage("Course Updated!");
+
+            // reset the result pane
+            resultPane = new GridPane();
 
         } catch (SQLException e) {
             e.printStackTrace();
