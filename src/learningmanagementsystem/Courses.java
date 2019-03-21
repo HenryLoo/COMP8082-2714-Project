@@ -1,7 +1,6 @@
 package learningmanagementsystem;
 
 import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,9 +19,7 @@ public class Courses extends Tables {
 
     // the connection to the database
     private Connection myConn;
-
-    private Label userMessage;
-
+    
     // the text fields for each data column in the table.
     private TextField courseIdTxtFld;
     private TextField courseNameTxtFld;
@@ -37,9 +34,6 @@ public class Courses extends Tables {
 
     // the current pane being displayed to user.
     private Pane currentPane;
-
-    // hold a result set after the set is closed.
-    private ResultSet resultHolder;
 
     /**
      * Create a Courses instance and run the dashboard.
@@ -67,6 +61,7 @@ public class Courses extends Tables {
 
     /**
      * Create a grid pane containing elements needed to add courses.
+     *
      * @return a GridPane with all the text fields.
      */
     public GridPane createAddDashBoard() {
@@ -150,7 +145,7 @@ public class Courses extends Tables {
 
         try {
             courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkProfID(courseProfId)) {
+            if (!checkUserID(courseProfId)) {
                 errorMessage += "The professor ID doesn't exist. \n";
                 throw new Exception();
             }
@@ -175,44 +170,20 @@ public class Courses extends Tables {
 
     }
 
-    /**
-     * Display an error message to user.
-     * @param errorMessage a String.
-     */
-    public void displayErrorMessage(String errorMessage) {
-        userMessage.setTextFill(Color.RED);
-        userMessage.setText(errorMessage);
-    }
 
-    /**
-     * Display an successful operation message to user.
-     * @param successMessage a String.
-     */
-    public void displaySuccessMessage(String successMessage) {
-        userMessage.setTextFill(Color.GREEN);
-        userMessage.setText(successMessage);
-    }
-
-    /**
-     * Display a notification message to user.
-     * @param notificationMessage a String.
-     */
-    public void displayNotificationMessage(String notificationMessage) {
-        userMessage.setTextFill(Color.BLACK);
-        userMessage.setText(notificationMessage);
-    }
 
     /**
      * Add data to the Courses table.
+     *
      * @param courseID
      * @param name
      * @param description
      * @param profID
      */
     @Override
-    public void add(String courseID, String name, String description, int profID){
+    public void add(String courseID, String name, String description, int profID) {
 
-        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '"+ name + "', '"
+        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
                 + description + "', " + profID + ");";
 
         try {
@@ -223,9 +194,6 @@ public class Courses extends Tables {
             // let user know course is added
             userMessage.setTextFill(Color.GREEN);
             userMessage.setText("Course Added.");
-
-            //
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -233,6 +201,7 @@ public class Courses extends Tables {
 
     /**
      * Create a grid pane containing elements needed to search courses.
+     *
      * @return a GridPane with all the textfields.
      */
     public GridPane createSearchDashBoard() {
@@ -281,33 +250,38 @@ public class Courses extends Tables {
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
         } else {
-            search("courseid", courseId);
+            ResultSet result = search("courseid", courseId);
+            displaySearchQueryResult(result);
         }
     }
 
     /**
      * Display data in a table with the specified location.
+     *
      * @param colName the column name as a String
      * @parem value the value as a String
      */
     @Override
-    public void search(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value +"';";
+    public ResultSet search(String colName, String value) {
+        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
 
         try {
             Statement newCommand = myConn.createStatement();
             ResultSet result = newCommand.executeQuery(sql);
-            resultHolder = result;
-            displaySearchQueryResult(result);
-            newCommand.close();
+
+            // will closed when ResultSet is closed
+            newCommand.closeOnCompletion();
+            return result;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
     /**
      * Display the search query result.
+     *
      * @param result a ResultSet.
      */
     public void displaySearchQueryResult(ResultSet result) {
@@ -317,9 +291,7 @@ public class Courses extends Tables {
                 displayNotificationMessage("No Result Found.");
                 return;
             }
-
             resultPane.getChildren().setAll(createSearchResultArea(result));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -330,7 +302,6 @@ public class Courses extends Tables {
      */
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
-
         Label courseIdLbl = new Label("CourseID");
         Label courseNameLbl = new Label("Course Name");
         Label courseDescriptionLbl = new Label("Description");
@@ -378,31 +349,36 @@ public class Courses extends Tables {
                 // equal to update command in sql
                 Button updateButton = new Button("Edit");
                 updateButton.setId(searchResult.getString("courseid"));
-                updateButton.setOnAction(this::openUpdateDashBoard);
+                updateButton.setOnAction(this::openEditDashBoard);
                 updateButton.setTooltip(new Tooltip("Edit"));
 
                 // equal to delete command in sql
                 Button deleteButton = new Button("Delete");
+                deleteButton.setId(searchResult.getString("courseid"));
                 deleteButton.setTooltip(new Tooltip("Delete"));
+                deleteButton.setOnAction(this::putForDelete);
 
                 gp.add(updateButton, 4, i);
                 gp.add(deleteButton, 5, i);
             }
+            searchResult.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Open the update dashboard.
      * @param event an ActionEvent.
      */
-    public void openUpdateDashBoard(ActionEvent event) {
-        currentPane.getChildren().setAll(createUpdateDashBoard(findButtonId(event)));
+    public void openEditDashBoard(ActionEvent event) {
+        currentPane.getChildren().setAll(createEditDashBoard(findButtonId(event)));
     }
 
     /**
      * Find the button id.
+     *
      * @param event an ActionEvent.
      * @return the button id as a String.
      */
@@ -411,7 +387,8 @@ public class Courses extends Tables {
         return buttonObj.getId();
     }
 
-    public GridPane createUpdateDashBoard(String courseid) {
+    public GridPane createEditDashBoard(String courseid) {
+        // create the dashboard based on the template
         GridPane gp = createSingleCourseInfoDashBoard();
 
         // create things unique to the add dashboard.
@@ -419,15 +396,11 @@ public class Courses extends Tables {
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        Button addBtn = new Button("Update Course");
-        addBtn.setOnAction(this::checkInputForEditingData);
-        gp.add(addBtn, 0, 6);
+        setTextBoxToValueOfResultSet(courseid);
 
-        // set textbox value to current course value
-//        courseIdTxtFld.setText();
-//        courseNameTxtFld;
-//        courseProfTxtFld;
-//        courseDescriptionTxtFld;
+        Button editBtn = new Button("Edit Course");
+        editBtn.setOnAction(this::checkInputForEditingData);
+        gp.add(editBtn, 0, 6);
 
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
@@ -435,25 +408,45 @@ public class Courses extends Tables {
         return gp;
     }
 
-    // try to edit data
-    // tell user if can't
+    private void setTextBoxToValueOfResultSet(String courseid) {
+        try {
+            // find the result associated with the courseid passed to this method.
+            // courseid is guaranteed to work
+            ResultSet result = search("courseid", courseid);
+            result.next();
+
+            // set textboxes to current value of the specified course
+            courseIdTxtFld.setText(result.getString("courseid"));
+            courseNameTxtFld.setText(result.getString("name"));
+            courseProfTxtFld.setText(result.getString("description"));
+            courseDescriptionTxtFld.setText(result.getString("profid"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void checkInputForEditingData(ActionEvent event) {
-        System.out.println(resultHolder);
+
+    }
+
+    public void putForDelete(ActionEvent event){
+        delete(findButtonId(event));
+        displaySuccessMessage("You successfully deleted the course!");
+        System.out.println(findButtonId(event));
     }
 
     public void delete(String courseID) {
 
 
-        String sql = "DELETE FROM Courses WHERE courseid = " + courseID + ";";
-
-
+        String sql = "DELETE FROM Courses WHERE courseid = '" + courseID + "';";
+        System.out.println("IN DELETE");
 
         try {
             Statement newCommand = myConn.createStatement();
             newCommand.executeUpdate(sql);
             newCommand.close();
-            System.out.println("Your data has been successfully deleted to Courses. \n"
-                    + "Returning to Courses Dashboard...");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -466,41 +459,10 @@ public class Courses extends Tables {
 
     }
 
-    /**
-     * Check if course id is valid.
-     * @param id a String
-     * @return true if valid, else false.
-     */
-    public boolean checkCourseID(String id){
-        // check for empty String
-        if (id == null || id.strip().equals("")) {
-            return false;
-        }
-
-        // check for length
-        if (id.length() != 6) {
-            return false;
-        }
-
-        // check that it starts with three letters
-        for (int i = 0; i < 3; i++){
-            if(!Character.isAlphabetic(id.charAt(i))){
-                return false;
-            }
-        }
-
-        // check that it ends with three letters.
-        for (int i = 3; i < 6; i++){
-            if(!Character.isDigit(id.charAt(i))){
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     /**
      * Check if course name is valid.
+     *
      * @param name a String
      * @return true if name is valid, else false.
      */
@@ -511,6 +473,7 @@ public class Courses extends Tables {
 
     /**
      * Check if course description is valid.
+     *
      * @param description a String
      * @return true if description is valid, else false.
      */
@@ -518,15 +481,5 @@ public class Courses extends Tables {
         final int maxLength = 150;
         return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
     }
-
-    /**
-     * Check if prof id is valid.
-     * @param profID a String
-     * @return true if valid, else false.
-     */
-    public boolean checkProfID(int profID){
-        int length = Integer.toString(profID).length();
-        return length == 2;
-    }
-
 }
+
