@@ -1,7 +1,12 @@
 package learningmanagementsystem;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -18,6 +23,15 @@ import java.sql.ResultSet;
 public abstract class Tables {
     public static final int HGAP = 5;
     public static final int VGAP = 10;
+
+    // display the result of the search function
+    protected GridPane resultPane;
+
+    // tell us that there's an error in user inputs.
+    protected boolean inputErrorIndicator;
+
+    // the current pane being displayed to user.
+    protected Pane currentPane;
 
     protected Label userMessage;
 
@@ -82,7 +96,7 @@ public abstract class Tables {
         userMessage.setTextFill(Color.BLACK);
         userMessage.setText(notificationMessage);
     }
-
+  
     /**
      * Check if prof id is valid.
      *
