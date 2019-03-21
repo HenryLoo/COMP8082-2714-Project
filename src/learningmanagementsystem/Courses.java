@@ -366,11 +366,11 @@ public class Courses extends Tables {
 
                 // create an edit button
                 ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button updateButton = new Button();
-                updateButton.setGraphic(editPencil);
-                updateButton.setId(searchResult.getString("courseid"));
-                updateButton.setOnAction(this::openEditDashBoard);
-                updateButton.setTooltip(new Tooltip("Edit"));
+                Button editButton = new Button();
+                editButton.setGraphic(editPencil);
+                editButton.setId(searchResult.getString("courseid"));
+                editButton.setOnAction(this::openEditDashBoard);
+                editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
                 ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
@@ -379,7 +379,7 @@ public class Courses extends Tables {
                 deleteButton.setTooltip(new Tooltip("Delete"));
                 deleteButton.setOnAction(this::putForDelete);
 
-                gp.add(updateButton, 4, i);
+                gp.add(editButton, 4, i);
                 gp.add(deleteButton, 5, i);
             }
             searchResult.close();
