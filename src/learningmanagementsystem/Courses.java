@@ -365,18 +365,13 @@ public class Courses extends Tables {
                 gp.add(courseProfLbl, 3, i);
 
                 // create an edit button
-                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button editButton = new Button();
-                editButton.setGraphic(editPencil);
+                Button editButton = new Button("Edit");
                 editButton.setId(searchResult.getString("courseid"));
                 editButton.setOnAction(this::openEditDashBoard);
-                editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
-                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
-                Button deleteButton = new Button();
+                Button deleteButton = new Button("Delete");
                 deleteButton.setId(searchResult.getString("courseid"));
-                deleteButton.setTooltip(new Tooltip("Delete"));
                 deleteButton.setOnAction(this::putForDelete);
 
                 gp.add(editButton, 4, i);

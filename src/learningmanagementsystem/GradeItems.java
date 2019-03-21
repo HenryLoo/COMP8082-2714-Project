@@ -23,10 +23,11 @@ public class GradeItems extends Tables {
     private Connection myConn;
 
     // the text fields for each data column in the table.
+    private TextField itemIdTxtFld;
     private TextField courseIdTxtFld;
-    private TextField courseNameTxtFld;
-    private TextField courseProfTxtFld;
-    private TextField courseDescriptionTxtFld;
+    private TextField nameTxtFld;
+    private TextField totalMarkTxtFld;
+    private TextField weightTxtFld;
 
     /**
      * Create a Courses instance and run the dashboard.
@@ -34,8 +35,6 @@ public class GradeItems extends Tables {
     public GradeItems(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
-        userMessage.setFont(Font.font(13));
-        userMessage.setTextFill(Color.RED);
         resultPane = new GridPane();
         currentPane = newCurrentPane;
     }
@@ -44,12 +43,14 @@ public class GradeItems extends Tables {
      * Initiate the textfields and userMessage to new ones.
      */
     public void initTextfieldsAndUserMessage() {
+        itemIdTxtFld = new TextField();
         courseIdTxtFld = new TextField();
-        courseNameTxtFld = new TextField();
-        courseProfTxtFld = new TextField();
-        courseDescriptionTxtFld = new TextField();
+        nameTxtFld = new TextField();
+        totalMarkTxtFld = new TextField();
+        weightTxtFld = new TextField();
 
         userMessage = new Label("");
+        userMessage.setFont(Font.font(13));
     }
 
     /**
@@ -62,11 +63,11 @@ public class GradeItems extends Tables {
         GridPane gp = createSingleCourseInfoDashBoard();
 
         // create things unique to the add dashboard.
-        Label functionTitle = new Label("Please enter the new course's data:");
+        Label functionTitle = new Label("Please enter the new grade item's data:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        Button addBtn = new Button("Add Course");
+        Button addBtn = new Button("Add GradeItem");
         addBtn.setOnAction(this::checkInputForAddingData);
         gp.add(addBtn, 0, 6);
 
@@ -83,32 +84,35 @@ public class GradeItems extends Tables {
     public GridPane createSingleCourseInfoDashBoard() {
         GridPane gp = new GridPane();
 
+        Label itemIdLbl = new Label("ItemID: ");
         Label courseIdLbl = new Label("CourseID: ");
-        Label courseNameLbl = new Label("Course Name: ");
-        Label courseProfLbl = new Label("Course Professor ID: ");
-        Label courseDescriptionLbl = new Label("Course Description: ");
+        Label nameLbl = new Label("Item Name: ");
+        Label markLbl = new Label("Total Mark: ");
+        Label weightLbl = new Label("Item Weight: ");
 
+        itemIdLbl.setFont(Font.font(18));
         courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
+        nameLbl.setFont(Font.font(18));
+        markLbl.setFont(Font.font(18));
+        weightLbl.setFont(Font.font(18));
 
-        gp.add(courseIdLbl, 0, 1);
-        gp.add(courseNameLbl, 0, 2);
-        gp.add(courseProfLbl, 0, 3);
-        gp.add(courseDescriptionLbl, 0, 4);
+        gp.add(itemIdLbl, 0, 1);
+        gp.add(courseIdLbl, 0, 2);
+        gp.add(nameLbl, 0, 3);
+        gp.add(markLbl, 0, 4);
+        gp.add(weightLbl, 0, 5);
 
-        // since the text fields are shared, we have to cleared them first
+        // since the text fields are shared, we have to clear them first
         initTextfieldsAndUserMessage();
 
-        gp.add(courseIdTxtFld, 1, 1);
-        gp.add(courseNameTxtFld, 1, 2);
-        gp.add(courseProfTxtFld, 1, 3);
-        gp.add(courseDescriptionTxtFld, 1, 4);
-        gp.add(userMessage, 0, 5, 2, 1);
+        gp.add(itemIdTxtFld, 1, 1);
+        gp.add(courseIdTxtFld, 1, 2);
+        gp.add(nameTxtFld, 1, 3);
+        gp.add(totalMarkTxtFld, 1, 4);
+        gp.add(weightTxtFld, 1, 5);
+        gp.add(userMessage, 0, 6, 2, 1);
 
         return gp;
-
     }
 
     // try to add data
@@ -116,7 +120,11 @@ public class GradeItems extends Tables {
     private void checkInputForAddingData(ActionEvent event) {
         // create an error message for user
         String errorMessage = "";
-        int courseProfId = 0;
+
+        String itemId = itemIdTxtFld.getText().trim();
+        if (!checkCourseID(courseId)) {
+            errorMessage += markCourseIdTxtFldWrong();
+        }
 
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
