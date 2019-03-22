@@ -6,6 +6,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 import java.sql.ResultSet;
@@ -34,20 +38,52 @@ public abstract class Tables {
 
     abstract GridPane createAddDashBoard();
 
-    abstract void add(String query);
+    /**
+     * Run a query that expects no return value (INSERT INTO, UPDATE, and DELETE).
+     * @param query a String.
+     * @param myConn a Connection.
+     * @param successMessage a String
+     */
+    protected void runQueryWithNoReturnValue(String query, Connection myConn, String successMessage) {
+        try {
+            Statement newCommand = myConn.createStatement();
+            newCommand.executeUpdate(query);
+            newCommand.close();
+            displaySuccessMessage(successMessage);
 
-    abstract void edit(String query);
-
-    abstract void delete(String query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     abstract GridPane createSearchDashBoard();
 
-    abstract ResultSet search(String colName, String value); // might change to display
+    /**
+     * Display data in a table with the specified location.
+     *
+     * @param colName the column name as a String
+     * @parem value the value as a String
+     */
+    protected ResultSet search(String colName, String value, Connection myConn) {
+        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
+        try {
+            Statement newCommand = myConn.createStatement();
+            ResultSet result = newCommand.executeQuery(sql);
+
+            // will closed when ResultSet is closed
+            newCommand.closeOnCompletion();
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
      * Confirmation message to user.
      */
-    public boolean confirmationMessage() {
+    public boolean getUserConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Box");
         alert.setHeaderText("Are you sure you want to delete?");

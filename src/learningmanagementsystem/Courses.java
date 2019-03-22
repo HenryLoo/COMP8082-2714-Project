@@ -4,9 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -138,7 +135,9 @@ public class Courses extends Tables {
             int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
             String courseDescription = courseDescriptionTxtFld.getText().trim();
 
-            prepareAddQuery(courseId, courseName, courseDescription, courseProfId);
+            String query = prepareAddQuery(courseId, courseName, courseDescription, courseProfId);
+            String message = "Course Added!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
 
     }
@@ -205,31 +204,18 @@ public class Courses extends Tables {
     }
 
     /**
-     * Add data to the Courses table.
+     * Create the query to data to the Courses table.
      *
      * @param courseID a String.
      * @param name a String.
      * @param description a String.
      * @param profID an int.
+     * @return a SQL String.
      */
-    public void prepareAddQuery(String courseID, String name, String description, int profID) {
+    public String prepareAddQuery(String courseID, String name, String description, int profID) {
 
-        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
+        return "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
                 + description + "', " + profID + ");";
-        add(sql);
-    }
-
-    public void add(String query) {
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(query);
-            newCommand.close();
-
-            displaySuccessMessage("Course Added!");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -271,7 +257,6 @@ public class Courses extends Tables {
         // create an error message for user
         String errorMessage = "";
 
-        // consider refactoring
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
             errorMessage += "Your course id must be six characters long. \n"
@@ -286,32 +271,9 @@ public class Courses extends Tables {
             // turn off error indicator
             inputErrorIndicator = false;
         } else {
-            
-            ResultSet result = search("courseid", courseId);
+            String columnName = "courseid";
+            ResultSet result = search(columnName, courseId, myConn);
             displaySearchQueryResult(result);
-        }
-    }
-
-    /**
-     * Display data in a table with the specified location.
-     *
-     * @param colName the column name as a String
-     * @parem value the value as a String
-     */
-    @Override
-    public ResultSet search(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
-        try {
-            Statement newCommand = myConn.createStatement();
-            ResultSet result = newCommand.executeQuery(sql);
-
-            // will closed when ResultSet is closed
-            newCommand.closeOnCompletion();
-            return result;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -431,7 +393,9 @@ public class Courses extends Tables {
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        setTextBoxToValueOfResultSet(courseid);
+        String columnName = "courseid";
+        ResultSet result = search("courseid", courseid, myConn);
+        setTextBoxToValueOfResultSet(result);
 
         Button editBtn = new Button("Edit Course");
 
@@ -446,13 +410,9 @@ public class Courses extends Tables {
         return gp;
     }
 
-    // set textbox to values of the 'select' statement based on
-    // the courseid
-    private void setTextBoxToValueOfResultSet(String courseid) {
+    // set textbox to values of the result set from searching the Courses table
+    private void setTextBoxToValueOfResultSet(ResultSet result) {
         try {
-            // find the result associated with the courseid passed to this method.
-            // courseid is guaranteed to work
-            ResultSet result = search("courseid", courseid);
             result.next();
 
             // set textboxes to current value of the specified course
@@ -461,6 +421,7 @@ public class Courses extends Tables {
             courseDescriptionTxtFld.setText(result.getString("description"));
             courseProfTxtFld.setText(result.getString("profid"));
 
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -483,51 +444,37 @@ public class Courses extends Tables {
             String courseDescription = courseDescriptionTxtFld.getText().trim();
             int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
 
-            edit(currentCourseId, newCourseId, courseName, courseDescription, courseProfId);
+            String query = prepareEditQuery(currentCourseId, newCourseId,
+                    courseName, courseDescription, courseProfId);
+            String message = "Course Updated!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
-    @Override
-    public void edit(String currentCourseID, String newCourseID, String courseName, String courseDescription,
-                     int courseProfId) {
-        String sql = "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
+    public String prepareEditQuery(String currentCourseID, String newCourseID,
+                                 String courseName, String courseDescription,
+                                 int courseProfId) {
+        return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
                 + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-            displaySuccessMessage("Course Updated!");
-
-            // reset the result pane
-            resultPane = new GridPane();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void putForDelete(ActionEvent event){
-        if (confirmationMessage()) {
-            delete(findButtonId(event));
-            displaySuccessMessage("You successfully deleted the course!");
+        if (getUserConfirmation()) {
+            String query = prepareDeleteQuery(findButtonId(event));
+            String message = "You successfully deleted the course!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
-    public void delete(String courseID) {
-        String sql = "DELETE FROM Courses WHERE courseid = '" + courseID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Delete from the Courses table based on the uniquePrimaryKeyValue.
+     * @param uniquePrimaryKeyValue a String
+     * @return a String query.
+     */
+    public String prepareDeleteQuery(String uniquePrimaryKeyValue) {
+        return "DELETE FROM Courses WHERE courseid = '" + uniquePrimaryKeyValue + "';";
     }
-
 
     /**
      * Check if course name is valid.

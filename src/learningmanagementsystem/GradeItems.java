@@ -125,8 +125,10 @@ public class GradeItems extends Tables {
             String itemName = itemNameTxtFld.getText().trim();
             int totalMark = Integer.parseInt(totalMarkTxtFld.getText().trim();
             int itemWeight = Integer.parseInt(weightTxtFld.getText().trim());
-            add(courseId, itemName, totalMark, itemWeight);
 
+            String query = prepareAddQuery(courseId, itemName, totalMark, itemWeight);
+            String message = "Item Added!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
@@ -189,14 +191,14 @@ public class GradeItems extends Tables {
     private String markTotalMarkTxtFldWrong() {
         inputErrorIndicator = true;
         totalMarkTxtFld.setStyle("-fx-border-color: red");
-        return "The total mark must be less than 100 and more than 0. \n";
+        return "The total mark must be between 0 and 100 inclusively. \n";
     }
 
     // mark that the weightTxtFld was wrong
     private String markWeightTxtFldWrong() {
         inputErrorIndicator = true;
         weightTxtFld.setStyle("-fx-border-color: red");
-        return "The weight. \n";
+        return "The weight must be between 0 and 100 inclusively. \n";
     }
 
     /**
@@ -207,22 +209,9 @@ public class GradeItems extends Tables {
      * @param totalMark an int
      * @param weight an int
      */
-    @Override
-    public void add(String courseID, String name, int totalMark, int weight) {
-
-        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
-                + description + "', " + profID + ");";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-            displaySuccessMessage("Course Added!");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public String prepareAddQuery(String courseID, String name, int totalMark, int weight) {
+        return "INSERT INTO GradeItems(courseid, name, total, weight) VALUES('" + courseID + "', '" + name + "', '"
+                + totalMark + "', " + weight + ");";
     }
 
     /**
@@ -264,8 +253,8 @@ public class GradeItems extends Tables {
         String errorMessage = "";
 
         // consider refactoring
-        String GradeitemId = GradeitemIdTxtFld.getText().trim();
-        if (!checkGradeitemID(GradeitemId)) {
+        String gradeItemId = itemIdTxtFld.getText().trim();
+        if (!checkItemID(gradeItemId)) {
             errorMessage += "Your Gradeitem id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
