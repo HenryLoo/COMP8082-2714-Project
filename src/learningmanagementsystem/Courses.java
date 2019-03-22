@@ -66,7 +66,7 @@ public class Courses extends Tables {
      */
     public GridPane createAddDashBoard() {
         // get the generic look of a course info dashboard
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
         // create things unique to the add dashboard.
         Label functionTitle = new Label("Please enter the new course's data:");
@@ -84,10 +84,10 @@ public class Courses extends Tables {
     }
 
     /**
-     * Create a single course info dashboard generic for add and edit dashboard.
+     * Create a dashboard template that can be used by other templates.
      * @return a grid pane containing all the needed elements.
      */
-    public GridPane createSingleCourseInfoDashBoard() {
+    public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
         Label courseIdLbl = new Label("CourseID: ");
@@ -258,8 +258,9 @@ public class Courses extends Tables {
             // turn off error indicator
             inputErrorIndicator = false;
         } else {
+            String tableName = "Courses";
             String columnName = "courseid";
-            ResultSet result = search(columnName, courseId, myConn);
+            ResultSet result = search(tableName, columnName, courseId, myConn);
             displaySearchQueryResult(result);
         }
     }
@@ -282,7 +283,7 @@ public class Courses extends Tables {
     }
 
     /**
-     * Create the search result area
+     * Create the search result area.
      */
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
@@ -333,12 +334,16 @@ public class Courses extends Tables {
                 // create an edit button
 //                ImageView editPencil = new ImageView(new Image("../../img/Pencil-icon.png"));
                 Button editButton = new Button("Edit");
+
+                // put the courseid of the current row into this button's id
                 editButton.setId(searchResult.getString("courseid"));
                 editButton.setOnAction(this::openEditDashBoard);
 
                 // create a delete button
 //              ImageView deleteSign = new ImageView(new Image("../../img/delete-1-icon.png"));
                 Button deleteButton = new Button("Delete");
+
+                // put the courseid of the current row into this button's id
                 deleteButton.setId(searchResult.getString("courseid"));
                 deleteButton.setOnAction(this::putForDelete);
 
@@ -361,27 +366,22 @@ public class Courses extends Tables {
     }
 
     /**
-     * Find the button id.
-     *
-     * @param event an ActionEvent.
-     * @return the button id as a String.
+     * Create an edit dashboard.
+     * @return the dashboard as a GridPane.
      */
-    public String findButtonId(ActionEvent event) {
-        Button buttonObj = (Button) event.getSource();
-        return buttonObj.getId();
-    }
-
+    @Override
     public GridPane createEditDashBoard(String courseid) {
         // create the dashboard based on the template
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
         // create things unique to the add dashboard.
         Label functionTitle = new Label("You can change any of the current data below:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
+        String tableName = "Courses";
         String columnName = "courseid";
-        ResultSet result = search("courseid", courseid, myConn);
+        ResultSet result = search(tableName,columnName, courseid, myConn);
         setTextBoxToValueOfResultSet(result);
 
         Button editBtn = new Button("Edit Course");
@@ -397,7 +397,7 @@ public class Courses extends Tables {
         return gp;
     }
 
-    // set textbox to values of the result set from searching the Courses table
+    // set textbox to values of the result set from searching the table
     private void setTextBoxToValueOfResultSet(ResultSet result) {
         try {
             result.next();
@@ -430,7 +430,7 @@ public class Courses extends Tables {
             String newCourseId = courseIdTxtFld.getText().trim();
             String courseName = courseNameTxtFld.getText().trim();
             String courseDescription = courseDescriptionTxtFld.getText().trim();
-            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+            String courseProfId = courseProfTxtFld.getText().trim();
 
             String query = prepareEditQuery(currentCourseId, newCourseId,
                     courseName, courseDescription, courseProfId);
@@ -439,9 +439,18 @@ public class Courses extends Tables {
         }
     }
 
+    /**
+     * Prepare an UPDATE query for Courses table.
+     * @param currentCourseID a String.
+     * @param newCourseID a String.
+     * @param courseName a String.
+     * @param courseDescription a String.
+     * @param courseProfId a String.
+     * @return
+     */
     public String prepareEditQuery(String currentCourseID, String newCourseID,
                                  String courseName, String courseDescription,
-                                 int courseProfId) {
+                                 String courseProfId) {
         return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
                 + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
@@ -449,14 +458,15 @@ public class Courses extends Tables {
 
     public void putForDelete(ActionEvent event){
         if (getUserConfirmation()) {
-            String query = prepareDeleteQuery(findButtonId(event));
-            String message = "You successfully deleted the course!";
+            String courseid = findButtonId(event);
+            String query = prepareDeleteQuery(courseid);
+            String message = "Course Deleted!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
     /**
-     * Delete from the Courses table based on the uniquePrimaryKeyValue.
+     * Prepare a DELETE query based on the uniquePrimaryKeyValue.
      * @param uniquePrimaryKeyValue a String
      * @return a String query.
      */

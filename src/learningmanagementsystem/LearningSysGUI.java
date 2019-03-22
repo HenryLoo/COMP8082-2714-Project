@@ -63,9 +63,10 @@ public class LearningSysGUI extends GridPane {
         public HBox createTableNameBar() {
             // create each button individually
             Button courseTable = createCoursesButton();
+            Button gradeItemTable = createGradeItemsButton();
 
             final int gap = 10;
-            HBox hbox = new HBox(courseTable);
+            HBox hbox = new HBox(courseTable, gradeItemTable);
             hbox.setSpacing(gap);
 
             return hbox;
@@ -74,7 +75,18 @@ public class LearningSysGUI extends GridPane {
         private Button createCoursesButton() {
             Button myButton = new Button("Courses");
 
-            Tooltip tip = new Tooltip("View and edit the courses");
+            Tooltip tip = new Tooltip("Access the school's courses");
+            myButton.setTooltip(tip);
+
+            // all table name buttons will have the same onAction.
+            myButton.setOnAction(this::createFunctionOptions);
+            return myButton;
+        }
+
+        private Button createGradeItemsButton() {
+            Button myButton = new Button("Grade Items");
+
+            Tooltip tip = new Tooltip("Access the school's grade items");
             myButton.setTooltip(tip);
 
             // all table name buttons will have the same onAction.
@@ -86,16 +98,17 @@ public class LearningSysGUI extends GridPane {
         private void createFunctionOptions(ActionEvent event) {
             // find which button was clicked
             String buttonName = findButtonText(event);
+
             // set the currentTable instance variable to the correct table.
             setCurrentTable(buttonName);
 
             // open the search dashboard
             openSearchDashBoard();
 
-            // equal to insert into command in sql
+            // create an add button
             Button addButton = new Button("Add " + buttonName);
             addButton.setOnAction(this::openAddDashBoard);
-            addButton.setTooltip(new Tooltip("Add New " + buttonName));
+            addButton.setTooltip(new Tooltip("Add New Data"));
 
             final int gap = 5;
             HBox hbox = new HBox(addButton);
@@ -113,8 +126,7 @@ public class LearningSysGUI extends GridPane {
         public String findButtonText(ActionEvent event) {
             // to check why this work, you can use System.out.println(event.getSource()).
             Button buttonObj = (Button) event.getSource();
-            String name = buttonObj.getText();
-            return name;
+            return buttonObj.getText();
         }
 
         /**
@@ -125,6 +137,9 @@ public class LearningSysGUI extends GridPane {
             switch (tableName) {
                 case "Courses":
                     currentTable = new Courses(databaseConnection, currentPane);
+                    break;
+                case "Grade Items":
+                    currentTable = new GradeItems(databaseConnection, currentPane);
                     break;
                 default:
                     System.out.println("There's no table with that name");

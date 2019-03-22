@@ -47,7 +47,7 @@ public class MyDBConnection {
     
          try{
                myConnection.close();
-               System.out.println("Connection desctroyed");
+               System.out.println("Connection destroyed");
             }
             catch(Exception e){}
         

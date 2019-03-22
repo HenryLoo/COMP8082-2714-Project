@@ -4,9 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -14,7 +11,6 @@ import javafx.scene.text.Font;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class GradeItems extends Tables {
 
@@ -59,9 +55,9 @@ public class GradeItems extends Tables {
      */
     public GridPane createAddDashBoard() {
         // get the generic look of a course info dashboard
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
-        // create things unique to the add dashboard.
+        // create the dashboard title
         Label functionTitle = new Label("Please enter the new grade item's data:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
@@ -77,10 +73,10 @@ public class GradeItems extends Tables {
     }
 
     /**
-     * Create a single course info dashboard generic for add and edit dashboard.
+     * Create a dashboard template that can be used by other dashboard.
      * @return a grid pane containing all the needed elements.
      */
-    public GridPane createSingleCourseInfoDashBoard() {
+    public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
         Label courseIdLbl = new Label("CourseID: ");
@@ -122,7 +118,7 @@ public class GradeItems extends Tables {
         } else {
             String courseId = courseIdTxtFld.getText().trim();
             String itemName = itemNameTxtFld.getText().trim();
-            int totalMark = Integer.parseInt(totalMarkTxtFld.getText().trim();
+            int totalMark = Integer.parseInt(totalMarkTxtFld.getText().trim());
             int itemWeight = Integer.parseInt(weightTxtFld.getText().trim());
 
             String query = prepareAddQuery(courseId, itemName, totalMark, itemWeight);
@@ -209,7 +205,7 @@ public class GradeItems extends Tables {
      * @return a GridPane with all the text fields.
      */
     public GridPane createSearchDashBoard() {
-        Label functionTitle = new Label("Search for grade item By itemid:");
+        Label functionTitle = new Label("Search for Grade Item By Itemid:");
         functionTitle.setFont(Font.font(22));
 
         // reset the textfields and userMessage since it's shared resources.
@@ -217,7 +213,7 @@ public class GradeItems extends Tables {
 
         GridPane gp = new GridPane();
         gp.add(functionTitle, 0, 0);
-        gp.add(courseIdTxtFld, 1, 0);
+        gp.add(itemIdTxtFld, 1, 0);
 
         Button searchBtn = new Button("Search Items");
         searchBtn.setOnAction(this::checkInputForSearchData);
@@ -248,14 +244,15 @@ public class GradeItems extends Tables {
             // turn error indicator off
             inputErrorIndicator = false;
         } else {
+            String tableName = "GradeItems";
             String columnName = "itemid";
-            ResultSet result = search(columnName, itemid, myConn);
+            ResultSet result = search(tableName, columnName, itemid, myConn);
             displaySearchQueryResult(result);
         }
     }
 
     /**
-     * Create the search result area
+     * Create the search result area.
      */
     @Override
     public GridPane createSearchResultArea(ResultSet searchResult) {
@@ -264,7 +261,7 @@ public class GradeItems extends Tables {
         Label courseIdLbl = new Label("Courseid");
         Label itemNameLbl = new Label("Item Name");
         Label totalMarkLbl = new Label("Total Mark");
-        Label weightLbl = new Label("Weight");
+        Label weightLbl = new Label("Weight (%)");
 
         itemIdLbl.setFont(Font.font(18));
         courseIdLbl.setFont(Font.font(18));
@@ -292,34 +289,39 @@ public class GradeItems extends Tables {
             // i start at 1 because it represent the row index after
             // the column name.
             for (int i = 1; searchResult.next(); i++) {
-                Label GradeitemIdLbl = new Label(searchResult.getString("Gradeitemid"));
-                Label GradeitemNameLbl = new Label(searchResult.getString("Gradeitem_name"));
-                Label GradeitemDescriptionLbl = new Label(searchResult.getString("description"));
-                Label GradeitemProfLbl = new Label(String.valueOf(searchResult.getInt("profid")));
+                Label itemIdLbl = new Label(searchResult.getString("itemid"));
+                Label courseIdLbl = new Label(searchResult.getString("courseid"));
+                Label itemNameLbl = new Label(searchResult.getString("name"));
+                Label totalMarkLbl = new Label(searchResult.getString("total"));
+                Label weightLbl = new Label(searchResult.getString("weight"));
 
-                GradeitemIdLbl.setFont(Font.font(18));
-                GradeitemNameLbl.setFont(Font.font(18));
-                GradeitemProfLbl.setFont(Font.font(18));
-                GradeitemDescriptionLbl.setFont(Font.font(18));
+                itemIdLbl.setFont(Font.font(18));
+                courseIdLbl.setFont(Font.font(18));
+                itemNameLbl.setFont(Font.font(18));
+                totalMarkLbl.setFont(Font.font(18));
+                weightLbl.setFont(Font.font(18));
 
-                gp.add(GradeitemIdLbl, 0, i);
-                gp.add(GradeitemNameLbl, 1, i);
-                gp.add(GradeitemDescriptionLbl, 2, i);
-                gp.add(GradeitemProfLbl, 3, i);
+                gp.add(itemIdLbl, 0, i);
+                gp.add(courseIdLbl, 1, i);
+                gp.add(itemNameLbl, 2, i);
+                gp.add(totalMarkLbl, 3, i);
+                gp.add(weightLbl, 4, i);
 
                 // create an edit button
-                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button editButton = new Button();
-                editButton.setGraphic(editPencil);
-                editButton.setId(searchResult.getString("Gradeitemid"));
+//                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
+                Button editButton = new Button("Edit");
+//                editButton.setGraphic(editPencil);
+
+                // put the itemid of the current row into this button's id
+                editButton.setId(searchResult.getString("itemid"));
                 editButton.setOnAction(this::openEditDashBoard);
-                editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
-                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
-                Button deleteButton = new Button();
-                deleteButton.setId(searchResult.getString("Gradeitemid"));
-                deleteButton.setTooltip(new Tooltip("Delete"));
+//                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
+                Button deleteButton = new Button("Delete");
+
+                // put the itemid of the current row into this button's id
+                deleteButton.setId(searchResult.getString("itemid"));
                 deleteButton.setOnAction(this::putForDelete);
 
                 gp.add(editButton, 4, i);
@@ -341,31 +343,29 @@ public class GradeItems extends Tables {
     }
 
     /**
-     * Find the button id.
-     *
-     * @param event an ActionEvent.
-     * @return the button id as a String.
+     * Create an edit dashboard.
+     * @return the dashboard as a GridPane.
      */
-    public String findButtonId(ActionEvent event) {
-        Button buttonObj = (Button) event.getSource();
-        return buttonObj.getId();
-    }
-
-    public GridPane createEditDashBoard(String courseid) {
+    @Override
+    public GridPane createEditDashBoard(String itemid) {
         // create the dashboard based on the template
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
-        // create things unique to the add dashboard.
+        // create the dashboard title
         Label functionTitle = new Label("You can change any of the current data below:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        setTextBoxToValueOfResultSet(Gradeitemid);
+        // set the text values of the text fields to the search result
+        String tableName = "GradeItems";
+        String columnName = "itemid";
+        ResultSet result = search(tableName, columnName, itemid, myConn);
+        setTextBoxToValueOfResultSet(result);
 
-        Button editBtn = new Button("Edit Gradeitem");
+        Button editBtn = new Button("Edit Item");
 
-        // add the current courseid into the update button
-        editBtn.setId(Gradeitemid);
+        // add the current itemid into the edit button
+        editBtn.setId(itemid);
         editBtn.setOnAction(this::checkInputForEditingData);
         gp.add(editBtn, 0, 6);
 
@@ -375,20 +375,19 @@ public class GradeItems extends Tables {
         return gp;
     }
 
-    // set textbox to values of the 'select' statement based on
-    // the courseid
-    private void setTextBoxToValueOfResultSet(String Gradeitemid) {
+    // set textbox to values of the result set from searching the table
+    private void setTextBoxToValueOfResultSet(ResultSet result) {
         try {
-            // find the result associated with the courseid passed to this method.
-            // courseid is guaranteed to work
-            ResultSet result = search("Gradeitemid", Gradeitemid);
             result.next();
 
             // set textboxes to current value of the specified course
-            GradeitemIdTxtFld.setText(result.getString("Gradeitemid"));
-            GradeitemNameTxtFld.setText(result.getString("Gradeitem_name"));
-            GradeitemDescriptionTxtFld.setText(result.getString("description"));
-            GradeitemProfTxtFld.setText(result.getString("profid"));
+            itemIdTxtFld.setText(result.getString("itemid"));
+            courseIdTxtFld.setText(result.getString("courseid"));
+            itemNameTxtFld.setText(result.getString("name"));
+            totalMarkTxtFld.setText(result.getString("total"));
+            weightTxtFld.setText(result.getString("weight"));
+
+            result.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -396,83 +395,63 @@ public class GradeItems extends Tables {
 
     }
 
+    // check that the input are correct before updating the table
     private void checkInputForEditingData(ActionEvent event) {
-        String errorMessage = "";
-        int courseProfId = 0;
-
-        String newCourseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(newCourseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkProfID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
+        String errorMessage = testAllTextFld();
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            String currentCourseId = findButtonId(event);
-            edit(currentCourseId, newCourseId, courseName, courseDescription, courseProfId);
+            String currentItemId = findButtonId(event);
+            String newItemId = itemIdTxtFld.getText().trim();
+            String courseId = courseIdTxtFld.getText().trim();
+            String itemName = itemNameTxtFld.getText().trim();
+            String totalMark = totalMarkTxtFld.getText().trim();
+            String weight = weightTxtFld.getText().trim();
+
+            String query = prepareEditQuery(currentItemId, newItemId,
+                                            courseId, itemName, totalMark,
+                                            weight);
+            String message = "Item Updated";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
-    @Override
-    public void edit(String currentCourseID, String newCourseID, String courseName, String courseDescription,
-                     int courseProfId) {
-        String sql = "UPDATE Courses SET courseid = '" + newCourseID + "', course_name = '"
-                + courseName + "', description = '" + courseDescription + "', profid = "
-                + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-            displaySuccessMessage("Course Updated!");
-
-            // reset the result pane
-            resultPane = new GridPane();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Prepare an UPDATE query for GradeItems table.
+     * @param currentItemID a String.
+     * @param newItemID a String.
+     * @param courseId a String.
+     * @param itemName a String.
+     * @param totalMark a String.
+     * @param weight a String.
+     */
+    public String prepareEditQuery(String currentItemID, String newItemID, String courseId,
+                                 String itemName, String totalMark, String weight) {
+        return "UPDATE GradeItems SET itemid = '" + newItemID + "' courseid = '"
+                + courseId + "', name = \"" + itemName + "\", total = '"
+                + totalMark + "', weight = " + weight + " WHERE itemid = '"
+                + currentItemID + "';";
     }
 
     public void putForDelete(ActionEvent event){
-        delete(findButtonId(event));
-        displaySuccessMessage("You successfully deleted the course!");
-        System.out.println(findButtonId(event));
+        if (getUserConfirmation()) {
+            String itemid = findButtonId(event);
+            String query = prepareDeleteQuery(itemid);
+            String message = "Item Deleted!";
+            runQueryWithNoReturnValue(query, myConn, message);
+        }
     }
 
-    public void delete(String GradeitemID) {
-        String sql = "DELETE FROM Gradeitems WHERE Gradeitemid = '" + GradeitemID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Prepare a DELETE query based on the uniquePrimaryKeyValue.
+     * @param uniquePrimaryKeyValue a String.
+     * @return a String query.
+     */
+    public String prepareDeleteQuery(String uniquePrimaryKeyValue) {
+        return "DELETE FROM GradeItems WHERE itemid = '" + uniquePrimaryKeyValue + "';";
     }
 
     /**
@@ -481,8 +460,7 @@ public class GradeItems extends Tables {
      * @return true if valid, false if else
      */
     public boolean checkItemName(String itemName){
-        int length = String.valueOf(itemName).length();
-        if(length > 40) {
+        if (itemName.length() > 40) {
             return false;
         }
         return true;
@@ -497,7 +475,6 @@ public class GradeItems extends Tables {
 
         try {
             int result = Integer.parseInt(markOrWeight);
-
             if (result > 100 || result < 0) {
                 return false;
             }

@@ -1,5 +1,7 @@
 package learningmanagementsystem;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -71,11 +73,14 @@ public abstract class Tables {
     /**
      * Display data in a table with the specified location.
      *
-     * @param colName the column name as a String
-     * @parem value the value as a String
+     * @param tableName a String.
+     * @param colName a String.
+     * @parem value a String.
+     * @param myConn a Connection.
      */
-    protected ResultSet search(String colName, String value, Connection myConn) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
+    protected ResultSet search(String tableName, String colName,
+                               String value, Connection myConn) {
+        String sql = "SELECT * FROM " + tableName + " WHERE " + colName + " = '" + value + "';";
         try {
             Statement newCommand = myConn.createStatement();
             ResultSet result = newCommand.executeQuery(sql);
@@ -89,6 +94,12 @@ public abstract class Tables {
             return null;
         }
     }
+
+    /**
+     * Child class must create an edit dashboard.
+     * @return the dashboard as a GridPane.
+     */
+    abstract GridPane createEditDashBoard(String primaryKeyValue);
 
     /**
      * Confirmation message to user.
@@ -106,6 +117,17 @@ public abstract class Tables {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Find the button id.
+     *
+     * @param event an ActionEvent.
+     * @return the button id as a String.
+     */
+    public String findButtonId(ActionEvent event) {
+        Button buttonObj = (Button) event.getSource();
+        return buttonObj.getId();
     }
 
     /**
@@ -216,7 +238,7 @@ public abstract class Tables {
      * @return true if valid, false if else
      */
     public boolean checkItemID(String itemID) {
-        if (itemID.length() > 6) {
+        if (itemID.length() != 6) {
             return false;
         }
 
@@ -224,6 +246,7 @@ public abstract class Tables {
             Integer.parseInt(itemID);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
