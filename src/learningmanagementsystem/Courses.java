@@ -58,7 +58,9 @@ public class Courses extends Tables {
         courseProfTxtFld = new TextField();
         courseDescriptionTxtFld = new TextField();
 
-        userMessage = new Label("");
+        userMessage = new Label();
+        userMessage.setFont(Font.font(15));
+
     }
 
     /**
@@ -136,12 +138,12 @@ public class Courses extends Tables {
             int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
             String courseDescription = courseDescriptionTxtFld.getText().trim();
 
-            add(courseId, courseName, courseDescription, courseProfId);
+            prepareAddQuery(courseId, courseName, courseDescription, courseProfId);
         }
 
     }
 
-    // test all the textfields and return the error message
+    // test all the textfields and return an error message if any
     private String testAllTextFld() {
         String errorMessage = "";
 
@@ -205,20 +207,22 @@ public class Courses extends Tables {
     /**
      * Add data to the Courses table.
      *
-     * @param courseID
-     * @param name
-     * @param description
-     * @param profID
+     * @param courseID a String.
+     * @param name a String.
+     * @param description a String.
+     * @param profID an int.
      */
-    @Override
-    public void add(String courseID, String name, String description, int profID) {
+    public void prepareAddQuery(String courseID, String name, String description, int profID) {
 
         String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
                 + description + "', " + profID + ");";
+        add(sql);
+    }
 
+    public void add(String query) {
         try {
             Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
+            newCommand.executeUpdate(query);
             newCommand.close();
 
             displaySuccessMessage("Course Added!");
@@ -282,8 +286,6 @@ public class Courses extends Tables {
             // turn off error indicator
             inputErrorIndicator = false;
         } else {
-            // clear the result pane
-            resultPane = new GridPane();
             
             ResultSet result = search("courseid", courseId);
             displaySearchQueryResult(result);
@@ -299,7 +301,6 @@ public class Courses extends Tables {
     @Override
     public ResultSet search(String colName, String value) {
         String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
-
         try {
             Statement newCommand = myConn.createStatement();
             ResultSet result = newCommand.executeQuery(sql);
@@ -321,7 +322,6 @@ public class Courses extends Tables {
      */
     public void displaySearchQueryResult(ResultSet result) {
         try {
-
             if (!result.isBeforeFirst()) {
                 displayNotificationMessage("No Result Found.");
                 return;
@@ -382,11 +382,13 @@ public class Courses extends Tables {
                 gp.add(courseProfLbl, 3, i);
 
                 // create an edit button
+//                ImageView editPencil = new ImageView(new Image("../../img/Pencil-icon.png"));
                 Button editButton = new Button("Edit");
                 editButton.setId(searchResult.getString("courseid"));
                 editButton.setOnAction(this::openEditDashBoard);
 
                 // create a delete button
+//              ImageView deleteSign = new ImageView(new Image("../../img/delete-1-icon.png"));
                 Button deleteButton = new Button("Delete");
                 deleteButton.setId(searchResult.getString("courseid"));
                 deleteButton.setOnAction(this::putForDelete);
@@ -488,8 +490,8 @@ public class Courses extends Tables {
     @Override
     public void edit(String currentCourseID, String newCourseID, String courseName, String courseDescription,
                      int courseProfId) {
-        String sql = "UPDATE Courses SET courseid = '" + newCourseID + "', course_name = '"
-                + courseName + "', description = '" + courseDescription + "', profid = "
+        String sql = "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
+                + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
 
         try {
@@ -507,8 +509,10 @@ public class Courses extends Tables {
     }
 
     public void putForDelete(ActionEvent event){
-        delete(findButtonId(event));
-        displaySuccessMessage("You successfully deleted the course!");
+        if (confirmationMessage()) {
+            delete(findButtonId(event));
+            displaySuccessMessage("You successfully deleted the course!");
+        }
     }
 
     public void delete(String courseID) {

@@ -86,10 +86,11 @@ public class LearningSysGUI extends GridPane {
         private void createFunctionOptions(ActionEvent event) {
             // find which button was clicked
             String buttonName = findButtonText(event);
+            // set the currentTable instance variable to the correct table.
+            setCurrentTable(buttonName);
 
-            // equal to select command in sql
-            Button viewButton = new Button("View Table");
-            viewButton.setOnAction(this::openSearchDashBoard);
+            // open the search dashboard
+            openSearchDashBoard();
 
             // equal to insert into command in sql
             Button addButton = new Button("Add " + buttonName);
@@ -97,7 +98,7 @@ public class LearningSysGUI extends GridPane {
             addButton.setTooltip(new Tooltip("Add New " + buttonName));
 
             final int gap = 5;
-            HBox hbox = new HBox(viewButton, addButton);
+            HBox hbox = new HBox(addButton);
             hbox.setSpacing(gap);
 
             // get the functionOptions that's currently empty and set it to hbox.
@@ -113,9 +114,6 @@ public class LearningSysGUI extends GridPane {
             // to check why this work, you can use System.out.println(event.getSource()).
             Button buttonObj = (Button) event.getSource();
             String name = buttonObj.getText();
-
-            // set the currentTable instance variable to the correct table.
-            setCurrentTable(name);
             return name;
         }
 
@@ -143,9 +141,8 @@ public class LearningSysGUI extends GridPane {
 
         /**
          * Open the search dashboard.
-         * @param event an Action Event.
          */
-        public void openSearchDashBoard(ActionEvent event) {
+        public void openSearchDashBoard() {
             currentPane.getChildren().setAll(currentTable.createSearchDashBoard());
         }
 

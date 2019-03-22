@@ -15,7 +15,7 @@ CREATE TABLE Users (
 	password VARCHAR(40) NOT NULL,
 	role ENUM('admin', 'professor', 'student') NOT NULL,
 	salt VARCHAR(8) UNIQUE NOT NULL
-);
+) ENGINE = INNODB;
 	
 CREATE TABLE Courses (
 	courseid VARCHAR(6) PRIMARY KEY NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE Courses (
 	REFERENCES Users(userid)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
-);
+) ENGINE = INNODB;
 	
 CREATE TABLE Blocks (
 	blockid INT(4) AUTO_INCREMENT NOT NULL,
@@ -39,8 +39,7 @@ CREATE TABLE Blocks (
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
 	PRIMARY KEY (blockid)
-	
-);
+) ENGINE = INNODB;
 
 CREATE TABLE Classes (
 	blockid INT(4),
@@ -54,10 +53,10 @@ CREATE TABLE Classes (
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
 	PRIMARY KEY (blockid, stuid)
-);
+) ENGINE = INNODB;
 
 CREATE TABLE GradeItems (
-	itemid INT(6),
+	itemid INT(6) AUTO_INCREMENT,
 	courseid VARCHAR(6),
 	name VARCHAR(40) NOT NULL,
 	total INT(3),
@@ -67,7 +66,7 @@ CREATE TABLE GradeItems (
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
 	PRIMARY KEY (itemid)
-);
+) ENGINE = INNODB;
 
 CREATE TABLE StuGrades (
 	stuid INT(6),
@@ -82,7 +81,7 @@ CREATE TABLE StuGrades (
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
 	PRIMARY KEY (stuid, itemid)
-);
+) ENGINE = INNODB;
 
 
 SHOW TABLES;

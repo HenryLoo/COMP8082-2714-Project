@@ -4,6 +4,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
 
 import java.sql.ResultSet;
 
@@ -30,12 +33,34 @@ public abstract class Tables {
 
 
     abstract GridPane createAddDashBoard();
-    abstract void add(String courseID, String name, String description, int profID);
-    abstract void edit(String currentCourseid, String newCourseid, String courseName,
-                       String courseDescription, int courseProfId);
-    abstract void delete(String courseID);
+
+    abstract void add(String query);
+
+    abstract void edit(String query);
+
+    abstract void delete(String query);
+
     abstract GridPane createSearchDashBoard();
+
     abstract ResultSet search(String colName, String value); // might change to display
+
+    /**
+     * Confirmation message to user.
+     */
+    public boolean confirmationMessage() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Box");
+        alert.setHeaderText("Are you sure you want to delete?");
+        alert.setResizable(false);
+        Optional<ButtonType> result = alert.showAndWait();
+        ButtonType button = result.orElse(ButtonType.CANCEL);
+
+        if (button == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Display an error message to user.
@@ -66,14 +91,14 @@ public abstract class Tables {
         userMessage.setTextFill(Color.BLACK);
         userMessage.setText(notificationMessage);
     }
-
-
+  
     /**
      * Check if prof id is valid.
+     *
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkUserID(int profID){
+    public boolean checkUserID(int profID) {
         int length = Integer.toString(profID).length();
         return length == 2;
     }
@@ -111,6 +136,21 @@ public abstract class Tables {
 
         return true;
     }
+
+    /**
+     * Check if item id is valid.
+     * @param itemID an int
+     * @return true if valid, false if else
+     */
+    public boolean checkItemID(int itemID) {
+        int lengthID = String.valueOf(itemID).length();
+        if (lengthID > 6) {
+            return false;
+        }
+        return true;
+    }
+
+
 }
 
 
