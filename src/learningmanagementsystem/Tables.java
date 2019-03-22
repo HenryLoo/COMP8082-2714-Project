@@ -1,13 +1,12 @@
 package learningmanagementsystem;
 
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -131,6 +130,38 @@ public abstract class Tables {
     }
 
     /**
+     * Create a button with the edit graphics.
+     * @return an edit Button.
+     */
+    public Button createEditButtonWithGraphic() {
+        ImageView editPencil = new ImageView(new Image("Pencil-icon.png"));
+        editPencil.setFitHeight(20);
+        editPencil.setPreserveRatio(true);
+        editPencil.setSmooth(true);
+
+        Button editButton = new Button();
+        editButton.setGraphic(editPencil);
+        editButton.setTooltip(new Tooltip("Edit the Row"));
+        return editButton;
+    }
+
+    /**
+     * Create a button with the delete graphics.
+     * @return a delete Button.
+     */
+    public Button createDeleteButtonWithGraphic() {
+        ImageView deleteSign = new ImageView(new Image("delete-1-icon.png"));
+        deleteSign.setFitHeight(20);
+        deleteSign.setPreserveRatio(true);
+        deleteSign.setSmooth(true);
+
+        Button delButton = new Button();
+        delButton.setGraphic(deleteSign);
+        delButton.setTooltip(new Tooltip("Delete the Row"));
+        return delButton;
+    }
+
+    /**
      * Display an error message to user.
      *
      * @param errorMessage a String.
@@ -173,6 +204,9 @@ public abstract class Tables {
                 resultPane.getChildren().setAll(new GridPane());
                 return;
             }
+
+            // clear the userMessage area
+            userMessage.setText("");
             resultPane.getChildren().setAll(createSearchResultArea(result));
         } catch (SQLException e) {
             e.printStackTrace();

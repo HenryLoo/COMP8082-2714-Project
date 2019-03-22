@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -24,15 +26,6 @@ public class Courses extends Tables {
     private TextField courseProfTxtFld;
     private TextField courseDescriptionTxtFld;
 
-    // display the result
-    private GridPane resultPane;
-
-    // tell us that there's an error in user inputs.
-    private boolean inputErrorIndicator;
-
-    // the current pane being displayed to user.
-    private Pane currentPane;
-
     /**
      * Create a Courses instance and run the dashboard.
      */
@@ -41,8 +34,8 @@ public class Courses extends Tables {
         initTextfieldsAndUserMessage();
         userMessage.setFont(Font.font(13));
         userMessage.setTextFill(Color.RED);
-        resultPane = new GridPane();
         currentPane = newCurrentPane;
+        resultPane = new GridPane();
     }
 
     /**
@@ -261,7 +254,6 @@ public class Courses extends Tables {
             String tableName = "Courses";
             String columnName = "courseid";
             ResultSet result = search(tableName, columnName, courseId, myConn);
-
             // call a method in the Tables class
             displaySearchQueryResult(result);
         }
@@ -317,16 +309,14 @@ public class Courses extends Tables {
                 gp.add(courseProfLbl, 3, i);
 
                 // create an edit button
-//                ImageView editPencil = new ImageView(new Image("../../img/Pencil-icon.png"));
-                Button editButton = new Button("Edit");
+                Button editButton = createEditButtonWithGraphic();
 
                 // put the courseid of the current row into this button's id
                 editButton.setId(searchResult.getString("courseid"));
                 editButton.setOnAction(this::openEditDashBoard);
 
                 // create a delete button
-//              ImageView deleteSign = new ImageView(new Image("../../img/delete-1-icon.png"));
-                Button deleteButton = new Button("Delete");
+                Button deleteButton = createDeleteButtonWithGraphic();
 
                 // put the courseid of the current row into this button's id
                 deleteButton.setId(searchResult.getString("courseid"));

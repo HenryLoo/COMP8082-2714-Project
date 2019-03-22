@@ -310,17 +310,14 @@ public class GradeItems extends Tables {
                 gp.add(weightLbl, 4, i);
 
                 // create an edit button
-//                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button editButton = new Button("Edit");
-//                editButton.setGraphic(editPencil);
+                Button editButton = createEditButtonWithGraphic();
 
                 // put the itemid of the current row into this button's id
                 editButton.setId(searchResult.getString("itemid"));
                 editButton.setOnAction(this::openEditDashBoard);
 
                 // create a delete button
-//                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
-                Button deleteButton = new Button("Delete");
+                Button deleteButton = createDeleteButtonWithGraphic();
 
                 // put the itemid of the current row into this button's id
                 deleteButton.setId(searchResult.getString("itemid"));
