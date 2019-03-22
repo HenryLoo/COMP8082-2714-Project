@@ -4,9 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -15,7 +12,6 @@ import javafx.scene.text.Font;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Courses extends Tables {
 
@@ -58,7 +54,9 @@ public class Courses extends Tables {
         courseProfTxtFld = new TextField();
         courseDescriptionTxtFld = new TextField();
 
-        userMessage = new Label("");
+        userMessage = new Label();
+        userMessage.setFont(Font.font(15));
+
     }
 
     /**
@@ -68,7 +66,7 @@ public class Courses extends Tables {
      */
     public GridPane createAddDashBoard() {
         // get the generic look of a course info dashboard
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
         // create things unique to the add dashboard.
         Label functionTitle = new Label("Please enter the new course's data:");
@@ -86,10 +84,10 @@ public class Courses extends Tables {
     }
 
     /**
-     * Create a single course info dashboard generic for add and update dashboard.
+     * Create a dashboard template that can be used by other templates.
      * @return a grid pane containing all the needed elements.
      */
-    public GridPane createSingleCourseInfoDashBoard() {
+    public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
         Label courseIdLbl = new Label("CourseID: ");
@@ -124,42 +122,46 @@ public class Courses extends Tables {
     // if there are errors, let users know
     private void checkInputForAddingData(ActionEvent event) {
         // create an error message for user
-        String errorMessage = "";
-        int courseProfId = 0;
-
-        String courseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
+        String errorMessage = testAllTextFld();
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            add(courseId, courseName, courseDescription, courseProfId);
+            String courseId = courseIdTxtFld.getText().trim();
+            String courseName = courseNameTxtFld.getText().trim();
+            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
+            String courseDescription = courseDescriptionTxtFld.getText().trim();
+
+            String query = prepareAddQuery(courseId, courseName, courseDescription, courseProfId);
+            String message = "Course Added!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
 
+    }
+
+    // test all the textfields and return an error message if any
+    private String testAllTextFld() {
+        String errorMessage = "";
+
+        if (!checkCourseID(courseIdTxtFld.getText().trim())) {
+            errorMessage += markCourseIdTxtFldWrong();
+        }
+
+        if (!checkCourseName(courseNameTxtFld.getText().trim())) {
+            errorMessage += markCourseNameTxtFldWrong();
+        }
+
+        if (!checkProfID(courseProfTxtFld.getText().trim())) {
+            errorMessage += markCourseProfIdTxtFldWrong();
+        }
+
+        if (!checkDescription(courseDescriptionTxtFld.getText().trim())) {
+            errorMessage += markCourseDescriptionTxtFld();
+        }
+
+        return errorMessage;
     }
 
     // mark that the courseIdTxtFld was wrong
@@ -192,29 +194,18 @@ public class Courses extends Tables {
     }
 
     /**
-     * Add data to the Courses table.
+     * Create the query to data to the Courses table.
      *
-     * @param courseID
-     * @param name
-     * @param description
-     * @param profID
+     * @param courseID a String.
+     * @param name a String.
+     * @param description a String.
+     * @param profID an int.
+     * @return a SQL String.
      */
-    @Override
-    public void add(String courseID, String name, String description, int profID) {
+    public String prepareAddQuery(String courseID, String name, String description, int profID) {
 
-        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
+        return "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
                 + description + "', " + profID + ");";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-            displaySuccessMessage("Course Added!");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -250,13 +241,9 @@ public class Courses extends Tables {
     // try to add data
     // if there are errors, let users know
     private void checkInputForSearchData(ActionEvent event) {
-        // turn off the error indicator
-        inputErrorIndicator = false;
-
         // create an error message for user
         String errorMessage = "";
 
-        // consider refactoring
         String courseId = courseIdTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
             errorMessage += "Your course id must be six characters long. \n"
@@ -267,56 +254,21 @@ public class Courses extends Tables {
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+
+            // turn off error indicator
+            inputErrorIndicator = false;
         } else {
-            ResultSet result = search("courseid", courseId);
+            String tableName = "Courses";
+            String columnName = "courseid";
+            ResultSet result = search(tableName, columnName, courseId, myConn);
+
+            // call a method in the Tables class
             displaySearchQueryResult(result);
         }
     }
 
     /**
-     * Display data in a table with the specified location.
-     *
-     * @param colName the column name as a String
-     * @parem value the value as a String
-     */
-    @Override
-    public ResultSet search(String colName, String value) {
-        String sql = "SELECT * FROM Courses WHERE " + colName + " = '" + value + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            ResultSet result = newCommand.executeQuery(sql);
-
-            // will closed when ResultSet is closed
-            newCommand.closeOnCompletion();
-            return result;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Display the search query result.
-     *
-     * @param result a ResultSet.
-     */
-    public void displaySearchQueryResult(ResultSet result) {
-        try {
-
-            if (!result.isBeforeFirst()) {
-                displayNotificationMessage("No Result Found.");
-                return;
-            }
-            resultPane.getChildren().setAll(createSearchResultArea(result));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Create the search result area
+     * Create the search result area.
      */
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
@@ -365,18 +317,19 @@ public class Courses extends Tables {
                 gp.add(courseProfLbl, 3, i);
 
                 // create an edit button
-                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button editButton = new Button();
-                editButton.setGraphic(editPencil);
+//                ImageView editPencil = new ImageView(new Image("../../img/Pencil-icon.png"));
+                Button editButton = new Button("Edit");
+
+                // put the courseid of the current row into this button's id
                 editButton.setId(searchResult.getString("courseid"));
                 editButton.setOnAction(this::openEditDashBoard);
-                editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
-                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
-                Button deleteButton = new Button();
+//              ImageView deleteSign = new ImageView(new Image("../../img/delete-1-icon.png"));
+                Button deleteButton = new Button("Delete");
+
+                // put the courseid of the current row into this button's id
                 deleteButton.setId(searchResult.getString("courseid"));
-                deleteButton.setTooltip(new Tooltip("Delete"));
                 deleteButton.setOnAction(this::putForDelete);
 
                 gp.add(editButton, 4, i);
@@ -398,26 +351,23 @@ public class Courses extends Tables {
     }
 
     /**
-     * Find the button id.
-     *
-     * @param event an ActionEvent.
-     * @return the button id as a String.
+     * Create an edit dashboard.
+     * @return the dashboard as a GridPane.
      */
-    public String findButtonId(ActionEvent event) {
-        Button buttonObj = (Button) event.getSource();
-        return buttonObj.getId();
-    }
-
+    @Override
     public GridPane createEditDashBoard(String courseid) {
         // create the dashboard based on the template
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
         // create things unique to the add dashboard.
         Label functionTitle = new Label("You can change any of the current data below:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        setTextBoxToValueOfResultSet(courseid);
+        String tableName = "Courses";
+        String columnName = "courseid";
+        ResultSet result = search(tableName,columnName, courseid, myConn);
+        setTextBoxToValueOfResultSet(result);
 
         Button editBtn = new Button("Edit Course");
 
@@ -432,13 +382,9 @@ public class Courses extends Tables {
         return gp;
     }
 
-    // set textbox to values of the 'select' statement based on
-    // the courseid
-    private void setTextBoxToValueOfResultSet(String courseid) {
+    // set textbox to values of the result set from searching the table
+    private void setTextBoxToValueOfResultSet(ResultSet result) {
         try {
-            // find the result associated with the courseid passed to this method.
-            // courseid is guaranteed to work
-            ResultSet result = search("courseid", courseid);
             result.next();
 
             // set textboxes to current value of the specified course
@@ -447,6 +393,7 @@ public class Courses extends Tables {
             courseDescriptionTxtFld.setText(result.getString("description"));
             courseProfTxtFld.setText(result.getString("profid"));
 
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -454,84 +401,63 @@ public class Courses extends Tables {
     }
 
     private void checkInputForEditingData(ActionEvent event) {
-        String errorMessage = "";
-        int courseProfId = 0;
-
-        String newCourseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(newCourseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
+        String errorMessage = testAllTextFld();
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
+            // get the current course set in the button id of the source
             String currentCourseId = findButtonId(event);
-            edit(currentCourseId, newCourseId, courseName, courseDescription, courseProfId);
+
+            String newCourseId = courseIdTxtFld.getText().trim();
+            String courseName = courseNameTxtFld.getText().trim();
+            String courseDescription = courseDescriptionTxtFld.getText().trim();
+            String courseProfId = courseProfTxtFld.getText().trim();
+
+            String query = prepareEditQuery(currentCourseId, newCourseId,
+                    courseName, courseDescription, courseProfId);
+            String message = "Course Updated!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
-    @Override
-    public void edit(String currentCourseID, String newCourseID, String courseName, String courseDescription,
-                     int courseProfId) {
-        String sql = "UPDATE Courses SET courseid = '" + newCourseID + "', course_name = '"
-                + courseName + "', description = '" + courseDescription + "', profid = "
+    /**
+     * Prepare an UPDATE query for Courses table.
+     * @param currentCourseID a String.
+     * @param newCourseID a String.
+     * @param courseName a String.
+     * @param courseDescription a String.
+     * @param courseProfId a String.
+     * @return
+     */
+    public String prepareEditQuery(String currentCourseID, String newCourseID,
+                                 String courseName, String courseDescription,
+                                 String courseProfId) {
+        return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
+                + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-            displaySuccessMessage("Course Updated!");
-
-            // reset the result pane
-            resultPane = new GridPane();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void putForDelete(ActionEvent event){
-        delete(findButtonId(event));
-        displaySuccessMessage("You successfully deleted the course!");
-        System.out.println(findButtonId(event));
-    }
-
-    public void delete(String courseID) {
-        String sql = "DELETE FROM Courses WHERE courseid = '" + courseID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (getUserConfirmation()) {
+            String courseid = findButtonId(event);
+            String query = prepareDeleteQuery(courseid);
+            String message = "Course Deleted!";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
+    /**
+     * Prepare a DELETE query based on the uniquePrimaryKeyValue.
+     * @param uniquePrimaryKeyValue a String
+     * @return a String query.
+     */
+    public String prepareDeleteQuery(String uniquePrimaryKeyValue) {
+        return "DELETE FROM Courses WHERE courseid = '" + uniquePrimaryKeyValue + "';";
+    }
 
     /**
      * Check if course name is valid.

@@ -4,18 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class GradeItems extends Tables {
 
@@ -23,10 +18,11 @@ public class GradeItems extends Tables {
     private Connection myConn;
 
     // the text fields for each data column in the table.
+    private TextField itemIdTxtFld;
     private TextField courseIdTxtFld;
-    private TextField courseNameTxtFld;
-    private TextField courseProfTxtFld;
-    private TextField courseDescriptionTxtFld;
+    private TextField itemNameTxtFld;
+    private TextField totalMarkTxtFld;
+    private TextField weightTxtFld;
 
     /**
      * Create a Courses instance and run the dashboard.
@@ -34,8 +30,6 @@ public class GradeItems extends Tables {
     public GradeItems(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
-        userMessage.setFont(Font.font(13));
-        userMessage.setTextFill(Color.RED);
         resultPane = new GridPane();
         currentPane = newCurrentPane;
     }
@@ -44,12 +38,14 @@ public class GradeItems extends Tables {
      * Initiate the textfields and userMessage to new ones.
      */
     public void initTextfieldsAndUserMessage() {
+        itemIdTxtFld = new TextField();
         courseIdTxtFld = new TextField();
-        courseNameTxtFld = new TextField();
-        courseProfTxtFld = new TextField();
-        courseDescriptionTxtFld = new TextField();
+        itemNameTxtFld = new TextField();
+        totalMarkTxtFld = new TextField();
+        weightTxtFld = new TextField();
 
         userMessage = new Label("");
+        userMessage.setFont(Font.font(15));
     }
 
     /**
@@ -59,14 +55,14 @@ public class GradeItems extends Tables {
      */
     public GridPane createAddDashBoard() {
         // get the generic look of a course info dashboard
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
-        // create things unique to the add dashboard.
-        Label functionTitle = new Label("Please enter the new course's data:");
+        // create the dashboard title
+        Label functionTitle = new Label("Please enter the new grade item's data:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        Button addBtn = new Button("Add Course");
+        Button addBtn = new Button("Add GradeItem");
         addBtn.setOnAction(this::checkInputForAddingData);
         gp.add(addBtn, 0, 6);
 
@@ -77,80 +73,88 @@ public class GradeItems extends Tables {
     }
 
     /**
-     * Create a single course info dashboard generic for add and update dashboard.
+     * Create a dashboard template that can be used by other dashboard.
      * @return a grid pane containing all the needed elements.
      */
-    public GridPane createSingleCourseInfoDashBoard() {
+    public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
         Label courseIdLbl = new Label("CourseID: ");
-        Label courseNameLbl = new Label("Course Name: ");
-        Label courseProfLbl = new Label("Course Professor ID: ");
-        Label courseDescriptionLbl = new Label("Course Description: ");
+        Label nameLbl = new Label("Item Name: ");
+        Label markLbl = new Label("Total Mark: ");
+        Label weightLbl = new Label("Item Weight: ");
 
         courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
+        nameLbl.setFont(Font.font(18));
+        markLbl.setFont(Font.font(18));
+        weightLbl.setFont(Font.font(18));
 
         gp.add(courseIdLbl, 0, 1);
-        gp.add(courseNameLbl, 0, 2);
-        gp.add(courseProfLbl, 0, 3);
-        gp.add(courseDescriptionLbl, 0, 4);
+        gp.add(nameLbl, 0, 2);
+        gp.add(markLbl, 0, 3);
+        gp.add(weightLbl, 0, 4);
 
-        // since the text fields are shared, we have to cleared them first
+        // since the text fields are shared, we have to clear them first
         initTextfieldsAndUserMessage();
 
         gp.add(courseIdTxtFld, 1, 1);
-        gp.add(courseNameTxtFld, 1, 2);
-        gp.add(courseProfTxtFld, 1, 3);
-        gp.add(courseDescriptionTxtFld, 1, 4);
+        gp.add(itemNameTxtFld, 1, 2);
+        gp.add(totalMarkTxtFld, 1, 3);
+        gp.add(weightTxtFld, 1, 4);
         gp.add(userMessage, 0, 5, 2, 1);
 
         return gp;
-
     }
 
-    // try to add data
-    // if there are errors, let users know
+    // check input before adding data
     private void checkInputForAddingData(ActionEvent event) {
         // create an error message for user
-        String errorMessage = "";
-        int courseProfId = 0;
-
-        String courseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
+        String errorMessage = testAllTextFld();
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            add(courseId, courseName, courseDescription, courseProfId);
+            String courseId = courseIdTxtFld.getText().trim();
+            String itemName = itemNameTxtFld.getText().trim();
+            int totalMark = Integer.parseInt(totalMarkTxtFld.getText().trim());
+            int itemWeight = Integer.parseInt(weightTxtFld.getText().trim());
+
+            String query = prepareAddQuery(courseId, itemName, totalMark, itemWeight);
+            String message = "Item Added!";
+            runQueryWithNoReturnValue(query, myConn, message);
+        }
+    }
+
+    // test all the textfields and return an error message if any
+    private String testAllTextFld() {
+        String errorMessage = "";
+
+        if (!checkCourseID(courseIdTxtFld.getText().trim())) {
+            errorMessage += markCourseIdTxtFldWrong();
         }
 
+        if (!checkItemName(itemNameTxtFld.getText().trim())) {
+            errorMessage += markItemNameTxtFldWrong();
+        }
+
+        if (!checkTotalMarkOrWeight(totalMarkTxtFld.getText().trim())) {
+            errorMessage += markTotalMarkTxtFldWrong();
+        }
+
+        if (!checkTotalMarkOrWeight(weightTxtFld.getText().trim())) {
+            errorMessage += markWeightTxtFldWrong();
+        }
+
+        return errorMessage;
+    }
+
+    // mark that the itemIdTxtFld was wrong
+    private String markItemIdTxtFldWrong() {
+        inputErrorIndicator = true;
+        itemIdTxtFld.setStyle("-fx-border-color: red");
+        return "Your item id must be six digits long. \n";
     }
 
     // mark that the courseIdTxtFld was wrong
@@ -161,51 +165,38 @@ public class GradeItems extends Tables {
                 + "It must start with three letters and end with three digits. \n";
     }
 
-    // mark the coursenameTxtFld was wrong
-    private String markCourseNameTxtFldWrong() {
+    // mark that the itemNameTxtFld was wrong
+    private String markItemNameTxtFldWrong() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course name must be less than 40 characters. \n";
+        itemNameTxtFld.setStyle("-fx-border-color: red");
+        return "Your item name must be less than 40 characters. \n";
     }
 
-    // mark the courseProfidTxtFld was wrong
-    private String markCourseProfIdTxtFldWrong() {
+    // mark that the totalMarkTxtFld was wrong
+    private String markTotalMarkTxtFldWrong() {
         inputErrorIndicator = true;
-        courseProfTxtFld.setStyle("-fx-border-color: red");
-        return "The professor ID doesn't exist. \n";
+        totalMarkTxtFld.setStyle("-fx-border-color: red");
+        return "The total mark must be between 0 and 100 inclusively. \n";
     }
 
-    // mark the courseDescriptionTxtFld was wrong
-    private String markCourseDescriptionTxtFld() {
+    // mark that the weightTxtFld was wrong
+    private String markWeightTxtFldWrong() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course description must be less than 150 characters. \n";
+        weightTxtFld.setStyle("-fx-border-color: red");
+        return "The weight must be between 0 and 100 inclusively. \n";
     }
 
     /**
-     * Add data to the Courses table.
+     * Add data to the GradeItems table.
      *
-     * @param courseID
-     * @param name
-     * @param description
-     * @param profID
+     * @param courseID a String
+     * @param name a String
+     * @param totalMark an int
+     * @param weight an int
      */
-    @Override
-    public void add(String courseID, String name, String description, int profID) {
-
-        String sql = "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
-                + description + "', " + profID + ");";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-            displaySuccessMessage("Course Added!");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public String prepareAddQuery(String courseID, String name, int totalMark, int weight) {
+        return "INSERT INTO GradeItems(courseid, name, total, weight) VALUES('" + courseID + "', '" + name + "', '"
+                + totalMark + "', " + weight + ");";
     }
 
     /**
@@ -214,8 +205,7 @@ public class GradeItems extends Tables {
      * @return a GridPane with all the text fields.
      */
     public GridPane createSearchDashBoard() {
-
-        Label functionTitle = new Label("Search for Gradeitem By GradeitemId:");
+        Label functionTitle = new Label("Search for Grade Item By Itemid:");
         functionTitle.setFont(Font.font(22));
 
         // reset the textfields and userMessage since it's shared resources.
@@ -223,9 +213,9 @@ public class GradeItems extends Tables {
 
         GridPane gp = new GridPane();
         gp.add(functionTitle, 0, 0);
-        gp.add(courseIdTxtFld, 1, 0);
+        gp.add(itemIdTxtFld, 1, 0);
 
-        Button searchBtn = new Button("Search Gradeitems");
+        Button searchBtn = new Button("Search Items");
         searchBtn.setOnAction(this::checkInputForSearchData);
         gp.add(searchBtn, 2, 0);
 
@@ -238,93 +228,54 @@ public class GradeItems extends Tables {
         return gp;
     }
 
-    // try to add data
-    // if there are errors, let users know
+    // check inputs before searching for data
     private void checkInputForSearchData(ActionEvent event) {
-        // turn off the error indicator
-        inputErrorIndicator = false;
-
         // create an error message for user
         String errorMessage = "";
 
-        // consider refactoring
-        String GradeitemId = GradeitemIdTxtFld.getText().trim();
-        if (!checkGradeitemID(GradeitemId)) {
-            errorMessage += "Your Gradeitem id must be six characters long. \n"
-                    + "It must start with three letters and end with three digits. \n";
-            inputErrorIndicator = true;
-            GradeitemIdTxtFld.setStyle("-fx-border-color: red");
+        String itemid = itemIdTxtFld.getText().trim();
+        if (!checkItemID(itemid)) {
+            errorMessage += markItemIdTxtFldWrong();
         }
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+
+            // turn error indicator off
+            inputErrorIndicator = false;
         } else {
-            ResultSet result = search("Gradeitemid", GradeitemId);
+            String tableName = "GradeItems";
+            String columnName = "itemid";
+            ResultSet result = search(tableName, columnName, itemid, myConn);
+
+            // call a method in the Tables class
             displaySearchQueryResult(result);
         }
     }
 
     /**
-     * Display data in a table with the specified location.
-     *
-     * @param colName the column name as a String
-     * @parem value the value as a String
+     * Create the search result area.
      */
     @Override
-    public ResultSet search(String colName, String value) {
-        String sql = "SELECT * FROM Gradeitems WHERE " + colName + " = '" + value + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            ResultSet result = newCommand.executeQuery(sql);
-
-            // will closed when ResultSet is closed
-            newCommand.closeOnCompletion();
-            return result;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Display the search query result.
-     *
-     * @param result a ResultSet.
-     */
-    public void displaySearchQueryResult(ResultSet result) {
-        try {
-
-            if (!result.isBeforeFirst()) {
-                displayNotificationMessage("No Result Found.");
-                return;
-            }
-            resultPane.getChildren().setAll(createSearchResultArea(result));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Create the search result area
-     */
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
-        Label GradeitemIdLbl = new Label("GradeitemID");
-        Label GradeitemNameLbl = new Label("Gradeitem Name");
-        Label GradeitemDescriptionLbl = new Label("Description");
-        Label GradeitemProfLbl = new Label("Professor ID");
+        Label itemIdLbl = new Label("ItemID");
+        Label courseIdLbl = new Label("Courseid");
+        Label itemNameLbl = new Label("Item Name");
+        Label totalMarkLbl = new Label("Total Mark");
+        Label weightLbl = new Label("Weight (%)");
 
+        itemIdLbl.setFont(Font.font(18));
         courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
+        itemNameLbl.setFont(Font.font(18));
+        totalMarkLbl.setFont(Font.font(18));
+        weightLbl.setFont(Font.font(18));
 
-        gp.add(GradeitemIdLbl, 0, 0);
-        gp.add(GradeitemNameLbl, 1, 0);
-        gp.add(GradeitemDescriptionLbl, 2, 0);
-        gp.add(GradeitemProfLbl, 3, 0);
+        gp.add(itemIdLbl, 0, 0);
+        gp.add(courseIdLbl, 1, 0);
+        gp.add(itemNameLbl, 2, 0);
+        gp.add(totalMarkLbl, 3, 0);
+        gp.add(weightLbl, 4, 0);
 
         appendResultToSearchResultArea(gp, searchResult);
 
@@ -340,38 +291,43 @@ public class GradeItems extends Tables {
             // i start at 1 because it represent the row index after
             // the column name.
             for (int i = 1; searchResult.next(); i++) {
-                Label GradeitemIdLbl = new Label(searchResult.getString("Gradeitemid"));
-                Label GradeitemNameLbl = new Label(searchResult.getString("Gradeitem_name"));
-                Label GradeitemDescriptionLbl = new Label(searchResult.getString("description"));
-                Label GradeitemProfLbl = new Label(String.valueOf(searchResult.getInt("profid")));
+                Label itemIdLbl = new Label(searchResult.getString("itemid"));
+                Label courseIdLbl = new Label(searchResult.getString("courseid"));
+                Label itemNameLbl = new Label(searchResult.getString("name"));
+                Label totalMarkLbl = new Label(searchResult.getString("total"));
+                Label weightLbl = new Label(searchResult.getString("weight"));
 
-                GradeitemIdLbl.setFont(Font.font(18));
-                GradeitemNameLbl.setFont(Font.font(18));
-                GradeitemProfLbl.setFont(Font.font(18));
-                GradeitemDescriptionLbl.setFont(Font.font(18));
+                itemIdLbl.setFont(Font.font(18));
+                courseIdLbl.setFont(Font.font(18));
+                itemNameLbl.setFont(Font.font(18));
+                totalMarkLbl.setFont(Font.font(18));
+                weightLbl.setFont(Font.font(18));
 
-                gp.add(GradeitemIdLbl, 0, i);
-                gp.add(GradeitemNameLbl, 1, i);
-                gp.add(GradeitemDescriptionLbl, 2, i);
-                gp.add(GradeitemProfLbl, 3, i);
+                gp.add(itemIdLbl, 0, i);
+                gp.add(courseIdLbl, 1, i);
+                gp.add(itemNameLbl, 2, i);
+                gp.add(totalMarkLbl, 3, i);
+                gp.add(weightLbl, 4, i);
 
                 // create an edit button
-                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
-                Button editButton = new Button();
-                editButton.setGraphic(editPencil);
-                editButton.setId(searchResult.getString("Gradeitemid"));
+//                ImageView editPencil = new ImageView(new Image("img/Pencil-icon.png"));
+                Button editButton = new Button("Edit");
+//                editButton.setGraphic(editPencil);
+
+                // put the itemid of the current row into this button's id
+                editButton.setId(searchResult.getString("itemid"));
                 editButton.setOnAction(this::openEditDashBoard);
-                editButton.setTooltip(new Tooltip("Edit"));
 
                 // create a delete button
-                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
-                Button deleteButton = new Button();
-                deleteButton.setId(searchResult.getString("Gradeitemid"));
-                deleteButton.setTooltip(new Tooltip("Delete"));
-                deleteButton.setOnAction(this::putForDelete);
+//                ImageView deleteSign = new ImageView(new Image("img/delete-1-icon.png"));
+                Button deleteButton = new Button("Delete");
 
-                gp.add(editButton, 4, i);
-                gp.add(deleteButton, 5, i);
+                // put the itemid of the current row into this button's id
+                deleteButton.setId(searchResult.getString("itemid"));
+                deleteButton.setOnAction(this::handleDeleteEvent);
+
+                gp.add(editButton, 5, i);
+                gp.add(deleteButton, 6, i);
             }
             searchResult.close();
 
@@ -389,31 +345,29 @@ public class GradeItems extends Tables {
     }
 
     /**
-     * Find the button id.
-     *
-     * @param event an ActionEvent.
-     * @return the button id as a String.
+     * Create an edit dashboard.
+     * @return the dashboard as a GridPane.
      */
-    public String findButtonId(ActionEvent event) {
-        Button buttonObj = (Button) event.getSource();
-        return buttonObj.getId();
-    }
-
-    public GridPane createEditDashBoard(String courseid) {
+    @Override
+    public GridPane createEditDashBoard(String itemid) {
         // create the dashboard based on the template
-        GridPane gp = createSingleCourseInfoDashBoard();
+        GridPane gp = createDashBoardTemplate();
 
-        // create things unique to the add dashboard.
+        // create the dashboard title
         Label functionTitle = new Label("You can change any of the current data below:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        setTextBoxToValueOfResultSet(Gradeitemid);
+        // set the text values of the text fields to the search result
+        String tableName = "GradeItems";
+        String columnName = "itemid";
+        ResultSet result = search(tableName, columnName, itemid, myConn);
+        setTextBoxToValueOfResultSet(result);
 
-        Button editBtn = new Button("Edit Gradeitem");
+        Button editBtn = new Button("Edit Item");
 
-        // add the current courseid into the update button
-        editBtn.setId(Gradeitemid);
+        // add the current itemid into the edit button
+        editBtn.setId(itemid);
         editBtn.setOnAction(this::checkInputForEditingData);
         gp.add(editBtn, 0, 6);
 
@@ -423,20 +377,19 @@ public class GradeItems extends Tables {
         return gp;
     }
 
-    // set textbox to values of the 'select' statement based on
-    // the courseid
-    private void setTextBoxToValueOfResultSet(String Gradeitemid) {
+    // set textbox to values of the result set from searching the table
+    private void setTextBoxToValueOfResultSet(ResultSet result) {
         try {
-            // find the result associated with the courseid passed to this method.
-            // courseid is guaranteed to work
-            ResultSet result = search("Gradeitemid", Gradeitemid);
             result.next();
 
             // set textboxes to current value of the specified course
-            GradeitemIdTxtFld.setText(result.getString("Gradeitemid"));
-            GradeitemNameTxtFld.setText(result.getString("Gradeitem_name"));
-            GradeitemDescriptionTxtFld.setText(result.getString("description"));
-            GradeitemProfTxtFld.setText(result.getString("profid"));
+            itemIdTxtFld.setText(result.getString("itemid"));
+            courseIdTxtFld.setText(result.getString("courseid"));
+            itemNameTxtFld.setText(result.getString("name"));
+            totalMarkTxtFld.setText(result.getString("total"));
+            weightTxtFld.setText(result.getString("weight"));
+
+            result.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -444,106 +397,102 @@ public class GradeItems extends Tables {
 
     }
 
+    // check that the input are correct before updating the table
     private void checkInputForEditingData(ActionEvent event) {
-        String errorMessage = "";
-        int courseProfId = 0;
-
-        String newCourseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(newCourseId)) {
-            errorMessage += markCourseIdTxtFldWrong();
-        }
-
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
-            errorMessage += markCourseNameTxtFldWrong();
-        }
-
-        try {
-            courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
-            errorMessage += markCourseDescriptionTxtFld();
-        }
+        String errorMessage = testAllTextFld();
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            String currentCourseId = findButtonId(event);
-            edit(currentCourseId, newCourseId, courseName, courseDescription, courseProfId);
+            String currentItemId = findButtonId(event);
+            String newItemId = itemIdTxtFld.getText().trim();
+            String courseId = courseIdTxtFld.getText().trim();
+            String itemName = itemNameTxtFld.getText().trim();
+            String totalMark = totalMarkTxtFld.getText().trim();
+            String weight = weightTxtFld.getText().trim();
+
+            String query = prepareEditQuery(currentItemId, newItemId,
+                                            courseId, itemName, totalMark,
+                                            weight);
+            String message = "Item Updated";
+            runQueryWithNoReturnValue(query, myConn, message);
         }
-    }
-
-    @Override
-    public void edit(String currentCourseID, String newCourseID, String courseName, String courseDescription,
-                     int courseProfId) {
-        String sql = "UPDATE Courses SET courseid = '" + newCourseID + "', course_name = '"
-                + courseName + "', description = '" + courseDescription + "', profid = "
-                + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-            displaySuccessMessage("Course Updated!");
-
-            // reset the result pane
-            resultPane = new GridPane();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void putForDelete(ActionEvent event){
-        delete(findButtonId(event));
-        displaySuccessMessage("You successfully deleted the course!");
-        System.out.println(findButtonId(event));
-    }
-
-    public void delete(String GradeitemID) {
-        String sql = "DELETE FROM Gradeitems WHERE Gradeitemid = '" + GradeitemID + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            newCommand.executeUpdate(sql);
-            newCommand.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * Check if course name is valid.
-     *
-     * @param name a String
-     * @return true if name is valid, else false.
-     */
-    public boolean checkCourseName(String name) {
-        final int maxLength = 40;
-        return name != null && !(name.strip().equals("")) && name.length() <= maxLength;
     }
 
     /**
-     * Check if course description is valid.
-     *
-     * @param description a String
-     * @return true if description is valid, else false.
+     * Prepare an UPDATE query for GradeItems table.
+     * @param currentItemID a String.
+     * @param newItemID a String.
+     * @param courseId a String.
+     * @param itemName a String.
+     * @param totalMark a String.
+     * @param weight a String.
      */
-    public boolean checkDescription(String description) {
-        final int maxLength = 150;
-        return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
+    public String prepareEditQuery(String currentItemID, String newItemID, String courseId,
+                                 String itemName, String totalMark, String weight) {
+        return "UPDATE GradeItems SET itemid = '" + newItemID + "', courseid = '"
+                + courseId + "', name = \"" + itemName + "\", total = '"
+                + totalMark + "', weight = '" + weight + "' WHERE itemid = '"
+                + currentItemID + "';";
+    }
+
+    /**
+     * Handle a delete event.
+     * @param event an ActionEvent.
+     */
+    public void handleDeleteEvent(ActionEvent event){
+        if (getUserConfirmation()) {
+            String itemid = findButtonId(event);
+            String query = prepareDeleteQuery(itemid);
+            String message = "Item Deleted!";
+            runQueryWithNoReturnValue(query, myConn, message);
+
+            // clear the resultPane and display notification
+            resultPane.getChildren().setAll(new GridPane());
+            displayNotificationMessage("");
+        }
+    }
+
+    /**
+     * Prepare a DELETE query based on the uniquePrimaryKeyValue.
+     * @param uniquePrimaryKeyValue a String.
+     * @return a String query.
+     */
+    public String prepareDeleteQuery(String uniquePrimaryKeyValue) {
+        return "DELETE FROM GradeItems WHERE itemid = '" + uniquePrimaryKeyValue + "';";
+    }
+
+    /**
+     * Check if item name is valid.
+     * @param itemName a String
+     * @return true if valid, false if else
+     */
+    public boolean checkItemName(String itemName){
+        if (itemName.length() > 40) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if total mark or weight is valid.
+     * @param markOrWeight a String
+     * @return true if valid, false if else
+     */
+    public boolean checkTotalMarkOrWeight(String markOrWeight) {
+
+        try {
+            int result = Integer.parseInt(markOrWeight);
+            if (result > 100 || result < 0) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 

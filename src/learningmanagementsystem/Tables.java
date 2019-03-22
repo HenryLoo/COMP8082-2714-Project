@@ -1,15 +1,17 @@
 package learningmanagementsystem;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 import java.sql.ResultSet;
@@ -38,31 +40,71 @@ public abstract class Tables {
 
     abstract GridPane createAddDashBoard();
 
-    abstract void add(String courseID, String name, String description, int profID);
+    /**
+     * Run a query that expects no return value (INSERT INTO, UPDATE, and DELETE).
+     * @param query a String.
+     * @param myConn a Connection.
+     * @param successMessage a String
+     */
+    protected void runQueryWithNoReturnValue(String query, Connection myConn, String successMessage) {
+        try {
+            Statement newCommand = myConn.createStatement();
+            newCommand.executeUpdate(query);
+            newCommand.close();
+            displaySuccessMessage(successMessage);
 
-    abstract void edit(String currentCourseid, String newCourseid, String courseName,
-                       String courseDescription, int courseProfId);
-
-    abstract void delete(String courseID);
-
-    abstract GridPane createSearchDashBoard();
-
-    abstract ResultSet search(String colName, String value); // might change to display
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
-     * Display an error message to user.
-     *
-     * @param errorMessage a String.
+     * Child class must create a search dashboard.
+     * @return the dashboard as a GridPane.
      */
-    public void displayErrorMessage(String errorMessage) {
-        userMessage.setTextFill(Color.RED);
-        userMessage.setText(errorMessage);
+    abstract GridPane createSearchDashBoard();
+
+    /**
+     * Child class must create a search result area.
+     * @return the result area as a GridPane.
+     */
+    abstract GridPane createSearchResultArea(ResultSet result);
+
+    /**
+     * Display data in a table with the specified location.
+     *
+     * @param tableName a String.
+     * @param colName a String.
+     * @parem value a String.
+     * @param myConn a Connection.
+     */
+    protected ResultSet search(String tableName, String colName,
+                               String value, Connection myConn) {
+        String sql = "SELECT * FROM " + tableName + " WHERE " + colName + " = '" + value + "';";
+        try {
+            Statement newCommand = myConn.createStatement();
+            ResultSet result = newCommand.executeQuery(sql);
+
+            // will closed when ResultSet is closed
+            newCommand.closeOnCompletion();
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    /**
+     * Child class must create an edit dashboard.
+     * @return the dashboard as a GridPane.
+     */
+    abstract GridPane createEditDashBoard(String primaryKeyValue);
 
     /**
      * Confirmation message to user.
      */
-    public boolean confirmationMessage() {
+    public boolean getUserConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Box");
         alert.setHeaderText("Are you sure you want to delete?");
@@ -75,6 +117,27 @@ public abstract class Tables {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Find the button id.
+     *
+     * @param event an ActionEvent.
+     * @return the button id as a String.
+     */
+    public String findButtonId(ActionEvent event) {
+        Button buttonObj = (Button) event.getSource();
+        return buttonObj.getId();
+    }
+
+    /**
+     * Display an error message to user.
+     *
+     * @param errorMessage a String.
+     */
+    public void displayErrorMessage(String errorMessage) {
+        userMessage.setTextFill(Color.RED);
+        userMessage.setText(errorMessage);
     }
 
     /**
@@ -96,16 +159,44 @@ public abstract class Tables {
         userMessage.setTextFill(Color.BLACK);
         userMessage.setText(notificationMessage);
     }
-  
+
+    /**
+     * Display the search query result.
+     *
+     * @param result a ResultSet.
+     */
+    public void displaySearchQueryResult(ResultSet result) {
+        try {
+            // if there are no result
+            if (!result.isBeforeFirst()) {
+                displayNotificationMessage("No Result Found.");
+                resultPane.getChildren().setAll(new GridPane());
+                return;
+            }
+            resultPane.getChildren().setAll(createSearchResultArea(result));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Check if prof id is valid.
      *
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkUserID(int profID) {
-        int length = Integer.toString(profID).length();
-        return length == 2;
+    public boolean checkProfID(String profID) {
+        if (profID.length() != 2) {
+            return false;
+        }
+
+        try {
+            Integer.parseInt(profID);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     /**
@@ -142,56 +233,23 @@ public abstract class Tables {
         return true;
     }
 
-
-    /**
-     * Checks if grade weight is valid.
-     *
-     * @param weight an int
-     * @return true if valid, false if else
-     */
-    public boolean gradeCheckWeight(int weight) {
-        if (weight > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check if total mark is valid.
-     * @param totalMark an int
-     * @return true if valid, false if else
-     */
-    public boolean gradesCheckTotalMark(int totalMark) {
-        if (totalMark > 100 || totalMark < 0) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Check if item id is valid.
-     * @param itemID an int
+     * @param itemID a String
      * @return true if valid, false if else
      */
-    public boolean gradesCheckItemID(int itemID) {
-        int lengthID = String.valueOf(itemID).length();
-        if (lengthID > 6) {
+    public boolean checkItemID(String itemID) {
+        if (itemID.length() != 6) {
             return false;
         }
-        return true;
-    }
 
-    /**
-     * Check if item name is valid.
-     * @param itemName a String
-     * @return true if valid, false if else
-     */
-    public boolean gradesCheckItemName(String itemName){
-        int length = String.valueOf(itemName).length();
-        if(length > 40) {
+        try {
+            Integer.parseInt(itemID);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-        return true;
     }
 
 
