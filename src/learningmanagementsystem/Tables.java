@@ -167,9 +167,10 @@ public abstract class Tables {
      */
     public void displaySearchQueryResult(ResultSet result) {
         try {
-
+            // if there are no result
             if (!result.isBeforeFirst()) {
                 displayNotificationMessage("No Result Found.");
+                resultPane.getChildren().setAll(new GridPane());
                 return;
             }
             resultPane.getChildren().setAll(createSearchResultArea(result));

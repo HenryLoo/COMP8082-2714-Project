@@ -261,24 +261,9 @@ public class Courses extends Tables {
             String tableName = "Courses";
             String columnName = "courseid";
             ResultSet result = search(tableName, columnName, courseId, myConn);
-            displaySearchQueryResult(result);
-        }
-    }
 
-    /**
-     * Display the search query result.
-     *
-     * @param result a ResultSet.
-     */
-    public void displaySearchQueryResult(ResultSet result) {
-        try {
-            if (!result.isBeforeFirst()) {
-                displayNotificationMessage("No Result Found.");
-                return;
-            }
-            resultPane.getChildren().setAll(createSearchResultArea(result));
-        } catch (SQLException e) {
-            e.printStackTrace();
+            // call a method in the Tables class
+            displaySearchQueryResult(result);
         }
     }
 

@@ -247,6 +247,8 @@ public class GradeItems extends Tables {
             String tableName = "GradeItems";
             String columnName = "itemid";
             ResultSet result = search(tableName, columnName, itemid, myConn);
+
+            // call a method in the Tables class
             displaySearchQueryResult(result);
         }
     }
@@ -322,10 +324,10 @@ public class GradeItems extends Tables {
 
                 // put the itemid of the current row into this button's id
                 deleteButton.setId(searchResult.getString("itemid"));
-                deleteButton.setOnAction(this::putForDelete);
+                deleteButton.setOnAction(this::handleDeleteEvent);
 
-                gp.add(editButton, 4, i);
-                gp.add(deleteButton, 5, i);
+                gp.add(editButton, 5, i);
+                gp.add(deleteButton, 6, i);
             }
             searchResult.close();
 
@@ -430,18 +432,26 @@ public class GradeItems extends Tables {
      */
     public String prepareEditQuery(String currentItemID, String newItemID, String courseId,
                                  String itemName, String totalMark, String weight) {
-        return "UPDATE GradeItems SET itemid = '" + newItemID + "' courseid = '"
+        return "UPDATE GradeItems SET itemid = '" + newItemID + "', courseid = '"
                 + courseId + "', name = \"" + itemName + "\", total = '"
-                + totalMark + "', weight = " + weight + " WHERE itemid = '"
+                + totalMark + "', weight = '" + weight + "' WHERE itemid = '"
                 + currentItemID + "';";
     }
 
-    public void putForDelete(ActionEvent event){
+    /**
+     * Handle a delete event.
+     * @param event an ActionEvent.
+     */
+    public void handleDeleteEvent(ActionEvent event){
         if (getUserConfirmation()) {
             String itemid = findButtonId(event);
             String query = prepareDeleteQuery(itemid);
             String message = "Item Deleted!";
             runQueryWithNoReturnValue(query, myConn, message);
+
+            // clear the resultPane and display notification
+            resultPane.getChildren().setAll(new GridPane());
+            displayNotificationMessage("");
         }
     }
 
