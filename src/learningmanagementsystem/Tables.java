@@ -56,7 +56,17 @@ public abstract class Tables {
         }
     }
 
+    /**
+     * Child class must create a search dashboard.
+     * @return the dashboard as a GridPane.
+     */
     abstract GridPane createSearchDashBoard();
+
+    /**
+     * Child class must create a search result area.
+     * @return the result area as a GridPane.
+     */
+    abstract GridPane createSearchResultArea(ResultSet result);
 
     /**
      * Display data in a table with the specified location.
@@ -127,16 +137,43 @@ public abstract class Tables {
         userMessage.setTextFill(Color.BLACK);
         userMessage.setText(notificationMessage);
     }
-  
+
+    /**
+     * Display the search query result.
+     *
+     * @param result a ResultSet.
+     */
+    public void displaySearchQueryResult(ResultSet result) {
+        try {
+
+            if (!result.isBeforeFirst()) {
+                displayNotificationMessage("No Result Found.");
+                return;
+            }
+            resultPane.getChildren().setAll(createSearchResultArea(result));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Check if prof id is valid.
      *
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkUserID(int profID) {
-        int length = Integer.toString(profID).length();
-        return length == 2;
+    public boolean checkProfID(String profID) {
+        if (profID.length() != 2) {
+            return false;
+        }
+
+        try {
+            Integer.parseInt(profID);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     /**
@@ -175,15 +212,20 @@ public abstract class Tables {
 
     /**
      * Check if item id is valid.
-     * @param itemID an int
+     * @param itemID a String
      * @return true if valid, false if else
      */
-    public boolean checkItemID(int itemID) {
-        int lengthID = String.valueOf(itemID).length();
-        if (lengthID > 6) {
+    public boolean checkItemID(String itemID) {
+        if (itemID.length() > 6) {
             return false;
         }
-        return true;
+
+        try {
+            Integer.parseInt(itemID);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

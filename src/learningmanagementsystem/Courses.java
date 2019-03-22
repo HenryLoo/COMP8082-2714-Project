@@ -12,7 +12,6 @@ import javafx.scene.text.Font;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Courses extends Tables {
 
@@ -85,7 +84,7 @@ public class Courses extends Tables {
     }
 
     /**
-     * Create a single course info dashboard generic for add and update dashboard.
+     * Create a single course info dashboard generic for add and edit dashboard.
      * @return a grid pane containing all the needed elements.
      */
     public GridPane createSingleCourseInfoDashBoard() {
@@ -146,28 +145,19 @@ public class Courses extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        String courseId = courseIdTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
+        if (!checkCourseID(courseIdTxtFld.getText().trim())) {
             errorMessage += markCourseIdTxtFldWrong();
         }
 
-        String courseName = courseNameTxtFld.getText().trim();
-        if (!checkCourseName(courseName)) {
+        if (!checkCourseName(courseNameTxtFld.getText().trim())) {
             errorMessage += markCourseNameTxtFldWrong();
         }
 
-        try {
-            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
+        if (!checkProfID(courseProfTxtFld.getText().trim())) {
             errorMessage += markCourseProfIdTxtFldWrong();
         }
 
-        String courseDescription = courseDescriptionTxtFld.getText().trim();
-        if (!checkDescription(courseDescription)) {
+        if (!checkDescription(courseDescriptionTxtFld.getText().trim())) {
             errorMessage += markCourseDescriptionTxtFld();
         }
 
@@ -251,9 +241,6 @@ public class Courses extends Tables {
     // try to add data
     // if there are errors, let users know
     private void checkInputForSearchData(ActionEvent event) {
-        // turn off the error indicator
-        inputErrorIndicator = false;
-
         // create an error message for user
         String errorMessage = "";
 
@@ -433,6 +420,7 @@ public class Courses extends Tables {
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {

@@ -77,7 +77,7 @@ public class GradeItems extends Tables {
     }
 
     /**
-     * Create a single course info dashboard generic for add and update dashboard.
+     * Create a single course info dashboard generic for add and edit dashboard.
      * @return a grid pane containing all the needed elements.
      */
     public GridPane createSingleCourseInfoDashBoard() {
@@ -110,8 +110,7 @@ public class GradeItems extends Tables {
         return gp;
     }
 
-    // try to add data
-    // if there are errors, let users know
+    // check input before adding data
     private void checkInputForAddingData(ActionEvent event) {
         // create an error message for user
         String errorMessage = testAllTextFld();
@@ -144,21 +143,11 @@ public class GradeItems extends Tables {
             errorMessage += markItemNameTxtFldWrong();
         }
 
-        try {
-            if (!checkTotalMarkOrWeight(Integer.parseInt(totalMarkTxtFld.getText().trim()))) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
+        if (!checkTotalMarkOrWeight(totalMarkTxtFld.getText().trim())) {
             errorMessage += markTotalMarkTxtFldWrong();
         }
 
-        try {
-            if (!checkTotalMarkOrWeight(Integer.parseInt(weightTxtFld.getText().trim()))) {
-                // do this so the catch block handles everything
-                throw new Exception();
-            }
-        } catch (Exception e) {
+        if (!checkTotalMarkOrWeight(weightTxtFld.getText().trim())) {
             errorMessage += markWeightTxtFldWrong();
         }
 
@@ -220,7 +209,7 @@ public class GradeItems extends Tables {
      * @return a GridPane with all the text fields.
      */
     public GridPane createSearchDashBoard() {
-        Label functionTitle = new Label("Search for Gradeitem By GradeitemId:");
+        Label functionTitle = new Label("Search for grade item By itemid:");
         functionTitle.setFont(Font.font(22));
 
         // reset the textfields and userMessage since it's shared resources.
@@ -230,7 +219,7 @@ public class GradeItems extends Tables {
         gp.add(functionTitle, 0, 0);
         gp.add(courseIdTxtFld, 1, 0);
 
-        Button searchBtn = new Button("Search Gradeitems");
+        Button searchBtn = new Button("Search Items");
         searchBtn.setOnAction(this::checkInputForSearchData);
         gp.add(searchBtn, 2, 0);
 
@@ -243,93 +232,51 @@ public class GradeItems extends Tables {
         return gp;
     }
 
-    // try to add data
-    // if there are errors, let users know
+    // check inputs before searching for data
     private void checkInputForSearchData(ActionEvent event) {
-        // turn off the error indicator
-        inputErrorIndicator = false;
-
         // create an error message for user
         String errorMessage = "";
 
-        // consider refactoring
-        String gradeItemId = itemIdTxtFld.getText().trim();
-        if (!checkItemID(gradeItemId)) {
-            errorMessage += "Your Gradeitem id must be six characters long. \n"
-                    + "It must start with three letters and end with three digits. \n";
-            inputErrorIndicator = true;
-            GradeitemIdTxtFld.setStyle("-fx-border-color: red");
+        String itemid = itemIdTxtFld.getText().trim();
+        if (!checkItemID(itemid)) {
+            errorMessage += markItemIdTxtFldWrong();
         }
 
         if (inputErrorIndicator) {
             displayErrorMessage(errorMessage);
+
+            // turn error indicator off
+            inputErrorIndicator = false;
         } else {
-            ResultSet result = search("Gradeitemid", GradeitemId);
+            String columnName = "itemid";
+            ResultSet result = search(columnName, itemid, myConn);
             displaySearchQueryResult(result);
-        }
-    }
-
-    /**
-     * Display data in a table with the specified location.
-     *
-     * @param colName the column name as a String
-     * @parem value the value as a String
-     */
-    @Override
-    public ResultSet search(String colName, String value) {
-        String sql = "SELECT * FROM Gradeitems WHERE " + colName + " = '" + value + "';";
-
-        try {
-            Statement newCommand = myConn.createStatement();
-            ResultSet result = newCommand.executeQuery(sql);
-
-            // will closed when ResultSet is closed
-            newCommand.closeOnCompletion();
-            return result;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Display the search query result.
-     *
-     * @param result a ResultSet.
-     */
-    public void displaySearchQueryResult(ResultSet result) {
-        try {
-
-            if (!result.isBeforeFirst()) {
-                displayNotificationMessage("No Result Found.");
-                return;
-            }
-            resultPane.getChildren().setAll(createSearchResultArea(result));
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
     /**
      * Create the search result area
      */
+    @Override
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
-        Label GradeitemIdLbl = new Label("GradeitemID");
-        Label GradeitemNameLbl = new Label("Gradeitem Name");
-        Label GradeitemDescriptionLbl = new Label("Description");
-        Label GradeitemProfLbl = new Label("Professor ID");
+        Label itemIdLbl = new Label("ItemID");
+        Label courseIdLbl = new Label("Courseid");
+        Label itemNameLbl = new Label("Item Name");
+        Label totalMarkLbl = new Label("Total Mark");
+        Label weightLbl = new Label("Weight");
 
+        itemIdLbl.setFont(Font.font(18));
         courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
+        itemNameLbl.setFont(Font.font(18));
+        totalMarkLbl.setFont(Font.font(18));
+        weightLbl.setFont(Font.font(18));
 
-        gp.add(GradeitemIdLbl, 0, 0);
-        gp.add(GradeitemNameLbl, 1, 0);
-        gp.add(GradeitemDescriptionLbl, 2, 0);
-        gp.add(GradeitemProfLbl, 3, 0);
+        gp.add(itemIdLbl, 0, 0);
+        gp.add(courseIdLbl, 1, 0);
+        gp.add(itemNameLbl, 2, 0);
+        gp.add(totalMarkLbl, 3, 0);
+        gp.add(weightLbl, 4, 0);
 
         appendResultToSearchResultArea(gp, searchResult);
 
@@ -465,7 +412,7 @@ public class GradeItems extends Tables {
 
         try {
             courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            if (!checkUserID(courseProfId)) {
+            if (!checkProfID(courseProfId)) {
                 // do this so the catch block handles everything
                 throw new Exception();
             }
@@ -543,14 +490,22 @@ public class GradeItems extends Tables {
 
     /**
      * Check if total mark or weight is valid.
-     * @param markOrWeight an int
+     * @param markOrWeight a String
      * @return true if valid, false if else
      */
-    public boolean checkTotalMarkOrWeight(int markOrWeight) {
-        if (markOrWeight > 100 || markOrWeight < 0) {
+    public boolean checkTotalMarkOrWeight(String markOrWeight) {
+
+        try {
+            int result = Integer.parseInt(markOrWeight);
+
+            if (result > 100 || result < 0) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
             return false;
         }
-        return true;
     }
 }
 
