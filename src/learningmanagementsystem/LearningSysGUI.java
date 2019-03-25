@@ -27,7 +27,7 @@ public class LearningSysGUI extends GridPane {
 
     public LearningSysGUI(Connection newDatabaseConnection) {
         databaseConnection = newDatabaseConnection;
-        currentPage = new LogInPage();
+        currentPage = new SignInPage();
 
         add(currentPage, 0, 0);
 
@@ -35,8 +35,8 @@ public class LearningSysGUI extends GridPane {
         setVgap(VGAP);
     }
 
-    private class LogInPage extends GridPane {
-        public LogInPage() {
+    private class SignInPage extends GridPane {
+        public SignInPage() {
             Text title = new Text("Log In");
             Text usernameTxt = new Text("Username:");
             Text passwordTxt = new Text("Password:");
@@ -49,15 +49,25 @@ public class LearningSysGUI extends GridPane {
             TextField passwordTxtFld = new TextField();
 
             Button signInBtn = new Button("Sign In");
+            signInBtn.setOnAction(this::signIn);
 
-            add(title, 0, 0 , 2, 2);
-            add(usernameTxt, 0, 2, 2, 1);
-            add(passwordTxt, 0, 3, 2, 1);
+            add(title, 0, 0 , 2, 1);
+            add(usernameTxt, 0, 2);
+            add(passwordTxt, 0, 3);
 
             add(usernameTxtFld, 1, 2);
             add(passwordTxtFld, 1, 3);
 
-            add(signInBtn, 0, 0);
+            add(signInBtn, 0, 4);
+            setHgap(HGAP);
+            setVgap(VGAP);
+
+        }
+
+        // check if user credential are correct and change page
+        private void signIn(ActionEvent event) {
+            // for testing purpose, only changing page for now.
+            currentPage.getChildren().setAll(new HomePage());
         }
     }
 
@@ -74,10 +84,14 @@ public class LearningSysGUI extends GridPane {
 
         public HomePage() {
             functionOptions = new HBox();
+            currentPane = new GridPane();
 
             add(createTableNameBar(), 0, 0);
             add(functionOptions, 0, 1);
             add(currentPane, 0, 2);
+
+            setHgap(HGAP);
+            setVgap(VGAP);
         }
 
         /**
