@@ -3,6 +3,7 @@ package learningmanagementsystem;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -14,52 +15,74 @@ import java.sql.*;
 
 public class LearningSysGUI extends GridPane {
 
-    // The bar that displays table functions.
-    private HBox functionOptions;
-
-    // The current pane being displayed.
-    private Pane currentPane;
-
-    // The current table that user is looking at.
-    private Tables currentTable;
+    public static final int HGAP = 5;
+    public static final int VGAP = 10;
 
     // The connection that connects the GUI to the database.
     private Connection databaseConnection;
 
+    // The page we are displaying to the user
+    private GridPane currentPage;
+
 
     public LearningSysGUI(Connection newDatabaseConnection) {
         databaseConnection = newDatabaseConnection;
-        OptionBar topBar = new OptionBar();
-        currentPane = greetingPane();
-        functionOptions = new HBox();
+        currentPage = new LogInPage();
 
-        add(topBar.createTableNameBar(), 0, 0);
-        add(functionOptions, 0, 1);
-        add(currentPane, 0, 2);
+        add(currentPage, 0, 0);
 
-        final int Hgap = 5;
-        final int Vgap = 20;
-        setHgap(Hgap);
-        setVgap(Vgap);
+        setHgap(HGAP);
+        setVgap(VGAP);
     }
 
-    private VBox greetingPane() {
-        Text welcome = new Text("Welcome to the Learning System!");
-        Text subtext = new Text("Choose a table above to get started.");
+    private class LogInPage extends GridPane {
+        public LogInPage() {
+            Text title = new Text("Log In");
+            Text usernameTxt = new Text("Username:");
+            Text passwordTxt = new Text("Password:");
 
-        welcome.setFont(Font.font(40));
-        subtext.setFont(Font.font(30));
+            title.setFont(Font.font(30));
+            usernameTxt.setFont(Font.font(22));
+            passwordTxt.setFont(Font.font(22));
 
-        VBox vbox = new VBox(welcome, subtext);
-        vbox.setAlignment(Pos.CENTER);
-        return vbox;
+            TextField usernameTxtFld = new TextField();
+            TextField passwordTxtFld = new TextField();
+
+            Button signInBtn = new Button("Sign In");
+
+            add(title, 0, 0 , 2, 2);
+            add(usernameTxt, 0, 2, 2, 1);
+            add(passwordTxt, 0, 3, 2, 1);
+
+            add(usernameTxtFld, 1, 2);
+            add(passwordTxtFld, 1, 3);
+
+            add(signInBtn, 0, 0);
+        }
     }
 
-    private class OptionBar {
+    private class HomePage extends GridPane{
+
+        // The bar that displays table functions.
+        private HBox functionOptions;
+
+        // The current pane being displayed.
+        private Pane currentPane;
+
+        // The current table that user is looking at.
+        private Tables currentTable;
+
+        public HomePage() {
+            functionOptions = new HBox();
+
+            add(createTableNameBar(), 0, 0);
+            add(functionOptions, 0, 1);
+            add(currentPane, 0, 2);
+        }
 
         /**
          * Create the buttons at the top of the program
-          */
+         */
         public HBox createTableNameBar() {
             // create each button individually
             Button courseTable = createCoursesButton();
@@ -118,8 +141,21 @@ public class LearningSysGUI extends GridPane {
             functionOptions.getChildren().setAll(hbox);
         }
 
+        private VBox greetingPane() {
+            Text welcome = new Text("Welcome to the Learning System!");
+            Text subtext = new Text("Choose a table above to get started.");
+
+            welcome.setFont(Font.font(40));
+            subtext.setFont(Font.font(30));
+
+            VBox vbox = new VBox(welcome, subtext);
+            vbox.setAlignment(Pos.CENTER);
+            return vbox;
+        }
+
         /**
          * Find the button text based on the event created by clicking on that button.
+         *
          * @param event an ActionEvent.
          * @return the name of the button as a String.
          */
@@ -131,6 +167,7 @@ public class LearningSysGUI extends GridPane {
 
         /**
          * Set the current table to a new instance of that table class.
+         *
          * @param tableName a String
          */
         public void setCurrentTable(String tableName) {
@@ -148,6 +185,7 @@ public class LearningSysGUI extends GridPane {
 
         /**
          * Open the add dashboard.
+         *
          * @param event an Action event.
          */
         public void openAddDashBoard(ActionEvent event) {
@@ -163,8 +201,5 @@ public class LearningSysGUI extends GridPane {
 
 
     }
-
-
-
 }
 
