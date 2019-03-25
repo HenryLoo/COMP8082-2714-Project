@@ -10,11 +10,13 @@
 USE munimoe_LMS;
 
 CREATE TABLE Users (
-	userid INT(6) PRIMARY KEY NOT NULL,
-	username VARCHAR(40) NOT NULL,
+	userid INT(6) AUTO_INCREMENT NOT NULL,
+	firstname VARCHAR(20) NOT NULL,
+	lastname VARCHAR(20) NOT NULL,
 	password VARCHAR(40) NOT NULL,
 	role ENUM('admin', 'professor', 'student') NOT NULL,
-	salt VARCHAR(8) UNIQUE NOT NULL
+	salt VARCHAR(8) UNIQUE NOT NULL,
+	PRIMARY KEY (userid)
 ) ENGINE = INNODB;
 	
 CREATE TABLE Courses (
@@ -27,32 +29,19 @@ CREATE TABLE Courses (
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 ) ENGINE = INNODB;
-	
-CREATE TABLE Blocks (
-	blockid INT(4) AUTO_INCREMENT NOT NULL,
-	courseid VARCHAR(6),
-	time VARCHAR(9),
-	day ENUM ('mon', 'tue', 'wed', 'thu', 'fri'),
-	room VARCHAR(4) NOT NULL,
-	FOREIGN KEY fk_courses_block(courseid)
-	REFERENCES Courses(courseid)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE,
-	PRIMARY KEY (blockid)
-) ENGINE = INNODB;
 
-CREATE TABLE Classes (
-	blockid INT(4),
+CREATE TABLE Enrolment (
+	courseid VARCHAR(6),
 	stuid INT(6),
 	FOREIGN KEY fk_student_classes(stuid)
 	REFERENCES Users(userid)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
-	FOREIGN KEY fk_blockid_classes(blockid)
-	REFERENCES Blocks(blockid)
+	FOREIGN KEY fk_courseid_classes(courseid)
+	REFERENCES Courses(courseid)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
-	PRIMARY KEY (blockid, stuid)
+	PRIMARY KEY (courseid, stuid)
 ) ENGINE = INNODB;
 
 CREATE TABLE GradeItems (
@@ -82,6 +71,5 @@ CREATE TABLE StuGrades (
 	ON DELETE CASCADE,
 	PRIMARY KEY (stuid, itemid)
 ) ENGINE = INNODB;
-
 
 SHOW TABLES;
