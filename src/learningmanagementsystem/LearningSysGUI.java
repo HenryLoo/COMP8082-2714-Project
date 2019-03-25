@@ -50,6 +50,7 @@ public class LearningSysGUI extends GridPane {
 
             Button signInBtn = new Button("Sign In");
             signInBtn.setOnAction(this::signIn);
+            signInBtn.setTooltip(new Tooltip("Click here to go to dashboard."));
 
             add(title, 0, 0 , 2, 1);
             add(usernameTxt, 0, 2);
@@ -82,9 +83,13 @@ public class LearningSysGUI extends GridPane {
         // The current table that user is looking at.
         private Tables currentTable;
 
-        public HomePage() {
+        // The user role;
+        private String userRole;
+
+        public HomePage(String userRole) {
             functionOptions = new HBox();
             currentPane = new GridPane();
+            this.userRole = userRole;
 
             add(createTableNameBar(), 0, 0);
             add(functionOptions, 0, 1);
