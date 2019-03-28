@@ -214,12 +214,12 @@ public abstract class Tables {
     }
 
     /**
-     * Check if prof id is valid.
+     * Check if prof or Student id or item id is valid.
      *
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkUserID(String profID) {
+    public boolean checkUserItemID(String profID) {
         if (profID.length() > 6) {
             return false;
         }
@@ -230,8 +230,31 @@ public abstract class Tables {
         } catch (Exception e) {
             return false;
         }
-
     }
+
+    /**
+     * Check if grades are valid.
+     *
+     * @param grade a String
+     * @return true if valid, else false.
+     */
+    public boolean checkGrade(String grade) {
+        try {
+          Double d = Double.parseDouble(grade);
+          if (d < 100 && d > 0){
+              Double.parseDouble(grade);
+              return true;
+          }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+
+
+
+
 
     /**
      * Check if course id is valid.
