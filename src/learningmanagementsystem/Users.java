@@ -13,21 +13,20 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Courses extends Tables {
+public class Users extends Tables {
 
     // the connection to the database
     private Connection myConn;
 
     // the text fields for each data column in the table.
-    private TextField courseIdTxtFld;
-    private TextField courseNameTxtFld;
-    private TextField courseProfTxtFld;
-    private TextField courseDescriptionTxtFld;
+    private TextField firstNameTxtFld;
+    private TextField lastNameTxtFld;
+    private TextField passwordTxtFld;
 
     /**
-     * Create a Courses instance and run the dashboard.
+     * Create a Users instance and run the dashboard.
      */
-    public Courses(Connection newMyConn, Pane newCurrentPane) {
+    public Users(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
         userMessage.setFont(Font.font(13));
@@ -40,10 +39,9 @@ public class Courses extends Tables {
      * Initiate the textfields and userMessage to new ones.
      */
     public void initTextfieldsAndUserMessage() {
-        courseIdTxtFld = new TextField();
-        courseNameTxtFld = new TextField();
-        courseProfTxtFld = new TextField();
-        courseDescriptionTxtFld = new TextField();
+        firstNameTxtFld = new TextField();
+        lastNameTxtFld = new TextField();
+        passwordTxtFld = new TextField();
 
         userMessage = new Label();
         userMessage.setFont(Font.font(15));
@@ -81,29 +79,25 @@ public class Courses extends Tables {
     public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
-        Label courseIdLbl = new Label("CourseID: ");
-        Label courseNameLbl = new Label("Course Name: ");
-        Label courseProfLbl = new Label("Course Professor ID: ");
-        Label courseDescriptionLbl = new Label("Course Description: ");
+        Label firstNameLbl = new Label("User First Name: ");
+        Label lastNameLbl = new Label("User Last Name: ");
+        Label passwordLbl = new Label("Password: ");
 
-        courseIdLbl.setFont(Font.font(18));
-        courseNameLbl.setFont(Font.font(18));
-        courseProfLbl.setFont(Font.font(18));
-        courseDescriptionLbl.setFont(Font.font(18));
+        firstNameLbl.setFont(Font.font(18));
+        lastNameLbl.setFont(Font.font(18));
+        passwordLbl.setFont(Font.font(18));
 
-        gp.add(courseIdLbl, 0, 1);
-        gp.add(courseNameLbl, 0, 2);
-        gp.add(courseProfLbl, 0, 3);
-        gp.add(courseDescriptionLbl, 0, 4);
+        gp.add(firstNameLbl, 0, 1);
+        gp.add(lastNameLbl, 0, 2);
+        gp.add(passwordLbl, 0, 3);
 
         // since the text fields are shared, we have to cleared them first
         initTextfieldsAndUserMessage();
 
-        gp.add(courseIdTxtFld, 1, 1);
-        gp.add(courseNameTxtFld, 1, 2);
-        gp.add(courseProfTxtFld, 1, 3);
-        gp.add(courseDescriptionTxtFld, 1, 4);
-        gp.add(userMessage, 0, 5, 2, 1);
+        gp.add(firstNameTxtFld, 1, 1);
+        gp.add(lastNameTxtFld, 1, 2);
+        gp.add(passwordTxtFld, 1, 3);
+        gp.add(userMessage, 0, 4, 2, 1);
 
         return gp;
 
@@ -120,13 +114,12 @@ public class Courses extends Tables {
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            String courseId = courseIdTxtFld.getText().trim();
-            String courseName = courseNameTxtFld.getText().trim();
-            int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
-            String courseDescription = courseDescriptionTxtFld.getText().trim();
+            String firstName = firstNameTxtFld.getText().trim();
+            String lastName = lastNameTxtFld.getText().trim();
+            int password = Integer.parseInt(passwordTxtFld.getText().trim());
 
-            String query = prepareAddQuery(courseId, courseName, courseDescription, courseProfId);
-            String message = "Course Added!";
+            String query = prepareAddQuery(firstName, lastName, password);
+            String message = "User Added!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
 
@@ -136,29 +129,25 @@ public class Courses extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkCourseID(courseIdTxtFld.getText().trim())) {
+        if (!checkUserID(firstNameTxtFld.getText().trim())) {
             errorMessage += markCourseIdTxtFldWrong();
         }
 
-        if (!checkCourseName(courseNameTxtFld.getText().trim())) {
+        if (!checkCourseName(lastNameTxtFld.getText().trim())) {
             errorMessage += markCourseNameTxtFldWrong();
         }
 
-        if (!checkUserID(courseProfTxtFld.getText().trim())) {
+        if (!checkUserID(passwordTxtFld.getText().trim())) {
             errorMessage += markCourseProfIdTxtFldWrong();
-        }
-
-        if (!checkDescription(courseDescriptionTxtFld.getText().trim())) {
-            errorMessage += markCourseDescriptionTxtFld();
         }
 
         return errorMessage;
     }
 
-    // mark that the courseIdTxtFld was wrong
+    // mark that the firstNameTxtFld was wrong
     private String markCourseIdTxtFldWrong() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        firstNameTxtFld.setStyle("-fx-border-color: red");
         return "Your course id must be six characters long. \n"
                 + "It must start with three letters and end with three digits. \n";
     }
@@ -166,21 +155,21 @@ public class Courses extends Tables {
     // mark the coursenameTxtFld was wrong
     private String markCourseNameTxtFldWrong() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        firstNameTxtFld.setStyle("-fx-border-color: red");
         return "Your course name must be less than 40 characters. \n";
     }
 
     // mark the courseProfidTxtFld was wrong
     private String markCourseProfIdTxtFldWrong() {
         inputErrorIndicator = true;
-        courseProfTxtFld.setStyle("-fx-border-color: red");
+        passwordTxtFld.setStyle("-fx-border-color: red");
         return "The professor ID doesn't exist. \n";
     }
 
     // mark the courseDescriptionTxtFld was wrong
     private String markCourseDescriptionTxtFld() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        firstNameTxtFld.setStyle("-fx-border-color: red");
         return "Your course description must be less than 150 characters. \n";
     }
 
@@ -214,7 +203,7 @@ public class Courses extends Tables {
 
         GridPane gp = new GridPane();
         gp.add(functionTitle, 0, 0);
-        gp.add(courseIdTxtFld, 1, 0);
+        gp.add(firstNameTxtFld, 1, 0);
 
         Button searchBtn = new Button("Search Courses");
         searchBtn.setOnAction(this::checkInputForSearchData);
@@ -235,12 +224,12 @@ public class Courses extends Tables {
         // create an error message for user
         String errorMessage = "";
 
-        String courseId = courseIdTxtFld.getText().trim();
+        String courseId = firstNameTxtFld.getText().trim();
         if (!checkCourseID(courseId)) {
             errorMessage += "Your course id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
-            courseIdTxtFld.setStyle("-fx-border-color: red");
+            firstNameTxtFld.setStyle("-fx-border-color: red");
         }
 
         if (inputErrorIndicator) {
@@ -376,10 +365,10 @@ public class Courses extends Tables {
             result.next();
 
             // set textboxes to current value of the specified course
-            courseIdTxtFld.setText(result.getString("courseid"));
-            courseNameTxtFld.setText(result.getString("course_name"));
-            courseDescriptionTxtFld.setText(result.getString("description"));
-            courseProfTxtFld.setText(result.getString("profid"));
+            firstNameTxtFld.setText(result.getString("courseid"));
+            lastNameTxtFld.setText(result.getString("course_name"));
+            .setText(result.getString("description"));
+            passwordTxtFld.setText(result.getString("profid"));
 
             result.close();
         } catch (SQLException e) {
@@ -400,10 +389,10 @@ public class Courses extends Tables {
             // get the current course set in the button id of the source
             String currentCourseId = findButtonId(event);
 
-            String newCourseId = courseIdTxtFld.getText().trim();
-            String courseName = courseNameTxtFld.getText().trim();
-            String courseDescription = courseDescriptionTxtFld.getText().trim();
-            String courseProfId = courseProfTxtFld.getText().trim();
+            String newCourseId = firstNameTxtFld.getText().trim();
+            String courseName = lastNameTxtFld.getText().trim();
+            String courseDescription = .getText().trim();
+            String courseProfId = passwordTxtFld.getText().trim();
 
             String query = prepareEditQuery(currentCourseId, newCourseId,
                     courseName, courseDescription, courseProfId);
@@ -422,8 +411,8 @@ public class Courses extends Tables {
      * @return
      */
     public String prepareEditQuery(String currentCourseID, String newCourseID,
-                                 String courseName, String courseDescription,
-                                 String courseProfId) {
+                                   String courseName, String courseDescription,
+                                   String courseProfId) {
         return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
                 + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
