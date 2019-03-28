@@ -184,7 +184,7 @@ public class Grades extends Tables {
      * @param grade a double
      */
     public String prepareAddQuery(int stuid, int itemid, double grade) {
-        return "INSERT INTO Grades(stuid, itemid, grade) VALUES('" + stuid + "', '" + itemid + "', '"
+        return "INSERT INTO StuGrades(stuid, itemid, grade) VALUES('" + stuid + "', '" + itemid + "', '"
                 + grade + "');";
     }
 
@@ -233,7 +233,7 @@ public class Grades extends Tables {
             // turn error indicator off
             inputErrorIndicator = false;
         } else {
-            String tableName = "Grades";
+            String tableName = "StuGrades";
             String columnName = "itemid";
             ResultSet result = search(tableName, columnName, itemid, myConn);
 
