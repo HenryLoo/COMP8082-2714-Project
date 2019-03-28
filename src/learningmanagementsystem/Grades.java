@@ -334,7 +334,7 @@ public class Grades extends Tables {
 
         // set the text values of the text fields to the search result
         String tableName = "GradeItems";
-        String columnName = "itemid";
+        String columnName = "stuid";
         ResultSet result = search(tableName, columnName, itemid, myConn);
         setTextBoxToValueOfResultSet(result);
 
