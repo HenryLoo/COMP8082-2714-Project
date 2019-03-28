@@ -219,7 +219,7 @@ public abstract class Tables {
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkUserItemID(String profID) {
+    public boolean checkUserOrItemID(String profID) {
         if (profID.length() > 6) {
             return false;
         }
