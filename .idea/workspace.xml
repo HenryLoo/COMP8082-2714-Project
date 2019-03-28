@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d14a5b00-3b11-4932-95f0-6b35fed03016" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/COMP8082-2714-Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/COMP8082-2714-Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/COMP8082-2714-Project/learningmanagementsystem/Grades.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/COMP8082-2714-Project/learningmanagementsystem/Grades.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/learningmanagementsystem/Grades.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/learningmanagementsystem/Grades.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -48,11 +45,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Grades.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="340" column="36" selection-start-line="340" selection-start-column="36" selection-end-line="340" selection-end-column="36" />
+            <state relative-caret-position="161">
+              <caret line="231" lean-forward="true" selection-start-line="231" selection-end-line="231" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -60,7 +57,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Users.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
@@ -102,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="25" column="37" lean-forward="true" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+            <state>
+              <caret column="33" lean-forward="true" selection-start-column="33" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -146,8 +143,8 @@
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/LearningSysGUI.java" />
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/Tables.java" />
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/GradeItems.java" />
-        <option value="$PROJECT_DIR$/src/learningmanagementsystem/Grades.java" />
         <option value="$PROJECT_DIR$/src/learningmanagementsystem/Users.java" />
+        <option value="$PROJECT_DIR$/src/learningmanagementsystem/Grades.java" />
       </list>
     </option>
   </component>
@@ -201,7 +198,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553804074561" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553804703859" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -275,12 +272,12 @@
       <workItem from="1553124029992" duration="190000" />
       <workItem from="1553124230553" duration="1802000" />
       <workItem from="1553202888529" duration="1283000" />
-      <workItem from="1553797207173" duration="6650000" />
+      <workItem from="1553797207173" duration="6898000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27111000" />
+    <option name="totallyTimeSpent" value="27359000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -387,16 +384,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="25" column="37" lean-forward="true" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6377">
@@ -404,20 +391,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Grades.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="340" column="36" selection-start-line="340" selection-start-column="36" selection-end-line="340" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database_data/database_schema.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="571">
           <caret line="68" column="14" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Users.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="422" column="50" lean-forward="true" selection-start-line="422" selection-start-column="50" selection-end-line="422" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -431,10 +418,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Users.java">
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="422" column="50" lean-forward="true" selection-start-line="422" selection-start-column="50" selection-end-line="422" selection-end-column="50" />
+        <state>
+          <caret column="33" lean-forward="true" selection-start-column="33" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Grades.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="231" lean-forward="true" selection-start-line="231" selection-end-line="231" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

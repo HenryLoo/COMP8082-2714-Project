@@ -234,7 +234,7 @@ public class Grades extends Tables {
             inputErrorIndicator = false;
         } else {
             String tableName = "StuGrades";
-            String columnName = "itemid";
+            String columnName = "stuid";
             ResultSet result = search(tableName, columnName, itemid, myConn);
 
             // call a method in the Tables class
