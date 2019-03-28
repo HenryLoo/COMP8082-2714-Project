@@ -129,7 +129,7 @@ public class Users extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkUserID(firstNameTxtFld.getText().trim())) {
+        if (!checkUserOrItemID(firstNameTxtFld.getText().trim())) {
             errorMessage += markFirstNameTxtFldWrong();
         }
 
@@ -405,7 +405,7 @@ public class Users extends Tables {
     public String prepareEditQuery(String currentCourseID, String newCourseID,
                                    String courseName, String courseDescription,
                                    String courseProfId) {
-        return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
+        return "UPDATE Users SET courseid = \"" + newCourseID + "\", course_name = \""
                 + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
     }
