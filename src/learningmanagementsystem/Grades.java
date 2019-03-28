@@ -75,23 +75,24 @@ public class Grades extends Tables {
     public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
-        Label courseIdLbl = new Label("CourseID: ");
-        Label nameLbl = new Label("Item Name: ");
-        Label weightLbl = new Label("Item Weight: ");
+        Label studentLbl = new Label("Student ID: ");
+        Label courseLbl = new Label("Course ID: ");
+        Label markLbl = new Label("Mark: ");
 
-        courseIdLbl.setFont(Font.font(18));
-        nameLbl.setFont(Font.font(18));
-        weightLbl.setFont(Font.font(18));
+        studentLbl.setFont(Font.font(18));
+        courseLbl.setFont(Font.font(18));
+        markLbl.setFont(Font.font(18));
 
-        gp.add(courseIdLbl, 0, 1);
-        gp.add(nameLbl, 0, 2);
-        gp.add(weightLbl, 0, 3);
+        gp.add(studentLbl, 0, 1);
+        gp.add(courseLbl, 0, 2);
+        gp.add(markLbl, 0, 3);
 
         // since the text fields are shared, we have to clear them first
         initTextfieldsAndUserMessage();
 
         gp.add(stuIdTextFld, 1, 1);
-        gp.add(gradeTxtFld, 1, 2);
+        gp.add(itemIdTxtFld, 1, 2);
+        gp.add(gradeTxtFld, 1,3);
         gp.add(userMessage, 0, 5, 2, 1);
 
         return gp;
