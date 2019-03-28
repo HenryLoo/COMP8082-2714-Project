@@ -76,15 +76,15 @@ public class Grades extends Tables {
         GridPane gp = new GridPane();
 
         Label studentLbl = new Label("Student ID: ");
-        Label courseLbl = new Label("Course ID: ");
+        Label itemLbl = new Label("Item ID: ");
         Label markLbl = new Label("Mark: ");
 
         studentLbl.setFont(Font.font(18));
-        courseLbl.setFont(Font.font(18));
+        itemLbl.setFont(Font.font(18));
         markLbl.setFont(Font.font(18));
 
         gp.add(studentLbl, 0, 1);
-        gp.add(courseLbl, 0, 2);
+        gp.add(itemLbl, 0, 2);
         gp.add(markLbl, 0, 3);
 
         // since the text fields are shared, we have to clear them first
@@ -110,7 +110,7 @@ public class Grades extends Tables {
         } else {
             int stuid = Integer.parseInt(stuIdTextFld.getText().trim());
             int itemId = Integer.parseInt(itemIdTxtFld.getText().trim());
-            int grade = Integer.parseInt(gradeTxtFld.getText().trim());
+            double grade = Double.parseDouble(gradeTxtFld.getText().trim());
 
             String query = prepareAddQuery(stuid, itemId, grade);
             String message = "Item Added!";
@@ -123,16 +123,16 @@ public class Grades extends Tables {
         String errorMessage = "";
 
         if (!checkCourseID(stuIdTextFld.getText().trim())) {
-            errorMessage += markCourseIdTxtFldWrong();
+            errorMessage += markStuIdtxtFldWrong();
         }
 
         if (!checkItemName(gradeTxtFld.getText().trim())) {
-            errorMessage += markItemNameTxtFldWrong();
+            errorMessage += markGradeTxtFldWrong();
         }
 
-//        if (!checkTotalMarkOrWeight(totalMarkTxtFld.getText().trim())) {
-//            errorMessage += markTotalMarkTxtFldWrong();
-//        }
+        if (!checkTotalMarkOrWeight(itemIdTxtFld.getText().trim())) {
+            errorMessage += markItemIdTxtFldWrong();
+        }
 //
 //        if (!checkTotalMarkOrWeight(weightTxtFld.getText().trim())) {
 //            errorMessage += markWeightTxtFldWrong();
@@ -149,18 +149,17 @@ public class Grades extends Tables {
     }
 
     // mark that the stuIdTextFld was wrong
-    private String markCourseIdTxtFldWrong() {
+    private String markStuIdtxtFldWrong() {
         inputErrorIndicator = true;
         stuIdTextFld.setStyle("-fx-border-color: red");
-        return "Your course id must be six characters long. \n"
-                + "It must start with three letters and end with three digits. \n";
+        return "Your student id is wrong!\n";
     }
 
     // mark that the gradeTxtFld was wrong
-    private String markItemNameTxtFldWrong() {
+    private String markGradeTxtFldWrong() {
         inputErrorIndicator = true;
         gradeTxtFld.setStyle("-fx-border-color: red");
-        return "Your item name must be less than 40 characters. \n";
+        return "Your grade must be between 0 and 100 \n";
     }
 
 //    // mark that the totalMarkTxtFld was wrong
