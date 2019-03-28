@@ -194,7 +194,7 @@ public class Grades extends Tables {
      * @return a GridPane with all the text fields.
      */
     public GridPane createSearchDashBoard() {
-        Label functionTitle = new Label("Search for Grade Item By Itemid:");
+        Label functionTitle = new Label("Search for Grade By stuid:");
         functionTitle.setFont(Font.font(22));
 
         // reset the textfields and userMessage since it's shared resources.
@@ -233,7 +233,7 @@ public class Grades extends Tables {
             // turn error indicator off
             inputErrorIndicator = false;
         } else {
-            String tableName = "GradeItems";
+            String tableName = "Grades";
             String columnName = "itemid";
             ResultSet result = search(tableName, columnName, itemid, myConn);
 
@@ -248,23 +248,17 @@ public class Grades extends Tables {
     @Override
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
-        Label itemIdLbl = new Label("ItemID");
-        Label courseIdLbl = new Label("Courseid");
-        Label itemNameLbl = new Label("Item Name");
-        Label totalMarkLbl = new Label("Total Mark");
-        Label weightLbl = new Label("Weight (%)");
+        Label studentid = new Label("Student Id");
+        Label itemid = new Label("Item Name");
+        Label grade = new Label("Grade");
 
-        itemIdLbl.setFont(Font.font(18));
-        courseIdLbl.setFont(Font.font(18));
-        itemNameLbl.setFont(Font.font(18));
-        totalMarkLbl.setFont(Font.font(18));
-        weightLbl.setFont(Font.font(18));
+        studentid.setFont(Font.font(18));
+        itemid.setFont(Font.font(18));
+        grade.setFont(Font.font(18));
 
-        gp.add(itemIdLbl, 0, 0);
-        gp.add(courseIdLbl, 1, 0);
-        gp.add(itemNameLbl, 2, 0);
-        gp.add(totalMarkLbl, 3, 0);
-        gp.add(weightLbl, 4, 0);
+        gp.add(studentid, 0, 0);
+        gp.add(itemid, 1, 0);
+        gp.add(grade, 2, 0);
 
         appendResultToSearchResultArea(gp, searchResult);
 
@@ -280,23 +274,17 @@ public class Grades extends Tables {
             // i start at 1 because it represent the row index after
             // the column name.
             for (int i = 1; searchResult.next(); i++) {
-                Label itemIdLbl = new Label(searchResult.getString("itemid"));
-                Label courseIdLbl = new Label(searchResult.getString("courseid"));
-                Label itemNameLbl = new Label(searchResult.getString("name"));
-                Label totalMarkLbl = new Label(searchResult.getString("total"));
-                Label weightLbl = new Label(searchResult.getString("weight"));
+                Label stuidLbl = new Label(searchResult.getString("stuid"));
+                Label itemNamelbl = new Label(searchResult.getString("itemid"));
+                Label gradeNameLbl = new Label(searchResult.getString("Grade"));
 
-                itemIdLbl.setFont(Font.font(18));
-                courseIdLbl.setFont(Font.font(18));
-                itemNameLbl.setFont(Font.font(18));
-                totalMarkLbl.setFont(Font.font(18));
-                weightLbl.setFont(Font.font(18));
+                stuidLbl.setFont(Font.font(18));
+                itemNamelbl.setFont(Font.font(18));
+                gradeNameLbl.setFont(Font.font(18));
 
-                gp.add(itemIdLbl, 0, i);
-                gp.add(courseIdLbl, 1, i);
-                gp.add(itemNameLbl, 2, i);
-                gp.add(totalMarkLbl, 3, i);
-                gp.add(weightLbl, 4, i);
+                gp.add(stuidLbl, 0, i);
+                gp.add(itemNamelbl, 1, i);
+                gp.add(gradeNameLbl, 2, i);
 
                 // create an edit button
                 Button editButton = createEditButtonWithGraphic();
