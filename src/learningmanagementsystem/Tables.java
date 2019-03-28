@@ -219,8 +219,8 @@ public abstract class Tables {
      * @param profID a String
      * @return true if valid, else false.
      */
-    public boolean checkProfID(String profID) {
-        if (profID.length() != 2) {
+    public boolean checkUserID(String profID) {
+        if (profID.length() > 6) {
             return false;
         }
 
@@ -273,7 +273,7 @@ public abstract class Tables {
      * @return true if valid, false if else
      */
     public boolean checkItemID(String itemID) {
-        if (itemID.length() != 6) {
+        if (itemID.length() > 6) {
             return false;
         }
 

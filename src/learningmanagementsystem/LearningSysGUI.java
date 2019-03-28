@@ -68,7 +68,7 @@ public class LearningSysGUI extends GridPane {
         // check if user credential are correct and change page
         private void signIn(ActionEvent event) {
             // for testing purpose, only changing page for now.
-            currentPage.getChildren().setAll(new HomePage());
+            currentPage.getChildren().setAll(new HomePage("admin"));
         }
     }
 
