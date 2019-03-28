@@ -15,7 +15,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6377">
+            <state relative-caret-position="-6117">
               <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
             </state>
           </provider>
@@ -24,8 +24,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Tables.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="79" column="31" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="31" />
+            <state relative-caret-position="251">
+              <caret line="42" column="10" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -48,8 +48,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Grades.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="231" lean-forward="true" selection-start-line="231" selection-end-line="231" />
+            <state relative-caret-position="281">
+              <caret line="70" column="7" lean-forward="true" selection-start-line="70" selection-start-column="7" selection-end-line="70" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -129,6 +129,9 @@
       <find>checkitemid</find>
       <find>search</find>
       <find>search(</find>
+      <find>add(</find>
+      <find>run</find>
+      <find>weight</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -198,7 +201,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553804703859" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553805224548" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -272,12 +275,12 @@
       <workItem from="1553124029992" duration="190000" />
       <workItem from="1553124230553" duration="1802000" />
       <workItem from="1553202888529" duration="1283000" />
-      <workItem from="1553797207173" duration="6898000" />
+      <workItem from="1553797207173" duration="7380000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27359000" />
+    <option name="totallyTimeSpent" value="27841000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -384,13 +387,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6377">
-          <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database_data/database_schema.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="571">
@@ -408,16 +404,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Tables.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="79" column="31" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Driver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -428,10 +414,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Tables.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="42" column="10" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Courses.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6117">
+          <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/learningmanagementsystem/Grades.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="231" lean-forward="true" selection-start-line="231" selection-end-line="231" />
+        <state relative-caret-position="281">
+          <caret line="70" column="7" lean-forward="true" selection-start-line="70" selection-start-column="7" selection-end-line="70" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
