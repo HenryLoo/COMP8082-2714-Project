@@ -122,15 +122,15 @@ public class Grades extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkCourseID(stuIdTextFld.getText().trim())) {
+        if (!checkUserItemID(stuIdTextFld.getText().trim())) {
             errorMessage += markStuIdtxtFldWrong();
         }
 
-        if (!checkItemName(gradeTxtFld.getText().trim())) {
+        if (!checkGrade(gradeTxtFld.getText().trim())) {
             errorMessage += markGradeTxtFldWrong();
         }
 
-        if (!checkTotalMarkOrWeight(itemIdTxtFld.getText().trim())) {
+        if (!checkUserItemID(itemIdTxtFld.getText().trim())) {
             errorMessage += markItemIdTxtFldWrong();
         }
 //
