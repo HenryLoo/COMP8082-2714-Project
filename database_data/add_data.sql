@@ -12,19 +12,19 @@ USE munimoe_LMS;
 # Data for Users: 3 admins, 3 professors, 6 students.
 INSERT INTO Users (firstname, lastname, password, role, salt)
   VALUES
-	("thomas_bui", "password", "admin", "12345678"),
-	("haonan_zhong", "qwerty", "admin", "abcdefgh"),
-	("bosco_kwan", "12345", "admin", "33221144"),
-	("isacc_newton", "calculus is mine", "professor", "33rf114a"),
-	("gottfried_leibniz", "i created calculus", "professor", "89rf174a"),
-	("alan_turing", "123enigma321", "professor", "moonkooj"),
-	("grace_hooper", "assembly_goddess", "professor", "zxcvbnm?"),
-	("john_smith", "my_password", "student", "noios14a"),
-	("amanda_waller", "argus_is_the_best", "student", "j&*!KJOd"),
-	("robert_langdon", "HISTORY!!", "student", "koHUWkj9"),
-	("angelica_schyler", "Burn_six_sept", "student", "fecs1rwq"),
-	("leeroy_jenkins", "atLeastIHaveChicken", "student", "3vwe1257"),
-	("hermione_granger", "Wingardium Levi-O-sa", "student", "p9*^73xs");
+	("thomas", "bui", "password", "admin", "12345678"),
+	("haonan", "zhong", "qwerty", "admin", "abcdefgh"),
+	("bosco", "kwan", "12345", "admin", "33221144"),
+	("isacc", "newton", "calculus is mine", "professor", "33rf114a"),
+	("gottfried", "leibniz", "i created calculus", "professor", "89rf174a"),
+	("alan", "turing", "123enigma321", "professor", "moonkooj"),
+	("grace", "hooper", "assembly_goddess", "professor", "zxcvbnm?"),
+	("john", "smith", "my_password", "student", "noios14a"),
+	("amanda", "waller", "argus_is_the_best", "student", "j&*!KJOd"),
+	("robert", "langdon", "HISTORY!!", "student", "koHUWkj9"),
+	("angelica", "schyler", "Burn_six_sept", "student", "fecs1rwq"),
+	("leeroy", "jenkins", "atLeastIHaveChicken", "student", "3vwe1257"),
+	("hermione", "granger", "Wingardium Levi-O-sa", "student", "p9*^73xs");
 
 # Data for Courses: 3 courses, 2 of them has lecture and lab versions.
 

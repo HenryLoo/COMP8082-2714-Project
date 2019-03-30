@@ -11,7 +11,8 @@ USE munimoe_LMS;
 
 CREATE TABLE Users (
 	userid INT(6) AUTO_INCREMENT NOT NULL,
-	username VARCHAR(20) NOT NULL,
+	firstname VARCHAR(20) NOT NULL,
+	lastname VARCHAR(20) NOT NULL,
 	password VARCHAR(40) NOT NULL,
 	role ENUM('admin', 'professor', 'student') NOT NULL,
 	salt VARCHAR(8) UNIQUE NOT NULL,
