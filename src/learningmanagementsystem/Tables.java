@@ -304,6 +304,20 @@ public abstract class Tables {
         }
     }
 
+    /**
+     * Capitalize the first letter of a String.
+     * @param s must not be null or full of white spaces.
+     * @return s but capitalize.
+     */
+    public static String capitalizeFirstLetter(String s) {
+        s = s.trim();
+        String firstLetter = s.substring(0, 1).toUpperCase();
+        String remainingLetters = s.substring(1).toLowerCase();
+        s = firstLetter + remainingLetters;
+
+        return s;
+    }
+
 
 }
 

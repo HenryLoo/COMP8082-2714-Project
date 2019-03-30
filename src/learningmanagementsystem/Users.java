@@ -300,8 +300,12 @@ public class Users extends Tables {
             // the column name.
             for (int i = 1; searchResult.next(); i++) {
                 Label userIdLbl = new Label(searchResult.getString("userid"));
-                Label firstNameLbl = new Label(searchResult.getString("firstname"));
-                Label lastNameLbl = new Label(searchResult.getString("lastname"));
+
+                String firstName = capitalizeFirstLetter(searchResult.getString("firstname"));
+                Label firstNameLbl = new Label(firstName);
+
+                String lastName = capitalizeFirstLetter(searchResult.getString("lastname"));
+                Label lastNameLbl = new Label(lastName);
                 Label roleLbl = new Label(String.valueOf(searchResult.getString("role")));
 
                 userIdLbl.setFont(Font.font(18));
