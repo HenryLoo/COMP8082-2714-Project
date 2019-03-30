@@ -20,9 +20,9 @@ public class Users extends Tables {
 
     // the text fields for each data column in the table.
     private TextField userIdTxtFld;
-    private TextField firstNameTxtFld;
-    private TextField lastNameTxtFld;
+    private TextField userNameTxtFld;
     private TextField passwordTxtFld;
+    private TextField confirmPasswordTxtFld;
 
     /**
      * Create a Users instance and run the dashboard.
@@ -41,9 +41,9 @@ public class Users extends Tables {
      */
     public void initTextfieldsAndUserMessage() {
         userIdTxtFld = new TextField();
-        firstNameTxtFld = new TextField();
-        lastNameTxtFld = new TextField();
+        userNameTxtFld = new TextField();
         passwordTxtFld = new TextField();
+        confirmPasswordTxtFld = new TextField();
 
         userMessage = new Label();
         userMessage.setFont(Font.font(15));
@@ -81,24 +81,24 @@ public class Users extends Tables {
     public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
-        Label firstNameLbl = new Label("User First Name: ");
-        Label lastNameLbl = new Label("User Last Name: ");
+        Label firstNameLbl = new Label("Username: ");
         Label passwordLbl = new Label("Password: ");
+        Label confirmPasswordLbl = new Label("Confirm Password: ");
 
         firstNameLbl.setFont(Font.font(18));
-        lastNameLbl.setFont(Font.font(18));
         passwordLbl.setFont(Font.font(18));
+        confirmPasswordLbl.setFont(Font.font(18));
 
         gp.add(firstNameLbl, 0, 1);
-        gp.add(lastNameLbl, 0, 2);
-        gp.add(passwordLbl, 0, 3);
+        gp.add(passwordLbl, 0, 2);
+        gp.add(confirmPasswordLbl, 0, 3);
 
         // since the text fields are shared, we have to cleared them first
         initTextfieldsAndUserMessage();
 
-        gp.add(firstNameTxtFld, 1, 1);
-        gp.add(lastNameTxtFld, 1, 2);
-        gp.add(passwordTxtFld, 1, 3);
+        gp.add(userNameTxtFld, 1, 1);
+        gp.add(passwordTxtFld, 1, 2);
+        gp.add(confirmPasswordTxtFld, 1, 3);
         gp.add(userMessage, 0, 4, 2, 1);
 
         return gp;
@@ -116,9 +116,9 @@ public class Users extends Tables {
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            String firstName = firstNameTxtFld.getText().trim();
-            String lastName = lastNameTxtFld.getText().trim();
-            String password = passwordTxtFld.getText().trim();
+            String firstName = userNameTxtFld.getText().trim();
+            String lastName = passwordTxtFld.getText().trim();
+            String password = confirmPasswordTxtFld.getText().trim();
 
             String query = prepareAddQuery(firstName, lastName, password);
             String message = "User Added!";
@@ -131,43 +131,28 @@ public class Users extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkUserOrItemID(firstNameTxtFld.getText().trim())) {
+        if (!checkName(userNameTxtFld.getText().trim())) {
             errorMessage += markFirstNameTxtFldWrong();
-        }
-
-        if (!checkName(lastNameTxtFld.getText().trim())) {
-            errorMessage += markLastNameTxtFldWrong();
         }
 
         if (!checkPassword(passwordTxtFld.getText().trim())) {
             errorMessage += markPasswordTxtFldWrong();
         }
 
+        if (!passwordTxtFld.getText().trim().equals(confirmPasswordTxtFld.getText().trim())) {
+            errorMessage += markConfirmPasswordTxtFldWrong();
+        }
         return errorMessage;
     }
 
-    // mark that the userIdTxtFld was wrong
-    private String markUserIdTxtFldWrong() {
-        inputErrorIndicator = true;
-        firstNameTxtFld.setStyle("-fx-border-color: red");
-        return "The user's id must be an integer. \n";
-    }
-
-    // mark that the firstNameTxtFld was wrong
+    // mark that the userNameTxtFld was wrong
     private String markFirstNameTxtFldWrong() {
         inputErrorIndicator = true;
-        firstNameTxtFld.setStyle("-fx-border-color: red");
-        return "The user's first name must be made of alphabetical characters. \n";
+        userNameTxtFld.setStyle("-fx-border-color: red");
+        return "The username must be made of alphabetical characters. \n";
     }
 
-    // mark the coursenameTxtFld was wrong
-    private String markLastNameTxtFldWrong() {
-        inputErrorIndicator = true;
-        firstNameTxtFld.setStyle("-fx-border-color: red");
-        return "The user's last name must be made of alphabetical characters. \n";
-    }
-
-    // mark the courseProfidTxtFld was wrong
+    // mark the passworddTxtFld was wrong
     private String markPasswordTxtFldWrong() {
         inputErrorIndicator = true;
         passwordTxtFld.setStyle("-fx-border-color: red");
@@ -177,17 +162,23 @@ public class Users extends Tables {
                 + "- One numerical character. \n";
     }
 
+    // mark the confirmPasswordTxtFld was wrong
+    private String markConfirmPasswordTxtFldWrong() {
+        inputErrorIndicator = true;
+        confirmPasswordTxtFld.setStyle("-fx-border-color: red");
+        return "The passwords must match each other\n";
+    }
+
+
     /**
      * Create the query to data to the Courses table.
      *
-     * @param firstName a String.
-     * @param lastName a String.
+     * @param userName a String.
      * @param password a String.
      * @return a SQL String.
      */
-    public String prepareAddQuery(String firstName, String lastName, String password) {
-        return "INSERT INTO Users VALUES('" + firstName + "', '" + lastName + "', '"
-                + password + "');";
+    public String prepareAddQuery(String userName, String password) {
+        return "INSERT INTO Users VALUES('" + userName + "', '" + password + "');";
     }
 
     /**
@@ -231,7 +222,7 @@ public class Users extends Tables {
             errorMessage += "Your course id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
-            firstNameTxtFld.setStyle("-fx-border-color: red");
+            userNameTxtFld.setStyle("-fx-border-color: red");
         }
 
         if (inputErrorIndicator) {
@@ -371,8 +362,8 @@ public class Users extends Tables {
             result.next();
 
             // set textboxes to current value of the specified course
-            firstNameTxtFld.setText(result.getString("firstname"));
-            lastNameTxtFld.setText(result.getString("lastname"));
+            userNameTxtFld.setText(result.getString("firstname"));
+            passwordTxtFld.setText(result.getString("lastname"));
 
             result.close();
         } catch (SQLException e) {
@@ -393,9 +384,9 @@ public class Users extends Tables {
             // get the current course set in the button id of the source
             String userId = findButtonId(event);
 
-            String firstName = firstNameTxtFld.getText().trim();
-            String lastName = lastNameTxtFld.getText().trim();
-            String password = passwordTxtFld.getText().trim();
+            String firstName = userNameTxtFld.getText().trim();
+            String lastName = passwordTxtFld.getText().trim();
+            String password = confirmPasswordTxtFld.getText().trim();
 
             String query = prepareEditQuery(userId, firstName,
                     lastName, password);
