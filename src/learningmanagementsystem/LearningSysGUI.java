@@ -104,32 +104,20 @@ public class LearningSysGUI extends GridPane {
          */
         public HBox createTableNameBar() {
             // create each button individually
-            Button courseTable = createCoursesButton();
-            Button gradeItemTable = createGradeItemsButton();
+            Button courseTable = createNameButton("Courses", "Access the school's courses");
+            Button gradeItemTable = createNameButton("Grade Items","Access the school's grade items");
+            Button gradesTable = createNameButton("Grades","Access the students' grades");
+            Button userTable = createNameButton("Users","Access the school's user");
 
-            final int gap = 10;
-            HBox hbox = new HBox(courseTable, gradeItemTable);
-            hbox.setSpacing(gap);
+            HBox hbox = new HBox(courseTable, gradeItemTable, gradesTable, userTable);
+            hbox.setSpacing(HGAP);
 
             return hbox;
         }
 
-        private Button createCoursesButton() {
-            Button myButton = new Button("Courses");
-
-            Tooltip tip = new Tooltip("Access the school's courses");
-            myButton.setTooltip(tip);
-
-            // all table name buttons will have the same onAction.
-            myButton.setOnAction(this::createFunctionOptions);
-            return myButton;
-        }
-
-        private Button createGradeItemsButton() {
-            Button myButton = new Button("Grade Items");
-
-            Tooltip tip = new Tooltip("Access the school's grade items");
-            myButton.setTooltip(tip);
+        private Button createNameButton(String name, String tooltip) {
+            Button myButton = new Button(name);
+            myButton.setTooltip(new Tooltip(tooltip));
 
             // all table name buttons will have the same onAction.
             myButton.setOnAction(this::createFunctionOptions);
@@ -196,6 +184,12 @@ public class LearningSysGUI extends GridPane {
                     break;
                 case "Grade Items":
                     currentTable = new GradeItems(databaseConnection, currentPane);
+                    break;
+                case "Grades":
+                    currentTable = new Grades(databaseConnection, currentPane);
+                    break;
+                case "Users":
+                    currentTable = new Users(databaseConnection, currentPane);
                     break;
                 default:
                     System.out.println("There's no table with that name");

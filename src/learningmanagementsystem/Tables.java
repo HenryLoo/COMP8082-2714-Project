@@ -216,16 +216,16 @@ public abstract class Tables {
     /**
      * Check if prof or Student id or item id is valid.
      *
-     * @param profID a String
+     * @param iD a String
      * @return true if valid, else false.
      */
-    public boolean checkUserOrItemID(String profID) {
-        if (profID.length() > 6) {
+    public boolean checkUserOrItemID(String iD) {
+        if (iD.length() > 6) {
             return false;
         }
 
         try {
-            Integer.parseInt(profID);
+            Integer.parseInt(iD);
             return true;
         } catch (Exception e) {
             return false;
@@ -250,11 +250,6 @@ public abstract class Tables {
         }
         return false;
     }
-
-
-
-
-
 
     /**
      * Check if course id is valid.
