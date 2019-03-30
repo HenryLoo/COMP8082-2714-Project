@@ -60,11 +60,11 @@ public class Users extends Tables {
         GridPane gp = createDashBoardTemplate();
 
         // create things unique to the add dashboard.
-        Label functionTitle = new Label("Please enter the new course's data:");
+        Label functionTitle = new Label("Please enter the new user's data:");
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        Button addBtn = new Button("Add Course");
+        Button addBtn = new Button("Add User");
         addBtn.setOnAction(this::checkInputForAddingData);
         gp.add(addBtn, 0, 6);
 
@@ -116,11 +116,10 @@ public class Users extends Tables {
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
-            String firstName = userNameTxtFld.getText().trim();
-            String lastName = passwordTxtFld.getText().trim();
-            String password = confirmPasswordTxtFld.getText().trim();
+            String userName = userNameTxtFld.getText().trim();
+            String password = passwordTxtFld.getText().trim();
 
-            String query = prepareAddQuery(firstName, lastName, password);
+            String query = prepareAddQuery(userName, password);
             String message = "User Added!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
@@ -131,8 +130,8 @@ public class Users extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkName(userNameTxtFld.getText().trim())) {
-            errorMessage += markFirstNameTxtFldWrong();
+        if (!checkUserName(userNameTxtFld.getText().trim())) {
+            errorMessage += markUserNameTxtFldWrong();
         }
 
         if (!checkPassword(passwordTxtFld.getText().trim())) {
@@ -145,8 +144,15 @@ public class Users extends Tables {
         return errorMessage;
     }
 
+    // mark that the userIdTxtFld was wrong
+    private String markUserIdTxtFldWrong() {
+        inputErrorIndicator = true;
+        userNameTxtFld.setStyle("-fx-border-color: red");
+        return "The userid must be made an integer. \n";
+    }
+
     // mark that the userNameTxtFld was wrong
-    private String markFirstNameTxtFldWrong() {
+    private String markUserNameTxtFldWrong() {
         inputErrorIndicator = true;
         userNameTxtFld.setStyle("-fx-border-color: red");
         return "The username must be made of alphabetical characters. \n";
@@ -178,7 +184,8 @@ public class Users extends Tables {
      * @return a SQL String.
      */
     public String prepareAddQuery(String userName, String password) {
-        return "INSERT INTO Users VALUES('" + userName + "', '" + password + "');";
+        return "INSERT INTO Users (username, password, role, salt) "
+                + "VALUES('" + userName + "', '" + password + "', 'student', 'asdo3iq1');";
     }
 
     /**
@@ -219,10 +226,7 @@ public class Users extends Tables {
 
         String userId = userIdTxtFld.getText().trim();
         if (!checkUserOrItemID(userId)) {
-            errorMessage += "Your course id must be six characters long. \n"
-                    + "It must start with three letters and end with three digits. \n";
-            inputErrorIndicator = true;
-            userNameTxtFld.setStyle("-fx-border-color: red");
+            errorMessage += markUserIdTxtFldWrong();
         }
 
         if (inputErrorIndicator) {
@@ -245,19 +249,16 @@ public class Users extends Tables {
     public GridPane createSearchResultArea(ResultSet searchResult) {
         GridPane gp = new GridPane();
         Label userIdLbl = new Label("UserID");
-        Label firstNameLbl = new Label("First Name");
-        Label lastNameLbl = new Label("Last Name");
+        Label firstNameLbl = new Label("Username");
         Label roleLbl = new Label("Role");
 
         userIdLbl.setFont(Font.font(18));
         firstNameLbl.setFont(Font.font(18));
-        lastNameLbl.setFont(Font.font(18));
         roleLbl.setFont(Font.font(18));
 
         gp.add(userIdLbl, 0, 0);
         gp.add(firstNameLbl, 1, 0);
-        gp.add(lastNameLbl, 2, 0);
-        gp.add(roleLbl, 3, 0);
+        gp.add(roleLbl, 2, 0);
 
         appendResultToSearchResultArea(gp, searchResult);
 
@@ -274,23 +275,16 @@ public class Users extends Tables {
             // the column name.
             for (int i = 1; searchResult.next(); i++) {
                 Label userIdLbl = new Label(searchResult.getString("userid"));
-
-                String firstName = capitalizeFirstLetter(searchResult.getString("firstname"));
-                Label firstNameLbl = new Label(firstName);
-
-                String lastName = capitalizeFirstLetter(searchResult.getString("lastname"));
-                Label lastNameLbl = new Label(lastName);
+                Label userNameLbl = new Label(searchResult.getString("username"));
                 Label roleLbl = new Label(String.valueOf(searchResult.getString("role")));
 
                 userIdLbl.setFont(Font.font(18));
-                firstNameLbl.setFont(Font.font(18));
-                lastNameLbl.setFont(Font.font(18));
+                userNameLbl.setFont(Font.font(18));
                 roleLbl.setFont(Font.font(18));
 
                 gp.add(userIdLbl, 0, i);
-                gp.add(firstNameLbl, 1, i);
-                gp.add(lastNameLbl, 2, i);
-                gp.add(roleLbl, 3, i);
+                gp.add(userNameLbl, 1, i);
+                gp.add(roleLbl, 2, i);
 
                 // create an edit button
                 Button editButton = createEditButtonWithGraphic();
@@ -306,9 +300,10 @@ public class Users extends Tables {
                 deleteButton.setId(searchResult.getString("userid"));
                 deleteButton.setOnAction(this::putForDelete);
 
-                gp.add(editButton, 4, i);
-                gp.add(deleteButton, 5, i);
+                gp.add(editButton, 3, i);
+                gp.add(deleteButton, 4, i);
             }
+
             searchResult.close();
 
         } catch (SQLException e) {
@@ -362,8 +357,7 @@ public class Users extends Tables {
             result.next();
 
             // set textboxes to current value of the specified course
-            userNameTxtFld.setText(result.getString("firstname"));
-            passwordTxtFld.setText(result.getString("lastname"));
+            userNameTxtFld.setText(result.getString("username"));
 
             result.close();
         } catch (SQLException e) {
@@ -384,12 +378,10 @@ public class Users extends Tables {
             // get the current course set in the button id of the source
             String userId = findButtonId(event);
 
-            String firstName = userNameTxtFld.getText().trim();
-            String lastName = passwordTxtFld.getText().trim();
-            String password = confirmPasswordTxtFld.getText().trim();
+            String userName = userNameTxtFld.getText().trim();
+            String password = passwordTxtFld.getText().trim();
 
-            String query = prepareEditQuery(userId, firstName,
-                    lastName, password);
+            String query = prepareEditQuery(userId, userName, password);
             String message = "User Updated!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
@@ -398,15 +390,12 @@ public class Users extends Tables {
     /**
      * Prepare an UPDATE query for Courses table.
      * @param userId a String.
-     * @param firstName a String.
-     * @param lastName a String.
+     * @param userName a String.
      * @param password a String.
      * @return an edit query as a String.
      */
-    public String prepareEditQuery(String userId, String firstName,
-                                   String lastName, String password) {
-        return "UPDATE Users SET firstname = \"" + firstName + "\", lastname = \""
-                + lastName + "\", password = \"" + password
+    public String prepareEditQuery(String userId, String userName, String password) {
+        return "UPDATE Users SET username = \"" + userName + "\", password = \"" + password
                 + " WHERE userid = '" + userId + "';";
     }
 
@@ -434,7 +423,7 @@ public class Users extends Tables {
      * @param name a String
      * @return true if name is valid, else false.
      */
-    public boolean checkName(String name) {
+    public boolean checkUserName(String name) {
         final int maxLength = 40;
         return name != null && !(name.strip().equals("")) && name.length() <= maxLength;
     }
@@ -446,7 +435,7 @@ public class Users extends Tables {
      * @return true if description is valid, else false.
      */
     public boolean checkPassword(String password) {
-        final int maxLength = 150;
+        final int maxLength = 40;
         return password != null && !(password.strip().equals("")) && password.length() <= maxLength;
     }
 }

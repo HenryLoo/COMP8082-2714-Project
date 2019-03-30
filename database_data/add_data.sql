@@ -10,7 +10,7 @@
 USE munimoe_LMS;
 
 # Data for Users: 3 admins, 3 professors, 6 students.
-INSERT INTO Users (firstname, lastname, password, role, salt)
+INSERT INTO Users (username, password, role, salt)
   VALUES
 	("thomas_bui", "password", "admin", "12345678"),
 	("haonan_zhong", "qwerty", "admin", "abcdefgh"),
@@ -62,7 +62,7 @@ INSERT INTO GradeItems (courseid, name, total, weight) VALUES
 	("COA101", "Quiz 1", 15, 50),
 	("MAT204", "Integral Quiz 1", 15, 25),
 	("MAT204", "Integral Quiz 2", 15, 25),
-	("MAT204", "Integral Test", 20, 25);
+	("MAT204", "Integral Test", 20, 25),
 	("MAT204", "Derivative Quiz 1", 15, 25);
 
 # Data for StuGrades
