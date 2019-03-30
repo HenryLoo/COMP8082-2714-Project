@@ -23,6 +23,7 @@ public class Users extends Tables {
     private TextField firstNameTxtFld;
     private TextField lastNameTxtFld;
     private TextField passwordTxtFld;
+    private TextField reenterPasswordTxtFld;
 
     /**
      * Create a Users instance and run the dashboard.
@@ -44,6 +45,7 @@ public class Users extends Tables {
         firstNameTxtFld = new TextField();
         lastNameTxtFld = new TextField();
         passwordTxtFld = new TextField();
+        reenterPasswordTxtFld = new TextField();
 
         userMessage = new Label();
         userMessage.setFont(Font.font(15));
@@ -64,7 +66,7 @@ public class Users extends Tables {
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        Button addBtn = new Button("Add Course");
+        Button addBtn = new Button("Add User");
         addBtn.setOnAction(this::checkInputForAddingData);
         gp.add(addBtn, 0, 6);
 
@@ -83,15 +85,18 @@ public class Users extends Tables {
 
         Label firstNameLbl = new Label("User First Name: ");
         Label lastNameLbl = new Label("User Last Name: ");
-        Label passwordLbl = new Label("Password: ");
+        Label passwordLbl = new Label("New Password: ");
+        Label nextPasswordLbl = new Label("Re-enter New Password: ");
 
         firstNameLbl.setFont(Font.font(18));
         lastNameLbl.setFont(Font.font(18));
         passwordLbl.setFont(Font.font(18));
+        nextPasswordLbl.setFont(Font.font(18));
 
         gp.add(firstNameLbl, 0, 1);
         gp.add(lastNameLbl, 0, 2);
         gp.add(passwordLbl, 0, 3);
+        gp.add(nextPasswordLbl, 0, 4);
 
         // since the text fields are shared, we have to cleared them first
         initTextfieldsAndUserMessage();
@@ -99,7 +104,8 @@ public class Users extends Tables {
         gp.add(firstNameTxtFld, 1, 1);
         gp.add(lastNameTxtFld, 1, 2);
         gp.add(passwordTxtFld, 1, 3);
-        gp.add(userMessage, 0, 4, 2, 1);
+        gp.add(reenterPasswordTxtFld, 1, 4);
+        gp.add(userMessage, 0, 5, 2, 1);
 
         return gp;
 
@@ -143,6 +149,10 @@ public class Users extends Tables {
             errorMessage += markPasswordTxtFldWrong();
         }
 
+        if (passwordTxtFld.getText().trim() != reenterPasswordTxtFld.getText().trim()) {
+            errorMessage += markReenterPasswordTxtFldWrong();
+        }
+
         return errorMessage;
     }
 
@@ -160,14 +170,14 @@ public class Users extends Tables {
         return "The user's first name must be made of alphabetical characters. \n";
     }
 
-    // mark the coursenameTxtFld was wrong
+    // mark the lastnameTxtFld was wrong
     private String markLastNameTxtFldWrong() {
         inputErrorIndicator = true;
         firstNameTxtFld.setStyle("-fx-border-color: red");
         return "The user's last name must be made of alphabetical characters. \n";
     }
 
-    // mark the courseProfidTxtFld was wrong
+    // mark the passwordTxtFld was wrong
     private String markPasswordTxtFldWrong() {
         inputErrorIndicator = true;
         passwordTxtFld.setStyle("-fx-border-color: red");
@@ -175,6 +185,13 @@ public class Users extends Tables {
                 + "It also must have at least: \n"
                 + "- One alphabetical character. \n"
                 + "- One numerical character. \n";
+    }
+
+    // mark the reenterPasswordTxtFld was wrong
+    private String markReenterPasswordTxtFldWrong() {
+        inputErrorIndicator = true;
+        passwordTxtFld.setStyle("-fx-border-color: red");
+        return "The passwords must match each other.";
     }
 
     /**
