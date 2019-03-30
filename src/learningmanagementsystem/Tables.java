@@ -304,6 +304,46 @@ public abstract class Tables {
         }
     }
 
+    /**
+     * Check if first name id is valid.
+     * @param name a String
+     * @return true if valid, false if else
+     */
+    public boolean checkName(String name) {
+        if (name == null || name.strip().equals("")) {
+            return false;
+        }
+
+        for(int i = 0; i < name.length(); i++) {
+            if(!Character.isAlphabetic(name.charAt(i))){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Check if role is valid.
+     * @param role a String
+     * @return true if valid, false if else
+     */
+    public boolean checkRole(String role) {
+        if(role == null || role.strip().equals("")) {
+            return false;
+        }
+
+        if(role.equals("admin") || role.equals("professor")
+                || role.equals("student")){
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 
 }
 
