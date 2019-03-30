@@ -144,7 +144,7 @@ public class Courses extends Tables {
             errorMessage += markCourseNameTxtFldWrong();
         }
 
-        if (!checkUserID(courseProfTxtFld.getText().trim())) {
+        if (!checkUserOrItemID(courseProfTxtFld.getText().trim())) {
             errorMessage += markCourseProfIdTxtFldWrong();
         }
 

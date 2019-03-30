@@ -19,6 +19,7 @@ public class Users extends Tables {
     private Connection myConn;
 
     // the text fields for each data column in the table.
+    private TextField userIdTxtFld;
     private TextField firstNameTxtFld;
     private TextField lastNameTxtFld;
     private TextField passwordTxtFld;
@@ -39,6 +40,7 @@ public class Users extends Tables {
      * Initiate the textfields and userMessage to new ones.
      */
     public void initTextfieldsAndUserMessage() {
+        userIdTxtFld = new TextField();
         firstNameTxtFld = new TextField();
         lastNameTxtFld = new TextField();
         passwordTxtFld = new TextField();
@@ -129,19 +131,26 @@ public class Users extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkUserID(firstNameTxtFld.getText().trim())) {
+        if (!checkUserOrItemID(firstNameTxtFld.getText().trim())) {
             errorMessage += markFirstNameTxtFldWrong();
         }
 
-        if (!checkCourseName(lastNameTxtFld.getText().trim())) {
+        if (!checkName(lastNameTxtFld.getText().trim())) {
             errorMessage += markLastNameTxtFldWrong();
         }
 
-        if (!checkUserID(passwordTxtFld.getText().trim())) {
+        if (!checkPassword(passwordTxtFld.getText().trim())) {
             errorMessage += markPasswordTxtFldWrong();
         }
 
         return errorMessage;
+    }
+
+    // mark that the userIdTxtFld was wrong
+    private String markUserIdTxtFldWrong() {
+        inputErrorIndicator = true;
+        firstNameTxtFld.setStyle("-fx-border-color: red");
+        return "The user's id must be an integer. \n";
     }
 
     // mark that the firstNameTxtFld was wrong
@@ -188,7 +197,7 @@ public class Users extends Tables {
      */
     public GridPane createSearchDashBoard() {
 
-        Label functionTitle = new Label("Search for Courses By CourseId:");
+        Label functionTitle = new Label("Search for Users By userid:");
         functionTitle.setFont(Font.font(22));
 
         // reset the textfields and userMessage since it's shared resources.
@@ -196,9 +205,9 @@ public class Users extends Tables {
 
         GridPane gp = new GridPane();
         gp.add(functionTitle, 0, 0);
-        gp.add(firstNameTxtFld, 1, 0);
+        gp.add(userIdTxtFld, 1, 0);
 
-        Button searchBtn = new Button("Search Courses");
+        Button searchBtn = new Button("Search Users");
         searchBtn.setOnAction(this::checkInputForSearchData);
         gp.add(searchBtn, 2, 0);
 
@@ -217,8 +226,8 @@ public class Users extends Tables {
         // create an error message for user
         String errorMessage = "";
 
-        String courseId = firstNameTxtFld.getText().trim();
-        if (!checkCourseID(courseId)) {
+        String userId = userIdTxtFld.getText().trim();
+        if (!checkUserOrItemID(userId)) {
             errorMessage += "Your course id must be six characters long. \n"
                     + "It must start with three letters and end with three digits. \n";
             inputErrorIndicator = true;
@@ -231,9 +240,9 @@ public class Users extends Tables {
             // turn off error indicator
             inputErrorIndicator = false;
         } else {
-            String tableName = "Courses";
-            String columnName = "courseid";
-            ResultSet result = search(tableName, columnName, courseId, myConn);
+            String tableName = "Users";
+            String columnName = "userid";
+            ResultSet result = search(tableName, columnName, userId, myConn);
             // call a method in the Tables class
             displaySearchQueryResult(result);
         }
@@ -276,7 +285,7 @@ public class Users extends Tables {
                 Label userIdLbl = new Label(searchResult.getString("userid"));
                 Label firstNameLbl = new Label(searchResult.getString("firstname"));
                 Label lastNameLbl = new Label(searchResult.getString("lastname"));
-                Label roleLbl = new Label(String.valueOf(searchResult.getInt("role")));
+                Label roleLbl = new Label(String.valueOf(searchResult.getString("role")));
 
                 userIdLbl.setFont(Font.font(18));
                 firstNameLbl.setFont(Font.font(18));
@@ -334,17 +343,17 @@ public class Users extends Tables {
         functionTitle.setFont(Font.font(22));
         gp.add(functionTitle, 0, 0, 2, 1);
 
-        String tableName = "Courses";
+        String tableName = "Users";
         String columnName = "userid";
         ResultSet result = search(tableName, columnName, userid, myConn);
         setTextBoxToValueOfResultSet(result);
 
-        Button editBtn = new Button("Edit Course");
+        Button editBtn = new Button("Edit User");
 
         // add the current userid into the update button
         editBtn.setId(userid);
         editBtn.setOnAction(this::checkInputForEditingData);
-        gp.add(editBtn, 0, 6);
+        gp.add(editBtn, 0, 5);
 
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
@@ -358,9 +367,8 @@ public class Users extends Tables {
             result.next();
 
             // set textboxes to current value of the specified course
-            firstNameTxtFld.setText(result.getString("courseid"));
-            lastNameTxtFld.setText(result.getString("course_name"));
-            passwordTxtFld.setText(result.getString("profid"));
+            firstNameTxtFld.setText(result.getString("firstname"));
+            lastNameTxtFld.setText(result.getString("lastname"));
 
             result.close();
         } catch (SQLException e) {
@@ -379,42 +387,39 @@ public class Users extends Tables {
             inputErrorIndicator = false;
         } else {
             // get the current course set in the button id of the source
-            String currentCourseId = findButtonId(event);
+            String userId = findButtonId(event);
 
-            String newCourseId = firstNameTxtFld.getText().trim();
-            String courseName = lastNameTxtFld.getText().trim();
-            String courseDescription = .getText().trim();
-            String courseProfId = passwordTxtFld.getText().trim();
+            String firstName = firstNameTxtFld.getText().trim();
+            String lastName = lastNameTxtFld.getText().trim();
+            String password = passwordTxtFld.getText().trim();
 
-            String query = prepareEditQuery(currentCourseId, newCourseId,
-                    courseName, courseDescription, courseProfId);
-            String message = "Course Updated!";
+            String query = prepareEditQuery(userId, firstName,
+                    lastName, password);
+            String message = "User Updated!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
     }
 
     /**
      * Prepare an UPDATE query for Courses table.
-     * @param currentCourseID a String.
-     * @param newCourseID a String.
-     * @param courseName a String.
-     * @param courseDescription a String.
-     * @param courseProfId a String.
-     * @return
+     * @param userId a String.
+     * @param firstName a String.
+     * @param lastName a String.
+     * @param password a String.
+     * @return an edit query as a String.
      */
-    public String prepareEditQuery(String currentCourseID, String newCourseID,
-                                   String courseName, String courseDescription,
-                                   String courseProfId) {
-        return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
-                + courseName + "\", description = \"" + courseDescription + "\", profid = "
-                + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
+    public String prepareEditQuery(String userId, String firstName,
+                                   String lastName, String password) {
+        return "UPDATE Users SET firstname = \"" + firstName + "\", lastname = \""
+                + lastName + "\", password = \"" + password
+                + " WHERE userid = '" + userId + "';";
     }
 
     public void putForDelete(ActionEvent event){
         if (getUserConfirmation()) {
-            String courseid = findButtonId(event);
-            String query = prepareDeleteQuery(courseid);
-            String message = "Course Deleted!";
+            String userid = findButtonId(event);
+            String query = prepareDeleteQuery(userid);
+            String message = "User Deleted!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
     }
@@ -425,29 +430,29 @@ public class Users extends Tables {
      * @return a String query.
      */
     public String prepareDeleteQuery(String uniquePrimaryKeyValue) {
-        return "DELETE FROM Courses WHERE courseid = '" + uniquePrimaryKeyValue + "';";
+        return "DELETE FROM Users WHERE userid = '" + uniquePrimaryKeyValue + "';";
     }
 
     /**
-     * Check if course name is valid.
+     * Check if name is valid.
      *
      * @param name a String
      * @return true if name is valid, else false.
      */
-    public boolean checkCourseName(String name) {
+    public boolean checkName(String name) {
         final int maxLength = 40;
         return name != null && !(name.strip().equals("")) && name.length() <= maxLength;
     }
 
     /**
-     * Check if course description is valid.
+     * Check if password is valid.
      *
-     * @param description a String
+     * @param password a String
      * @return true if description is valid, else false.
      */
-    public boolean checkDescription(String description) {
+    public boolean checkPassword(String password) {
         final int maxLength = 150;
-        return description != null && !(description.strip().equals("")) && description.length() <= maxLength;
+        return password != null && !(password.strip().equals("")) && password.length() <= maxLength;
     }
 }
 

@@ -122,7 +122,7 @@ public class Grades extends Tables {
     private String testAllTextFld() {
         String errorMessage = "";
 
-        if (!checkUserItemID(stuIdTextFld.getText().trim())) {
+        if (!checkUserOrItemID(stuIdTextFld.getText().trim())) {
             errorMessage += markStuIdtxtFldWrong();
         }
 
@@ -130,7 +130,7 @@ public class Grades extends Tables {
             errorMessage += markGradeTxtFldWrong();
         }
 
-        if (!checkUserItemID(itemIdTxtFld.getText().trim())) {
+        if (!checkUserOrItemID(itemIdTxtFld.getText().trim())) {
             errorMessage += markItemIdTxtFldWrong();
         }
 //
