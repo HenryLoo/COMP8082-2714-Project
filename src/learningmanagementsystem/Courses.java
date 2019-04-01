@@ -66,7 +66,7 @@ public class Courses extends Tables {
 
         Button addBtn = new Button("Add Course");
         addBtn.setOnAction(this::checkInputForAddingData);
-        gp.add(addBtn, 0, 5);
+        gp.add(addBtn, 0, 6);
 
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
@@ -81,25 +81,29 @@ public class Courses extends Tables {
     public GridPane createDashBoardTemplate() {
         GridPane gp = new GridPane();
 
+        Label courseIdLbl = new Label("CourseID: ");
         Label courseNameLbl = new Label("Course Name: ");
         Label courseProfLbl = new Label("Course Professor ID: ");
         Label courseDescriptionLbl = new Label("Course Description: ");
 
+        courseIdLbl.setFont(Font.font(18));
         courseNameLbl.setFont(Font.font(18));
         courseProfLbl.setFont(Font.font(18));
         courseDescriptionLbl.setFont(Font.font(18));
 
-        gp.add(courseNameLbl, 0, 1);
-        gp.add(courseProfLbl, 0, 2);
-        gp.add(courseDescriptionLbl, 0, 3);
+        gp.add(courseIdLbl, 0, 1);
+        gp.add(courseNameLbl, 0, 2);
+        gp.add(courseProfLbl, 0, 3);
+        gp.add(courseDescriptionLbl, 0, 4);
 
         // since the text fields are shared, we have to cleared them first
         initTextfieldsAndUserMessage();
 
-        gp.add(courseNameTxtFld, 1, 1);
-        gp.add(courseProfTxtFld, 1, 2);
-        gp.add(courseDescriptionTxtFld, 1, 3);
-        gp.add(userMessage, 0, 4, 2, 1);
+        gp.add(courseIdTxtFld, 1, 1);
+        gp.add(courseNameTxtFld, 1, 2);
+        gp.add(courseProfTxtFld, 1, 3);
+        gp.add(courseDescriptionTxtFld, 1, 4);
+        gp.add(userMessage, 0, 5, 2, 1);
 
         return gp;
 
@@ -116,11 +120,12 @@ public class Courses extends Tables {
             // turn off the error indicator
             inputErrorIndicator = false;
         } else {
+            String courseId = courseIdTxtFld.getText().trim();
             String courseName = courseNameTxtFld.getText().trim();
             int courseProfId = Integer.parseInt(courseProfTxtFld.getText().trim());
             String courseDescription = courseDescriptionTxtFld.getText().trim();
 
-            String query = prepareAddQuery(courseName, courseDescription, courseProfId);
+            String query = prepareAddQuery(courseId, courseName, courseDescription, courseProfId);
             String message = "Course Added!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
@@ -130,6 +135,10 @@ public class Courses extends Tables {
     // test all the textfields and return an error message if any
     private String testAllTextFld() {
         String errorMessage = "";
+
+        if (!checkCourseID(courseIdTxtFld.getText().trim())) {
+            errorMessage += markCourseIdTxtFldWrong();
+        }
 
         if (!checkCourseName(courseNameTxtFld.getText().trim())) {
             errorMessage += markCourseNameTxtFldWrong();
@@ -146,10 +155,18 @@ public class Courses extends Tables {
         return errorMessage;
     }
 
+    // mark that the courseIdTxtFld was wrong
+    private String markCourseIdTxtFldWrong() {
+        inputErrorIndicator = true;
+        courseIdTxtFld.setStyle("-fx-border-color: red");
+        return "Your course id must be six characters long. \n"
+                + "It must start with three letters and end with three digits. \n";
+    }
+
     // mark the coursenameTxtFld was wrong
     private String markCourseNameTxtFldWrong() {
         inputErrorIndicator = true;
-        courseNameTxtFld.setStyle("-fx-border-color: red");
+        courseIdTxtFld.setStyle("-fx-border-color: red");
         return "Your course name must be less than 40 characters. \n";
     }
 
@@ -163,21 +180,22 @@ public class Courses extends Tables {
     // mark the courseDescriptionTxtFld was wrong
     private String markCourseDescriptionTxtFld() {
         inputErrorIndicator = true;
-        courseNameTxtFld.setStyle("-fx-border-color: red");
+        courseIdTxtFld.setStyle("-fx-border-color: red");
         return "Your course description must be less than 150 characters. \n";
     }
 
     /**
      * Create the query to data to the Courses table.
      *
+     * @param courseID a String.
      * @param name a String.
      * @param description a String.
      * @param profID an int.
      * @return a SQL String.
      */
-    public String prepareAddQuery(String name, String description, int profID) {
+    public String prepareAddQuery(String courseID, String name, String description, int profID) {
 
-        return "INSERT INTO Courses(course_name, description, profid) VALUES('" + name + "', '"
+        return "INSERT INTO Courses VALUES('" + courseID + "', '" + name + "', '"
                 + description + "', " + profID + ");";
     }
 
@@ -357,6 +375,8 @@ public class Courses extends Tables {
         try {
             result.next();
 
+            // set textboxes to current value of the specified course
+            courseIdTxtFld.setText(result.getString("courseid"));
             courseNameTxtFld.setText(result.getString("course_name"));
             courseDescriptionTxtFld.setText(result.getString("description"));
             courseProfTxtFld.setText(result.getString("profid"));
@@ -380,11 +400,12 @@ public class Courses extends Tables {
             // get the current course set in the button id of the source
             String currentCourseId = findButtonId(event);
 
+            String newCourseId = courseIdTxtFld.getText().trim();
             String courseName = courseNameTxtFld.getText().trim();
             String courseDescription = courseDescriptionTxtFld.getText().trim();
             String courseProfId = courseProfTxtFld.getText().trim();
 
-            String query = prepareEditQuery(currentCourseId,
+            String query = prepareEditQuery(currentCourseId, newCourseId,
                     courseName, courseDescription, courseProfId);
             String message = "Course Updated!";
             runQueryWithNoReturnValue(query, myConn, message);
@@ -394,15 +415,16 @@ public class Courses extends Tables {
     /**
      * Prepare an UPDATE query for Courses table.
      * @param currentCourseID a String.
+     * @param newCourseID a String.
      * @param courseName a String.
      * @param courseDescription a String.
      * @param courseProfId a String.
      * @return
      */
-    public String prepareEditQuery(String currentCourseID,
+    public String prepareEditQuery(String currentCourseID, String newCourseID,
                                  String courseName, String courseDescription,
                                  String courseProfId) {
-        return "UPDATE Courses SET course_name = \""
+        return "UPDATE Courses SET courseid = \"" + newCourseID + "\", course_name = \""
                 + courseName + "\", description = \"" + courseDescription + "\", profid = "
                 + courseProfId + " WHERE courseid = '" + currentCourseID + "';";
     }
