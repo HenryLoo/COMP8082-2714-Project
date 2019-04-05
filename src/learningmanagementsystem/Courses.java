@@ -3,12 +3,14 @@ package learningmanagementsystem;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +35,7 @@ public class Courses extends Tables {
         userMessage.setFont(Font.font(13));
         userMessage.setTextFill(Color.RED);
         currentPane = newCurrentPane;
-        resultPane = new GridPane();
+        resultPane = new ScrollPane();
     }
 
     /**
@@ -159,14 +161,14 @@ public class Courses extends Tables {
     private String markCourseIdTxtFldWrong() {
         inputErrorIndicator = true;
         courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course id must be six characters long. \n"
+        return "Your course id must be at most six characters long. \n"
                 + "It must start with three letters and end with three digits. \n";
     }
 
     // mark the coursenameTxtFld was wrong
     private String markCourseNameTxtFldWrong() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        courseNameTxtFld.setStyle("-fx-border-color: red");
         return "Your course name must be less than 40 characters. \n";
     }
 
@@ -180,7 +182,7 @@ public class Courses extends Tables {
     // mark the courseDescriptionTxtFld was wrong
     private String markCourseDescriptionTxtFld() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        courseDescriptionTxtFld.setStyle("-fx-border-color: red");
         return "Your course description must be less than 150 characters. \n";
     }
 
@@ -223,10 +225,22 @@ public class Courses extends Tables {
         gp.add(userMessage, 0, 1, 2, 1);
         gp.add(resultPane, 0, 2, 3, 1);
 
+        Button seeAllBtn = new Button("See all courses");
+        seeAllBtn.setOnAction(this::displayAllData);
+        gp.add(seeAllBtn, 0, 3);
+
+        // automatically displays all data in the table.
+        displaySearchQueryResult(search("Courses", myConn));
+
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
 
         return gp;
+    }
+
+    // display all the data in the table
+    private void displayAllData(ActionEvent event) {
+        displaySearchQueryResult(search("Courses", myConn));
     }
 
     // try to add data

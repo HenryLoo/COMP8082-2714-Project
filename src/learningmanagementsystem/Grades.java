@@ -3,6 +3,7 @@ package learningmanagementsystem;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -28,7 +29,7 @@ public class Grades extends Tables {
     public Grades(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
-        resultPane = new GridPane();
+        resultPane = new ScrollPane();
         currentPane = newCurrentPane;
     }
 
@@ -212,10 +213,22 @@ public class Grades extends Tables {
         gp.add(userMessage, 0, 1, 2, 1);
         gp.add(resultPane, 0, 2, 3, 1);
 
+        Button seeAllBtn = new Button("See all grades");
+        seeAllBtn.setOnAction(this::displayAllData);
+        gp.add(seeAllBtn, 0, 3);
+
+        // automatically displays all data in the table.
+        displaySearchQueryResult(search("StuGrades", myConn));
+
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
 
         return gp;
+    }
+
+    // display all the data in the table
+    private void displayAllData(ActionEvent event) {
+        displaySearchQueryResult(search("StuGrades", myConn));
     }
 
     // check inputs before searching for data
@@ -224,7 +237,7 @@ public class Grades extends Tables {
         String errorMessage = "";
 
         String itemid = itemIdTxtFld.getText().trim();
-        if (!checkItemID(itemid)) {
+        if (!checkUserOrItemID(itemid)) {
             errorMessage += markItemIdTxtFldWrong();
         }
 
@@ -418,7 +431,7 @@ public class Grades extends Tables {
             runQueryWithNoReturnValue(query, myConn, message);
 
             // clear the resultPane and display notification
-            resultPane.getChildren().setAll(new GridPane());
+            resultPane.setContent(new GridPane());
             displayNotificationMessage("");
         }
     }
@@ -433,18 +446,5 @@ public class Grades extends Tables {
     public String prepareDeleteQuery(String uniquePrimaryKeyValue, int secondPrimaryKeyValue) {
         return "DELETE FROM StuGrades WHERE stuid = '" + uniquePrimaryKeyValue + "' AND itemid = \'"
                 + secondPrimaryKeyValue + "\' ;";
-    }
-
-    /**
-     * Check if item name is valid.
-     *
-     * @param itemName a String
-     * @return true if valid, false if else
-     */
-    public boolean checkItemName(String itemName) {
-        if (itemName.length() > 40) {
-            return false;
-        }
-        return true;
     }
 }

@@ -2,9 +2,7 @@ package learningmanagementsystem;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -27,16 +25,26 @@ public class LearningSysGUI extends GridPane {
 
     public LearningSysGUI(Connection newDatabaseConnection) {
         databaseConnection = newDatabaseConnection;
-        currentPage = new SignInPage();
+        currentPage = new SignInPage(databaseConnection);
 
         add(currentPage, 0, 0);
 
+        setAlignment(Pos.CENTER);
         setHgap(HGAP);
         setVgap(VGAP);
     }
 
     private class SignInPage extends GridPane {
-        public SignInPage() {
+        private TextField usernameTxtFld;
+        private PasswordField passwordTxtFld;
+        private Label errorMessage;
+
+        private Connection myConn;
+
+        public SignInPage(Connection myConn) {
+            this.myConn = myConn;
+            errorMessage = new Label();
+
             Text title = new Text("Log In");
             Text usernameTxt = new Text("Username:");
             Text passwordTxt = new Text("Password:");
@@ -45,8 +53,8 @@ public class LearningSysGUI extends GridPane {
             usernameTxt.setFont(Font.font(22));
             passwordTxt.setFont(Font.font(22));
 
-            TextField usernameTxtFld = new TextField();
-            TextField passwordTxtFld = new TextField();
+            usernameTxtFld = new TextField();
+            passwordTxtFld = new PasswordField();
 
             Button signInBtn = new Button("Sign In");
             signInBtn.setOnAction(this::signIn);
@@ -59,7 +67,9 @@ public class LearningSysGUI extends GridPane {
             add(usernameTxtFld, 1, 2);
             add(passwordTxtFld, 1, 3);
 
-            add(signInBtn, 0, 4);
+            add(errorMessage, 0, 4);
+
+            add(signInBtn, 0, 5);
             setHgap(HGAP);
             setVgap(VGAP);
 
@@ -67,8 +77,59 @@ public class LearningSysGUI extends GridPane {
 
         // check if user credential are correct and change page
         private void signIn(ActionEvent event) {
-            // for testing purpose, only changing page for now.
-            currentPage.getChildren().setAll(new HomePage("admin"));
+            String username = usernameTxtFld.getText();
+            String password = passwordTxtFld.getText();
+            String message = "";
+
+            if (username.isEmpty()) {
+                message = markUserNameTxtFldWrong();
+            }
+
+            if (password.isEmpty()) {
+                message += markPasswordTxtFldWrong();
+            }
+
+            if (!message.isEmpty()) {
+                errorMessage.setText(message);
+                return;
+            }
+
+            if (searchForUser(username, password)) {
+                LearningSysGUI.this.setAlignment(Pos.TOP_LEFT);
+                currentPage.getChildren().setAll(new HomePage("admin"));
+            } else {
+                errorMessage.setText("Your username and password pair are incorrect");
+            }
+
+        }
+
+        // search if user is in the Users table
+        private boolean searchForUser(String name, String password) {
+            String sql = "SELECT * FROM Users WHERE username='" + name + "' AND password='" + password + "';";
+            try {
+                Statement newCommand = myConn.createStatement();
+                ResultSet result = newCommand.executeQuery(sql);
+
+                boolean answer = result.next();
+                newCommand.close();
+                return answer;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        // mark that the userNameTxtFld was wrong
+        private String markUserNameTxtFldWrong() {
+            usernameTxtFld.setStyle("-fx-border-color: red");
+            return "The username must be made of alphabetical characters only. \n";
+        }
+
+        // mark the passworddTxtFld was wrong
+        private String markPasswordTxtFldWrong() {
+            passwordTxtFld.setStyle("-fx-border-color: red");
+            return "The password must be at least 6 characters long. \n";
         }
     }
 
@@ -146,18 +207,6 @@ public class LearningSysGUI extends GridPane {
 
             // get the functionOptions that's currently empty and set it to hbox.
             functionOptions.getChildren().setAll(hbox);
-        }
-
-        private VBox greetingPane() {
-            Text welcome = new Text("Welcome to the Learning System!");
-            Text subtext = new Text("Choose a table above to get started.");
-
-            welcome.setFont(Font.font(40));
-            subtext.setFont(Font.font(30));
-
-            VBox vbox = new VBox(welcome, subtext);
-            vbox.setAlignment(Pos.CENTER);
-            return vbox;
         }
 
         /**

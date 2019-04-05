@@ -3,6 +3,7 @@ package learningmanagementsystem;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -33,7 +34,7 @@ public class Users extends Tables {
         userMessage.setFont(Font.font(13));
         userMessage.setTextFill(Color.RED);
         currentPane = newCurrentPane;
-        resultPane = new GridPane();
+        resultPane = new ScrollPane();
     }
 
     /**
@@ -148,24 +149,21 @@ public class Users extends Tables {
     private String markUserIdTxtFldWrong() {
         inputErrorIndicator = true;
         userNameTxtFld.setStyle("-fx-border-color: red");
-        return "The userid must be made an integer. \n";
+        return "The userid must be an integer. \n";
     }
 
     // mark that the userNameTxtFld was wrong
     private String markUserNameTxtFldWrong() {
         inputErrorIndicator = true;
         userNameTxtFld.setStyle("-fx-border-color: red");
-        return "The username must be made of alphabetical characters. \n";
+        return "The username must be made of alphabetical characters only. \n";
     }
 
     // mark the passworddTxtFld was wrong
     private String markPasswordTxtFldWrong() {
         inputErrorIndicator = true;
         passwordTxtFld.setStyle("-fx-border-color: red");
-        return "The password must be at least 6 characters long. \n"
-                + "It also must have at least: \n"
-                + "- One alphabetical character. \n"
-                + "- One numerical character. \n";
+        return "The password must be at least 6 characters long. \n";
     }
 
     // mark the confirmPasswordTxtFld was wrong
@@ -212,10 +210,23 @@ public class Users extends Tables {
         gp.add(userMessage, 0, 1, 2, 1);
         gp.add(resultPane, 0, 2, 3, 1);
 
+        Button seeAllBtn = new Button("See all users");
+        seeAllBtn.setOnAction(this::displayAllData);
+        gp.add(seeAllBtn, 0, 3);
+
+        // automatically displays all data in the table.
+        displaySearchQueryResult(search("Users", myConn));
+
+
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
 
         return gp;
+    }
+
+    // display all the data in the table
+    private void displayAllData(ActionEvent event) {
+        displaySearchQueryResult(search("Users", myConn));
     }
 
     // try to add data
