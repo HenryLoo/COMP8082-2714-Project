@@ -231,6 +231,7 @@ public class Courses extends Tables {
 
         // automatically displays all data in the table.
         displaySearchQueryResult(search("Courses", myConn));
+
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
 

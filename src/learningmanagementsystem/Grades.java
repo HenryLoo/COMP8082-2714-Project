@@ -212,10 +212,22 @@ public class Grades extends Tables {
         gp.add(userMessage, 0, 1, 2, 1);
         gp.add(resultPane, 0, 2, 3, 1);
 
+        Button seeAllBtn = new Button("See all grades");
+        seeAllBtn.setOnAction(this::displayAllData);
+        gp.add(seeAllBtn, 0, 3);
+
+        // automatically displays all data in the table.
+        displaySearchQueryResult(search("StuGrades", myConn));
+
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
 
         return gp;
+    }
+
+    // display all the data in the table
+    private void displayAllData(ActionEvent event) {
+        displaySearchQueryResult(search("StuGrades", myConn));
     }
 
     // check inputs before searching for data
@@ -428,24 +440,5 @@ public class Grades extends Tables {
     public String prepareDeleteQuery(String uniquePrimaryKeyValue, int secondPrimaryKeyValue) {
         return "DELETE FROM StuGrades WHERE stuid = '" + uniquePrimaryKeyValue + "' AND itemid = \'"
                 + secondPrimaryKeyValue + "\' ;";
-    }
-
-    /**
-     * Check if total mark or weight is valid.
-     * @param markOrWeight a String
-     * @return true if valid, false if else
-     */
-    public boolean checkTotalMarkOrWeight(String markOrWeight) {
-
-        try {
-            int result = Integer.parseInt(markOrWeight);
-            if (result > 100 || result < 0) {
-                return false;
-            }
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 }

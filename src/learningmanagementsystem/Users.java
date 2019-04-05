@@ -213,10 +213,23 @@ public class Users extends Tables {
         gp.add(userMessage, 0, 1, 2, 1);
         gp.add(resultPane, 0, 2, 3, 1);
 
+        Button seeAllBtn = new Button("See all users");
+        seeAllBtn.setOnAction(this::displayAllData);
+        gp.add(seeAllBtn, 0, 3);
+
+        // automatically displays all data in the table.
+        displaySearchQueryResult(search("Users", myConn));
+
+
         gp.setHgap(HGAP);
         gp.setVgap(VGAP);
 
         return gp;
+    }
+
+    // display all the data in the table
+    private void displayAllData(ActionEvent event) {
+        displaySearchQueryResult(search("Users", myConn));
     }
 
     // try to add data
