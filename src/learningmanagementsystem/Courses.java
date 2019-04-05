@@ -161,7 +161,7 @@ public class Courses extends Tables {
     private String markCourseIdTxtFldWrong() {
         inputErrorIndicator = true;
         courseIdTxtFld.setStyle("-fx-border-color: red");
-        return "Your course id must be six characters long. \n"
+        return "Your course id must be at most six characters long. \n"
                 + "It must start with three letters and end with three digits. \n";
     }
 

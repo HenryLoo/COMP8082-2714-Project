@@ -116,6 +116,7 @@ public abstract class Tables {
         }
     }
 
+
     /**
      * Child class must create an edit dashboard.
      * @return the dashboard as a GridPane.
@@ -242,6 +243,11 @@ public abstract class Tables {
      * @return true if valid, else false.
      */
     public boolean checkUserOrItemID(String iD) {
+        // check for empty String
+        if (iD == null || iD.strip().equals("")) {
+            return false;
+        }
+
         if (iD.length() > 6) {
             return false;
         }

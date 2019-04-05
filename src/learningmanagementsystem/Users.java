@@ -149,24 +149,21 @@ public class Users extends Tables {
     private String markUserIdTxtFldWrong() {
         inputErrorIndicator = true;
         userNameTxtFld.setStyle("-fx-border-color: red");
-        return "The userid must be made an integer. \n";
+        return "The userid must be an integer. \n";
     }
 
     // mark that the userNameTxtFld was wrong
     private String markUserNameTxtFldWrong() {
         inputErrorIndicator = true;
         userNameTxtFld.setStyle("-fx-border-color: red");
-        return "The username must be made of alphabetical characters. \n";
+        return "The username must be made of alphabetical characters only. \n";
     }
 
     // mark the passworddTxtFld was wrong
     private String markPasswordTxtFldWrong() {
         inputErrorIndicator = true;
         passwordTxtFld.setStyle("-fx-border-color: red");
-        return "The password must be at least 6 characters long. \n"
-                + "It also must have at least: \n"
-                + "- One alphabetical character. \n"
-                + "- One numerical character. \n";
+        return "The password must be at least 6 characters long. \n";
     }
 
     // mark the confirmPasswordTxtFld was wrong
