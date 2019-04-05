@@ -2,10 +2,7 @@ package learningmanagementsystem;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -32,13 +29,14 @@ public class LearningSysGUI extends GridPane {
 
         add(currentPage, 0, 0);
 
+        setAlignment(Pos.CENTER);
         setHgap(HGAP);
         setVgap(VGAP);
     }
 
     private class SignInPage extends GridPane {
         private TextField usernameTxtFld;
-        private TextField passwordTxtFld;
+        private PasswordField passwordTxtFld;
         private Label errorMessage;
 
         private Connection myConn;
@@ -56,7 +54,7 @@ public class LearningSysGUI extends GridPane {
             passwordTxt.setFont(Font.font(22));
 
             usernameTxtFld = new TextField();
-            passwordTxtFld = new TextField();
+            passwordTxtFld = new PasswordField();
 
             Button signInBtn = new Button("Sign In");
             signInBtn.setOnAction(this::signIn);
@@ -97,6 +95,7 @@ public class LearningSysGUI extends GridPane {
             }
 
             if (searchForUser(username, password)) {
+                LearningSysGUI.this.setAlignment(Pos.TOP_LEFT);
                 currentPage.getChildren().setAll(new HomePage("admin"));
             } else {
                 errorMessage.setText("Your username and password pair are incorrect");

@@ -71,6 +71,7 @@ public class Grades extends Tables {
 
     /**
      * Create a dashboard template that can be used by other dashboard.
+     *
      * @return a grid pane containing all the needed elements.
      */
     public GridPane createDashBoardTemplate() {
@@ -93,7 +94,7 @@ public class Grades extends Tables {
 
         gp.add(stuIdTextFld, 1, 1);
         gp.add(itemIdTxtFld, 1, 2);
-        gp.add(gradeTxtFld, 1,3);
+        gp.add(gradeTxtFld, 1, 3);
         gp.add(userMessage, 0, 5, 2, 1);
 
         return gp;
@@ -114,7 +115,7 @@ public class Grades extends Tables {
             double grade = Double.parseDouble(gradeTxtFld.getText().trim());
 
             String query = prepareAddQuery(stuid, itemId, grade);
-            String message = "Item Added!";
+            String message = "Grade Added!";
             runQueryWithNoReturnValue(query, myConn, message);
         }
     }
@@ -180,9 +181,9 @@ public class Grades extends Tables {
     /**
      * Add data to the GradeItems table.
      *
-     * @param stuid an int
+     * @param stuid  an int
      * @param itemid an int
-     * @param grade a double
+     * @param grade  a double
      */
     public String prepareAddQuery(int stuid, int itemid, double grade) {
         return "INSERT INTO StuGrades(stuid, itemid, grade) VALUES('" + stuid + "', '" + itemid + "', '"
@@ -325,6 +326,7 @@ public class Grades extends Tables {
 
     /**
      * Open the update dashboard.
+     *
      * @param event an ActionEvent.
      */
     public void openEditDashBoard(ActionEvent event) {
@@ -333,6 +335,7 @@ public class Grades extends Tables {
 
     /**
      * Create an edit dashboard.
+     *
      * @return the dashboard as a GridPane.
      */
     @Override
@@ -396,7 +399,7 @@ public class Grades extends Tables {
             String stuId = stuIdTextFld.getText().trim();
             int grade = Integer.parseInt(gradeTxtFld.getText().trim());
 
-            String query = prepareEditQuery(stuId,newItemId,grade);
+            String query = prepareEditQuery(stuId, newItemId, grade);
             String message = "Grade inserted";
             runQueryWithNoReturnValue(query, myConn, message);
         }
@@ -404,24 +407,26 @@ public class Grades extends Tables {
 
     /**
      * Prepare an UPDATE query for GradeItems table.
-     * @param stuId a String.
+     *
+     * @param stuId  a String.
      * @param itemId an int.
-     * @param grade an int.
+     * @param grade  an int.
      */
     public String prepareEditQuery(String stuId, int itemId,
-                                    int grade) {
+                                   int grade) {
         return "UPDATE StuGrades SET grade = \'" + grade + "\'  WHERE studId = " + stuId + " AND itemid = \'" + itemId + "\' ;";
     }
 
     /**
      * Handle a delete event.
+     *
      * @param event an ActionEvent.
      */
-    public void handleDeleteEvent(ActionEvent event){
+    public void handleDeleteEvent(ActionEvent event) {
         if (getUserConfirmation()) {
             String stuid = findButtonId(event);
             int itemid = Integer.parseInt(itemIdTxtFld.getText());
-            String query = prepareDeleteQuery(stuid,itemid);
+            String query = prepareDeleteQuery(stuid, itemid);
             String message = "Item Deleted!";
             runQueryWithNoReturnValue(query, myConn, message);
 
@@ -433,6 +438,7 @@ public class Grades extends Tables {
 
     /**
      * Prepare a DELETE query based on the uniquePrimaryKeyValue and secondPrimnaryKey.
+     *
      * @param uniquePrimaryKeyValue a String.
      * @param secondPrimaryKeyValue an int.
      * @return a String query.
