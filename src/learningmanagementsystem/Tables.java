@@ -26,7 +26,7 @@ public abstract class Tables {
     public static final int VGAP = 10;
 
     // display the result of the search function
-    protected GridPane resultPane;
+    protected ScrollPane resultPane;
 
     // tell us that there's an error in user inputs.
     protected boolean inputErrorIndicator;
@@ -79,7 +79,29 @@ public abstract class Tables {
      */
     protected ResultSet search(String tableName, String colName,
                                String value, Connection myConn) {
-        String sql = "SELECT * FROM " + tableName + " WHERE " + colName + " = '" + value + "';";
+        String sql = "SELECT * FROM " + tableName + " WHERE " + colName + " LIKE '" + value + "';";
+        try {
+            Statement newCommand = myConn.createStatement();
+            ResultSet result = newCommand.executeQuery(sql);
+
+            // will closed when ResultSet is closed
+            newCommand.closeOnCompletion();
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Display all data in a table.
+     *
+     * @param tableName a String.
+     * @param myConn a Connection.
+     */
+    protected ResultSet search(String tableName, Connection myConn) {
+        String sql = "SELECT * FROM " + tableName + ";";
         try {
             Statement newCommand = myConn.createStatement();
             ResultSet result = newCommand.executeQuery(sql);
@@ -201,13 +223,13 @@ public abstract class Tables {
             // if there are no result
             if (!result.isBeforeFirst()) {
                 displayNotificationMessage("No Result Found.");
-                resultPane.getChildren().setAll(new GridPane());
+                resultPane.setContent(new GridPane());
                 return;
             }
 
             // clear the userMessage area
             userMessage.setText("");
-            resultPane.getChildren().setAll(createSearchResultArea(result));
+            resultPane.setContent(createSearchResultArea(result));
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -23,9 +23,11 @@ public class MyDBConnection {
 
     public void init(){
        try {
+           String url = "jdbc:mysql://51.38.19.86:3306/munimoe_LMS?zeroDateTimeBehavior" +
+                   "=CONVERT_TO_NULL&serverTimezone=UTC";
             Class.forName("com.mysql.cj.jdbc.Driver");
-            myConnection=DriverManager.getConnection(
-                    "jdbc:mysql://51.38.19.86:3306/munimoe_LMS","munimoe_admin", "a9D4^x1Uy8AV");
+            myConnection=DriverManager.getConnection(url,
+                    "munimoe_admin", "a9D4^x1Uy8AV");
 
            System.out.println("Database connection success!");
         }

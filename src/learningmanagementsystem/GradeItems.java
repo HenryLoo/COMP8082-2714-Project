@@ -3,6 +3,7 @@ package learningmanagementsystem;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -30,7 +31,7 @@ public class GradeItems extends Tables {
     public GradeItems(Connection newMyConn, Pane newCurrentPane) {
         myConn = newMyConn;
         initTextfieldsAndUserMessage();
-        resultPane = new GridPane();
+        resultPane = new ScrollPane();
         currentPane = newCurrentPane;
     }
 
@@ -447,7 +448,7 @@ public class GradeItems extends Tables {
             runQueryWithNoReturnValue(query, myConn, message);
 
             // clear the resultPane and display notification
-            resultPane.getChildren().setAll(new GridPane());
+            resultPane.setContent(new GridPane());
             displayNotificationMessage("");
         }
     }
