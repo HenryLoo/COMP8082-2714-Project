@@ -247,7 +247,7 @@ public class GradeItems extends Tables {
         String errorMessage = "";
 
         String itemid = itemIdTxtFld.getText().trim();
-        if (!checkItemID(itemid)) {
+        if (!checkUserOrItemID(itemid)) {
             errorMessage += markItemIdTxtFldWrong();
         }
 

@@ -79,7 +79,7 @@ public abstract class Tables {
      */
     protected ResultSet search(String tableName, String colName,
                                String value, Connection myConn) {
-        String sql = "SELECT * FROM " + tableName + " WHERE " + colName + " LIKE '" + value + "';";
+        String sql = "SELECT * FROM " + tableName + " WHERE " + colName + " LIKE '%" + value + "%';";
         try {
             Statement newCommand = myConn.createStatement();
             ResultSet result = newCommand.executeQuery(sql);
@@ -286,44 +286,11 @@ public abstract class Tables {
         }
 
         // check for length
-        if (id.length() != 6) {
+        if (id.length() > 6) {
             return false;
-        }
-
-        // check that it starts with three letters
-        for (int i = 0; i < 3; i++) {
-            if (!Character.isAlphabetic(id.charAt(i))) {
-                return false;
-            }
-        }
-
-        // check that it ends with three letters.
-        for (int i = 3; i < 6; i++) {
-            if (!Character.isDigit(id.charAt(i))) {
-                return false;
-            }
         }
 
         return true;
-    }
-
-    /**
-     * Check if item id is valid.
-     * @param itemID a String
-     * @return true if valid, false if else
-     */
-    public boolean checkItemID(String itemID) {
-        if (itemID.length() > 6) {
-            return false;
-        }
-
-        try {
-            Integer.parseInt(itemID);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
 

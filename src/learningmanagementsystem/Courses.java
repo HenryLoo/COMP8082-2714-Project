@@ -168,7 +168,7 @@ public class Courses extends Tables {
     // mark the coursenameTxtFld was wrong
     private String markCourseNameTxtFldWrong() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        courseNameTxtFld.setStyle("-fx-border-color: red");
         return "Your course name must be less than 40 characters. \n";
     }
 
@@ -182,7 +182,7 @@ public class Courses extends Tables {
     // mark the courseDescriptionTxtFld was wrong
     private String markCourseDescriptionTxtFld() {
         inputErrorIndicator = true;
-        courseIdTxtFld.setStyle("-fx-border-color: red");
+        courseDescriptionTxtFld.setStyle("-fx-border-color: red");
         return "Your course description must be less than 150 characters. \n";
     }
 
